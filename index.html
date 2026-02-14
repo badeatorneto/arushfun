@@ -3,203 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARUSH.FUN</title>
+    <title>ARUSH.FUN | The Simulation</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@700&family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;900&family=Space+Grotesk:wght@700&family=VT323&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --brutal-shadow: 6px 6px 0px #000; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; overflow-x: hidden; }
-        .neal-card { border: 4px solid #000; border-radius: 20px; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-        .neal-card:hover { transform: translateY(-5px); box-shadow: var(--brutal-shadow); }
-        .game-view { display: none; min-height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; }
-        .active { display: block; }
-        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: 0.1s; background: white; font-weight: 800; text-transform: uppercase; padding: 0.5rem 1.5rem; }
+        :root { --neon: #00ff99; --void: #050505; --retro-gray: #c0c0c0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f2f5; overflow-x: hidden; }
+        
+        /* CORE UI */
+        .neal-card { border: 4px solid #000; border-radius: 16px; transition: 0.2s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer; position: relative; overflow: hidden; }
+        .neal-card:hover { transform: translateY(-8px) rotate(-1deg); box-shadow: 8px 8px 0px #000; }
+        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: 0.1s; background: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
         .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
         
-        /* Game Specific Styles */
-        .retro-90s { background: #c0c0c0; font-family: 'MS Sans Serif', sans-serif; border: 2px solid #fff; border-right-color: #808080; border-bottom-color: #808080; }
-        .universe-dark { background: #050505; color: #00ff99; font-family: 'Space Grotesk', sans-serif; }
+        /* VIEWS */
+        .view-container { display: none; min-height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; overflow-y: auto; background: white; z-index: 10; }
+        .view-container.active { display: block; }
+
+        /* ANIMATIONS */
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        .shake-hard { animation: shake 0.5s; animation-iteration-count: infinite; }
+        .glitch-text { text-shadow: 2px 0 red, -2px 0 blue; animation: shake 0.3s infinite; }
+
+        /* GAME SPECIFIC */
+        .retro-ui { font-family: 'VT323', monospace; background: #000; color: #0f0; }
+        .universe-bg { background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); color: #fff; font-family: 'Space Grotesk', sans-serif; }
+        .particle { position: absolute; border-radius: 50%; pointer-events: none; animation: implode 1s forwards; }
+        @keyframes implode { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0); left: 50%; top: 50%; } }
+        
+        /* SCROLL STYLES */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #eee; }
+        ::-webkit-scrollbar-thumb { background: #000; border: 2px solid #eee; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="homeView" class="game-view active p-8 md:p-20">
-        <div class="max-w-6xl mx-auto text-center mb-16">
-            <h1 class="text-7xl md:text-9xl font-black italic tracking-tighter uppercase">ARUSH<span class="text-blue-600">.</span>FUN</h1>
-            <p class="text-xl font-bold opacity-40 tracking-widest uppercase">9 Games & Stuff by Arush</p>
+    <div id="homeView" class="view-container active p-8 bg-[#fdfbf7]">
+        <div class="max-w-7xl mx-auto text-center mb-16 pt-10">
+            <h1 class="text-9xl font-[900] tracking-tighter mb-4 italic uppercase relative inline-block">
+                ARUSH<span class="text-blue-600">.</span>FUN
+                <span class="absolute -top-4 -right-12 text-sm bg-black text-white px-2 py-1 rotate-12 font-mono">v2.0 GOD-TIER</span>
+            </h1>
+            <p class="text-2xl font-bold uppercase tracking-[0.4em] opacity-40">The Simulation Suite</p>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto" id="mainGrid">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto pb-20">
+            <div onclick="loadGame('time')" class="neal-card bg-yellow-300 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">⏳</div>
+                <div><h3 class="text-3xl font-black uppercase">The Price of Time</h3><p class="font-bold opacity-60">Life Actuary Simulator</p></div>
             </div>
+            <div onclick="loadGame('elon')" class="neal-card bg-green-400 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">🚀</div>
+                <div><h3 class="text-3xl font-black uppercase">Spend Elon's Money</h3><p class="font-bold opacity-60">Market Shaker Edition</p></div>
+            </div>
+            <div onclick="loadGame('butterfly')" class="neal-card bg-blue-400 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">🦋</div>
+                <div><h3 class="text-3xl font-black uppercase">Butterfly Effect</h3><p class="font-bold opacity-60">Chaos Graph Engine</p></div>
+            </div>
+            <div onclick="loadGame('ark')" class="neal-card bg-orange-400 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">🧬</div>
+                <div><h3 class="text-3xl font-black uppercase">Earth's Inventory</h3><p class="font-bold opacity-60">The Ark Algorithm</p></div>
+            </div>
+            <div onclick="loadGame('capsule')" class="neal-card bg-purple-400 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">💾</div>
+                <div><h3 class="text-3xl font-black uppercase">Internet Capsule</h3><p class="font-bold opacity-60">DOM Time Machine</p></div>
+            </div>
+            <div onclick="loadGame('trolley')" class="neal-card bg-red-500 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">🚋</div>
+                <div><h3 class="text-3xl font-black uppercase">Absurd Trolley</h3><p class="font-bold opacity-60">AI Ethics Trainer</p></div>
+            </div>
+            <div onclick="loadGame('debt')" class="neal-card bg-slate-300 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">📉</div>
+                <div><h3 class="text-3xl font-black uppercase">Size of the Debt</h3><p class="font-bold opacity-60">The Infinite Scroll</p></div>
+            </div>
+            <div onclick="loadGame('password')" class="neal-card bg-pink-300 p-8 flex flex-col justify-between h-64 group">
+                <div class="text-7xl group-hover:scale-110 transition">🔒</div>
+                <div><h3 class="text-3xl font-black uppercase">Password 2026</h3><p class="font-bold opacity-60">Security Theater</p></div>
+            </div>
+            <div onclick="loadGame('universe')" class="neal-card bg-black text-white p-8 flex flex-col justify-between h-64 group border-gray-600">
+                <div class="text-7xl group-hover:scale-110 transition">🌌</div>
+                <div><h3 class="text-3xl font-black uppercase text-white">Buy The Universe</h3><p class="font-bold opacity-60">Type III Clicker</p></div>
+            </div>
+        </div>
     </div>
 
-    <div id="gameStage" class="game-view bg-white">
-        <nav class="p-4 border-b-4 border-black flex justify-between items-center bg-white sticky top-0 z-50">
-            <button onclick="exitGame()" class="brutal-btn text-sm">← ARUSH.FUN</button>
-            <h2 id="gameTitle" class="font-black uppercase tracking-tighter text-xl">Game Name</h2>
-            <div class="w-20"></div>
-        </nav>
-        <div id="gameContent" class="p-4 md:p-10 min-h-[calc(100vh-80px)]"></div>
+    <div id="gameStage" class="view-container">
+        <nav id="gameNav" class="sticky top-0 z-50 bg-white border-b-4 border-black px-6 py-3 flex justify-between items-center shadow-lg">
+            <button onclick="goHome()" class="brutal-btn px-4 py-2 text-sm flex items-center gap-2"><span>↩</span> ARUSH.FUN</button>
+            <div id="gameHeaderInfo" class="font-black uppercase text-xl tracking-tight">GAME TITLE</div>
+            <div class="w-24"></div> </nav>
+        
+        <div id="gameContent" class="min-h-screen"></div>
     </div>
 
     <script>
-        const games = [
-            { id: 'time', title: "The Price of Time", emoji: "⌛", color: "bg-yellow-300" },
-            { id: 'elon', title: "Spend Elon's Money", emoji: "🚀", color: "bg-green-400" },
-            { id: 'butterfly', title: "Butterfly Effect", emoji: "🦋", color: "bg-blue-400" },
-            { id: 'inventory', title: "Earth's Inventory", emoji: "📦", color: "bg-orange-400" },
-            { id: 'capsule', title: "Internet Capsule", emoji: "💾", color: "bg-purple-400" },
-            { id: 'trolley', title: "AI Trolley Problem", emoji: "🚃", color: "bg-red-400" },
-            { id: 'debt', title: "Size of the Debt", emoji: "📉", color: "bg-slate-300" },
-            { id: 'password', title: "Password 2026", emoji: "⌨️", color: "bg-zinc-200" },
-            { id: 'universe', title: "Buy The Universe", emoji: "🌌", color: "bg-black", text: "text-white" }
-        ];
-
-        function initHome() {
-            const grid = document.getElementById('mainGrid');
-            grid.innerHTML = games.map(g => `
-                <div onclick="launchGame('${g.id}')" class="neal-card ${g.color} ${g.text || 'text-black'}">
-                    <span class="text-6xl mb-4">${g.emoji}</span>
-                    <h3 class="text-2xl font-black uppercase">${g.title}</h3>
-                </div>
-            `).join('');
-        }
-
-        function launchGame(id) {
-            document.getElementById('homeView').classList.remove('active');
-            document.getElementById('gameStage').classList.add('active');
-            const game = games.find(g => g.id === id);
-            document.getElementById('gameTitle').innerText = game.title;
-            renderGame(id);
-        }
-
-        function exitGame() {
+        // --- GLOBAL STATE MANAGER ---
+        const gameState = { activeGame: null, data: {} };
+        
+        function goHome() {
             document.getElementById('gameStage').classList.remove('active');
             document.getElementById('homeView').classList.add('active');
-            document.getElementById('gameContent').innerHTML = '';
+            // Clean up intervals
+            if (window.gameInterval) clearInterval(window.gameInterval);
+            document.getElementById('gameContent').innerHTML = ''; // Memory Dump
         }
 
-        function renderGame(id) {
-            const container = document.getElementById('gameContent');
+        function loadGame(id) {
+            document.getElementById('homeView').classList.remove('active');
+            const stage = document.getElementById('gameStage');
+            stage.classList.add('active');
+            stage.scrollTop = 0;
+            gameState.activeGame = id;
+            
+            const content = document.getElementById('gameContent');
+            const header = document.getElementById('gameHeaderInfo');
+            
+            // RESET STYLES
+            stage.className = "view-container active"; 
+            document.getElementById('gameNav').className = "sticky top-0 z-50 bg-white border-b-4 border-black px-6 py-3 flex justify-between items-center shadow-lg";
+
+            // ROUTER
             switch(id) {
-                case 'butterfly':
-                    container.innerHTML = `
-                        <div class="max-w-2xl mx-auto text-center">
-                            <div class="text-4xl font-black mb-8" id="bf-story">You wake up. The sun is hitting your face.</div>
-                            <div class="flex flex-col gap-4" id="bf-choices">
-                                <button onclick="bfNext('Snoozed for 10 mins', 'The bus leaves without you. You take a later one and sit next to a stranger who offers you a job.', 1)" class="brutal-btn p-6">Snooze for 10 minutes</button>
-                                <button onclick="bfNext('Got up immediately', 'You catch the early bus. It crashes. You survive, but you miss the job interview of your life.', -1)" class="brutal-btn p-6">Get up immediately</button>
-                            </div>
-                            <div class="mt-12 p-4 border-4 border-black bg-white">
-                                <p class="font-bold uppercase opacity-50 text-xs">Global Impact Counter</p>
-                                <div id="bf-counter" class="text-5xl font-black">0</div>
-                            </div>
-                        </div>`;
-                    break;
-                case 'inventory':
-                    container.innerHTML = `
-                        <div class="max-w-4xl mx-auto">
-                            <div class="bg-black text-white p-4 mb-8 text-center font-bold">CARGO CAPACITY: <span id="cargo-cap">100</span>% REMAINING</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="inv-items"></div>
-                        </div>`;
-                    const items = [["8 Billion Humans", 60], ["The Internet", 30], ["3 Trillion Trees", 50], ["Music", 10], ["Pizza", 5], ["Shakespeare", 2]];
-                    const invDiv = document.getElementById('inv-items');
-                    items.forEach(it => {
-                        invDiv.innerHTML += `
-                            <button onclick="saveItem('${it[0]}', ${it[1]})" class="brutal-btn flex justify-between items-center p-4">
-                                <span>${it[0]}</span><span class="text-red-500">-${it[1]}%</span>
-                            </button>`;
-                    });
-                    break;
-                case 'capsule':
-                    container.className = "p-0 bg-[#c0c0c0]";
-                    container.innerHTML = `
-                        <div class="h-[5000px] w-full relative pt-20" style="background: linear-gradient(#c0c0c0, #e0e0e0, #fff, #000);">
-                            <div class="sticky top-40 text-center font-black">
-                                <p class="text-xs uppercase">Scroll through time</p>
-                                <h1 id="year-label" class="text-9xl opacity-20">1991</h1>
-                            </div>
-                            <div class="absolute top-[500px] left-10 p-4 retro-90s w-64 shadow-xl">The First Website is born.</div>
-                            <div class="absolute top-[1500px] right-10 p-4 border-4 border-black bg-white w-64">2004: Facebook Launches.</div>
-                            <div class="absolute top-[3000px] left-10 p-4 border-4 border-black bg-black text-white w-64 italic">2026: ARUSH.FUN Goes Viral.</div>
-                        </div>`;
-                    window.onscroll = () => {
-                        const year = 1991 + Math.floor(window.scrollY / 150);
-                        if(document.getElementById('year-label')) document.getElementById('year-label').innerText = year;
-                    };
-                    break;
-                case 'trolley':
-                    container.innerHTML = `
-                        <div class="max-w-2xl mx-auto text-center py-20">
-                            <h3 class="text-3xl font-black mb-10">A self-driving car's brakes fail.</h3>
-                            <div class="grid grid-cols-2 gap-8">
-                                <div class="p-8 border-4 border-black bg-red-100">
-                                    <p class="mb-4 font-bold">Hit 5 Grandmas</p>
-                                    <button onclick="trolleyChoice()" class="brutal-btn bg-red-500 text-white w-full">CHOOSE</button>
-                                </div>
-                                <div class="p-8 border-4 border-black bg-blue-100">
-                                    <p class="mb-4 font-bold">Hit 1 AI Developer</p>
-                                    <button onclick="trolleyChoice()" class="brutal-btn bg-blue-500 text-white w-full">CHOOSE</button>
-                                </div>
-                            </div>
-                            <div id="trolley-stats" class="mt-10 hidden font-black text-xl text-green-600">64% of people saved the developer.</div>
-                        </div>`;
-                    break;
-                case 'universe':
-                    container.parentElement.classList.add('universe-dark');
-                    container.innerHTML = `
-                        <div class="text-center">
-                            <div class="text-6xl font-black mb-10 tracking-widest" id="u-money">1,000,000,000,000,000,000,000,000,000,000,000 Credits</div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <button class="p-10 border-2 border-[#0f9] bg-transparent hover:bg-[#0f9] hover:text-black font-black uppercase">G-Type Star (500Q)</button>
-                                <button class="p-10 border-2 border-[#0f9] bg-transparent hover:bg-[#0f9] hover:text-black font-black uppercase">Supermassive Black Hole (1S)</button>
-                                <button class="p-10 border-2 border-[#0f9] bg-transparent hover:bg-[#0f9] hover:text-black font-black uppercase">Andromeda Galaxy (500S)</button>
-                            </div>
-                        </div>`;
-                    break;
-                case 'debt':
-                    container.innerHTML = `
-                        <div class="overflow-x-auto whitespace-nowrap py-40 bg-gray-100 border-y-4 border-black">
-                            <div class="inline-block w-[10cm] h-20 bg-green-200 border-2 border-green-800 text-center leading-[80px] font-bold mr-20">$100 BILL</div>
-                            <div class="inline-block w-[1000px] h-40 bg-green-400 border-4 border-green-900 text-center leading-[160px] font-black mr-40">$1 MILLION (Couch Size)</div>
-                            <div class="inline-block w-[5000px] h-80 bg-green-600 border-8 border-green-950 text-white text-center leading-[320px] font-black">$34 TRILLION (Moon Orbit)</div>
-                        </div>`;
-                    break;
-                case 'password':
-                    container.innerHTML = `
-                        <div class="max-w-xl mx-auto py-20 text-center">
-                            <p class="font-bold mb-2">Rule 1: Password must include the current temperature on Mars.</p>
-                            <input type="text" id="pw-input" class="w-full p-4 border-4 border-black text-2xl font-black focus:bg-red-50 outline-none" placeholder="Enter password...">
-                            <div id="pw-msg" class="text-red-600 font-bold mt-4 uppercase">❌ Rule 1 Failed</div>
-                        </div>`;
-                    break;
-                default:
-                    container.innerHTML = `<h1 class="text-center text-4xl font-black uppercase mt-20">Coming Soon: ${id} Logic</h1>`;
+                case 'time': initTimeGame(content, header); break;
+                case 'elon': initElonGame(content, header); break;
+                case 'butterfly': initButterfly(content, header); break;
+                case 'ark': initArk(content, header); break;
+                case 'capsule': initCapsule(content, header, stage); break;
+                case 'trolley': initTrolley(content, header); break;
+                case 'debt': initDebt(content, header); break;
+                case 'password': initPassword(content, header); break;
+                case 'universe': initUniverse(content, header, stage); break;
             }
         }
 
-        // --- MINI GAME LOGIC HANDLERS ---
-        function bfNext(choice, story, impact) {
-            document.getElementById('bf-story').innerText = story;
-            document.getElementById('bf-choices').innerHTML = `<button onclick="location.reload()" class="brutal-btn p-6">Your life ended. Restart?</button>`;
-            const count = document.getElementById('bf-counter');
-            count.innerText = parseInt(count.innerText) + (impact * 1000000);
+        // ==========================================
+        // 1. THE PRICE OF TIME: LIFE ACTUARY
+        // ==========================================
+        function initTimeGame(container, header) {
+            header.innerText = "The Price of Time";
+            let hours = 700800; // 80 years
+            let used = 0;
+            let items = [];
+            
+            container.innerHTML = `
+                <div class="flex flex-col lg:flex-row h-[calc(100vh-80px)] overflow-hidden bg-yellow-50">
+                    <div class="lg:w-2/3 p-6 overflow-y-auto border-r-4 border-black">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="timeMarket"></div>
+                    </div>
+                    <div class="lg:w-1/3 bg-white p-6 flex flex-col border-t-4 lg:border-t-0 border-black">
+                        <div class="mb-8 flex justify-center relative">
+                            <svg width="200" height="200" class="transform -rotate-90">
+                                <circle cx="100" cy="100" r="90" stroke="#eee" stroke-width="20" fill="none"/>
+                                <circle id="lifeCircle" cx="100" cy="100" r="90" stroke="black" stroke-width="20" fill="none" stroke-dasharray="565" stroke-dashoffset="0" class="transition-all duration-500"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span id="hoursText" class="text-3xl font-black">${hours.toLocaleString()}</span>
+                                <span class="text-xs font-bold uppercase opacity-50">Hours Left</span>
+                            </div>
+                        </div>
+                        <div id="ledger" class="flex-grow overflow-y-auto font-mono text-sm bg-gray-100 p-4 border-2 border-dashed border-gray-400">
+                            <p class="opacity-50 text-center">--- LIFE STARTED ---</p>
+                        </div>
+                    </div>
+                </div>`;
+
+            const market = [
+                {n: "Netflix Sub", cost: 730, type: "Wants", desc: "Drains 2h/day for a year"},
+                {n: "Puppy", cost: 5000, type: "Love", desc: "Walks take time. Lots of it."},
+                {n: "University Degree", cost: 35000, type: "Needs", desc: "4 years of youth gone."},
+                {n: "Bad Relationship", cost: 17000, type: "Regrets", desc: "2 years you won't get back."},
+                {n: "Commute (Career)", cost: 40000, type: "Work", desc: "Sitting in traffic."},
+                {n: "Doomscrolling", cost: 80000, type: "Regrets", desc: "10 years on phone screens."},
+            ];
+
+            const marketDiv = document.getElementById('timeMarket');
+            market.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "brutal-btn p-4 text-left flex justify-between items-center group hover:bg-red-50";
+                btn.innerHTML = `<div><div class="font-black">${item.n}</div><div class="text-xs opacity-60">${item.desc}</div></div><div class="font-black text-xl">-${item.cost.toLocaleString()}h</div>`;
+                btn.onclick = () => buyTimeItem(item);
+                marketDiv.appendChild(btn);
+            });
+
+            function buyTimeItem(item) {
+                if(hours - item.cost < 0) {
+                    alert("MORTALITY ALERT: You will die before finishing this.");
+                    return;
+                }
+                hours -= item.cost;
+                used += item.cost;
+                updateClock();
+                const entry = document.createElement('div');
+                entry.className = "border-b border-gray-300 py-2 flex justify-between";
+                entry.innerHTML = `<span>${item.n}</span><span class="font-bold">-${item.cost}h</span>`;
+                document.getElementById('ledger').prepend(entry);
+            }
+
+            function updateClock() {
+                const percent = hours / 700800;
+                const offset = 565 * (1 - percent);
+                document.getElementById('lifeCircle').style.strokeDashoffset = offset;
+                document.getElementById('hoursText').innerText = hours.toLocaleString();
+                if(hours < 1000) document.getElementById('lifeCircle').style.stroke = "red";
+            }
         }
 
-        let totalSaved = 0;
-        function saveItem(name, cost) {
-            let cap = document.getElementById('cargo-cap');
-            let current = parseInt(cap.innerText);
-            if(current >= cost) {
-                cap.innerText = current - cost;
-                alert(`Saved ${name}!`);
-            } else { alert("Cargo full! Earth is deleting..."); }
+        // ==========================================
+        // 2. SPEND ELON: MARKET SHAKER
+        // ==========================================
+        function initElonGame(container, header) {
+            header.innerText = "Spend Elon's Fortune";
+            let money = 250000000000;
+            
+            container.innerHTML = `
+                <div class="p-4 bg-white">
+                    <div class="sticky top-20 bg-black text-green-400 p-2 font-mono text-sm mb-4 whitespace-nowrap overflow-hidden z-40">
+                        <div id="newsTicker" class="inline-block animate-[marquee_20s_linear_infinite]">BREAKING: ELON MUSK LIQUIDATES ASSETS FOR SHOPPING SPREE ... MARKET VOLATILITY INDEX AT 9000 ... </div>
+                    </div>
+                    <div class="text-center py-8">
+                        <div id="elonBalance" class="text-6xl md:text-8xl font-black text-green-600 tracking-tighter">$${money.toLocaleString()}</div>
+                        <div class="h-4 w-full bg-gray-200 mt-4 rounded-full overflow-hidden relative">
+                             <div id="cashPile" class="h-full bg-green-500 w-full transition-all duration-500"></div>
+                        </div>
+                    </div>
+                    <div id="elonGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"></div>
+                </div>`;
+
+            const items = [
+                {n: "Big Mac", p: 5, icon: "🍔"}, {n: "Netflix Year", p: 200, icon: "📺"},
+                {n: "Rolex", p: 15000, icon: "⌚"}, {n: "Tesla Model S", p: 90000, icon: "🚗"},
+                {n: "House", p: 450000, icon: "🏡"}, {n: "Private Jet", p: 60000000, icon: "🛩️"},
+                {n: "Mona Lisa", p: 860000000, icon: "🖼️"}, {n: "Twitter (X)", p: 44000000000, icon: "✖️"},
+                {n: "Mars Colony", p: 100000000000, icon: "🪐"}
+            ];
+
+            const grid = document.getElementById('elonGrid');
+            items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="neal-card bg-white p-6 flex flex-col items-center shadow-[6px_6px_0px_#ccc]">
+                        <div class="text-5xl mb-4">${item.icon}</div>
+                        <div class="font-black uppercase">${item.n}</div>
+                        <div class="text-green-600 font-bold mb-4">$${item.p.toLocaleString()}</div>
+                        <button onclick="spendElon(${item.p}, '${item.n}')" class="brutal-btn w-full bg-green-100 hover:bg-green-300">BUY</button>
+                    </div>`;
+            });
+
+            window.spendElon = (cost, name) => {
+                if(money >= cost) {
+                    money -= cost;
+                    document.getElementById('elonBalance').innerText = "$" + money.toLocaleString();
+                    const percent = (money / 250000000000) * 100;
+                    document.getElementById('cashPile').style.width = percent + "%";
+                    if(name === "Mona Lisa") alert("BREAKING NEWS: Art Historians are crying.");
+                    if(name === "Twitter (X)") alert("BREAKING NEWS: Facebook stock drops 15%.");
+                }
+            };
         }
 
-        function trolleyChoice() {
-            document.getElementById('trolley-stats').classList.remove('hidden');
+        // ==========================================
+        // 3. BUTTERFLY EFFECT: CHAOS GRAPH
+        // ==========================================
+        function initButterfly(container, header) {
+            header.innerText = "Butterfly Effect Simulator";
+            let chaos = 0;
+            const nodes = {
+                1: { t: "The Alarm Rings.", c: [ {t: "Snooze (10m)", next: 2, impact: 5}, {t: "Wake Up Now", next: 3, impact: 0} ] },
+                2: { t: "You missed the bus.", c: [ {t: "Run to work", next: 4, impact: 10}, {t: "Call in sick", next: 5, impact: 20} ] },
+                3: { t: "You catch the bus.", c: [ {t: "Sit by weirdo", next: 6, impact: 2}, {t: "Stand up", next: 7, impact: 0} ] },
+                4: { t: "You get hit by a bike. Broken leg.", c: [] },
+                5: { t: "You watch TV all day. You see a lottery ad.", c: [] },
+                6: { t: "The weirdo is a CEO. He hires you.", c: [] },
+                7: { t: "Normal day. Nothing happens.", c: [] }
+            };
+
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-[80vh] bg-slate-100 p-4">
+                    <canvas id="chaosCanvas" width="800" height="400" class="border-4 border-black bg-white mb-8 shadow-[8px_8px_0px_#000]"></canvas>
+                    <div id="storyBox" class="text-center max-w-lg">
+                        <h2 id="storyText" class="text-3xl font-black mb-6">Simulation Start.</h2>
+                        <div id="storyOptions" class="flex gap-4 justify-center"></div>
+                    </div>
+                    <div class="mt-8 font-mono font-bold text-red-600" id="chaosMeter">Chaos Level: 0%</div>
+                </div>`;
+            
+            renderNode(1);
+
+            function renderNode(id) {
+                const node = nodes[id];
+                if(!node) return;
+                
+                document.getElementById('storyText').innerText = node.t;
+                const opts = document.getElementById('storyOptions');
+                opts.innerHTML = '';
+                
+                if(node.c.length === 0) {
+                    opts.innerHTML = `<button onclick="initButterfly(document.getElementById('gameContent'), document.getElementById('gameHeaderInfo'))" class="brutal-btn p-4">Reset Simulation</button>`;
+                    return;
+                }
+
+                node.c.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = "brutal-btn p-4 hover:bg-blue-100";
+                    btn.innerText = choice.t;
+                    btn.onclick = () => {
+                        chaos += choice.impact;
+                        document.getElementById('chaosMeter').innerText = `Chaos Level: ${chaos}%`;
+                        if(chaos > 50) document.body.classList.add('shake-hard');
+                        renderNode(choice.next);
+                    };
+                    opts.appendChild(btn);
+                });
+            }
         }
 
-        initHome();
+        // ==========================================
+        // 4. EARTH'S INVENTORY: ARK ALGORITHM
+        // ==========================================
+        function initArk(container, header) {
+            header.innerText = "Earth's Final Inventory";
+            container.innerHTML = `
+                <div class="bg-gray-900 text-green-400 font-mono min-h-screen p-6">
+                    <div class="grid grid-cols-3 gap-4 mb-8 border-b border-green-700 pb-4">
+                        <div class="text-center">VOLUME: <span id="vol">100</span>%</div>
+                        <div class="text-center">WEIGHT: <span id="wgt">100</span>%</div>
+                        <div class="text-center">SUSTAIN: <span id="sus">0</span></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="arkItems"></div>
+                    <button onclick="launchArk()" class="fixed bottom-10 right-10 border-2 border-green-400 bg-black text-green-400 px-8 py-4 font-black hover:bg-green-900 uppercase">Launch Ark</button>
+                </div>`;
+            
+            const items = [
+                {n: "1 Billion Humans", v: 40, w: 40, s: -20},
+                {n: "Seed Bank", v: 5, w: 5, s: 50},
+                {n: "Internet Servers", v: 20, w: 10, s: -10},
+                {n: "Livestock", v: 30, w: 30, s: -15},
+                {n: "Oxygen Scrubbers", v: 10, w: 10, s: 40},
+                {n: "Art & Culture", v: 5, w: 2, s: 0},
+            ];
+
+            let stats = {v:100, w:100, s:0};
+            
+            items.forEach(item => {
+                document.getElementById('arkItems').innerHTML += `
+                    <div class="border border-green-700 p-4 hover:bg-green-900 cursor-pointer" onclick="toggleArkItem(this, ${item.v}, ${item.w}, ${item.s})">
+                        <div class="font-bold text-xl mb-2">[ ] ${item.n}</div>
+                        <div class="text-xs opacity-70">Vol:${item.v} Wgt:${item.w} Sus:${item.s}</div>
+                    </div>`;
+            });
+
+            window.toggleArkItem = (el, v, w, s) => {
+                if(el.classList.contains('bg-green-800')) {
+                    el.classList.remove('bg-green-800');
+                    el.querySelector('div').innerText = el.querySelector('div').innerText.replace('[X]', '[ ]');
+                    stats.v += v; stats.w += w; stats.s -= s;
+                } else {
+                    if(stats.v < v || stats.w < w) { alert("INSUFFICIENT CAPACITY"); return; }
+                    el.classList.add('bg-green-800');
+                    el.querySelector('div').innerText = el.querySelector('div').innerText.replace('[ ]', '[X]');
+                    stats.v -= v; stats.w -= w; stats.s += s;
+                }
+                document.getElementById('vol').innerText = stats.v;
+                document.getElementById('wgt').innerText = stats.w;
+                document.getElementById('sus').innerText = stats.s;
+            }
+
+            window.launchArk = () => {
+                let msg = "Launch Report:\n";
+                if(stats.s < 0) msg += "FAILURE: Colony starved due to negative sustain.\n";
+                else msg += "SUCCESS: Colony is self-sustaining.\n";
+                alert(msg);
+            }
+        }
+
+        // ==========================================
+        // 5. INTERNET CAPSULE: DOM TIME MACHINE
+        // ==========================================
+        function initCapsule(container, header, stage) {
+            header.innerText = "Internet Time Capsule";
+            document.getElementById('gameNav').classList.remove('bg-white', 'border-black'); // Custom Nav
+            container.innerHTML = `
+                <div id="capsule-scroll" class="h-[5000px] w-full relative">
+                    <div class="fixed top-24 left-4 font-mono z-50 bg-black text-white p-2">YEAR: <span id="yearDisplay">1990</span></div>
+                    
+                    <div class="absolute top-0 w-full h-[1000px] bg-[#c0c0c0] font-[Times] p-10">
+                        <h1 class="text-blue-800 underline text-4xl mb-4">Welcome to the World Wide Web</h1>
+                        <table border="1" class="w-full bg-white"><tr><td>Table Layouts</td><td>Were Cool</td></tr></table>
+                    </div>
+
+                    <div class="absolute top-[1000px] w-full h-[1500px] bg-[url('https://i.imgur.com/8Qj8j9M.png')] p-10 font-[Arial]">
+                        <marquee class="text-3xl font-bold text-red-500 bg-yellow-200 border-4 border-dashed border-red-500 mb-10">WELCOME TO MY MYSPACE PAGE!!!</marquee>
+                        <div class="bg-white border-2 border-blue-500 p-4 rounded-lg shadow-lg max-w-md mx-auto">
+                            <h2 class="font-bold text-blue-600">Facebook Login</h2>
+                            <input placeholder="Email" class="border p-1 w-full mb-2">
+                        </div>
+                    </div>
+
+                    <div class="absolute top-[2500px] w-full h-[1500px] bg-[#f5f5f5] font-[Roboto] p-10">
+                        <div class="bg-white shadow-xl rounded-lg p-8 max-w-2xl mx-auto mt-20">
+                            <h2 class="text-3xl font-light text-gray-700 mb-4">Material Design</h2>
+                            <button class="bg-blue-500 text-white uppercase font-bold py-2 px-4 rounded shadow hover:shadow-lg transition">Like</button>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-[4000px] w-full h-[1000px] bg-black text-white p-10 flex flex-col items-center justify-center">
+                        <h1 class="text-6xl font-black mb-8 glitch-text">THE END.</h1>
+                        <input class="bg-transparent border-b-2 border-white text-3xl text-center outline-none mb-4 w-full max-w-lg" placeholder="Leave a message...">
+                        <button class="border border-white px-8 py-2 hover:bg-white hover:text-black transition">Bury Capsule</button>
+                    </div>
+                </div>`;
+
+            stage.onscroll = () => {
+                const y = stage.scrollTop;
+                const year = 1990 + Math.floor(y / 120);
+                const disp = document.getElementById('yearDisplay');
+                if(disp) disp.innerText = year;
+            }
+        }
+
+        // ==========================================
+        // 6. ABSURD TROLLEY: AI ETHICS
+        // ==========================================
+        function initTrolley(container, header) {
+            header.innerText = "Absurd Trolley Problem";
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-[80vh] bg-red-50 p-6">
+                    <div class="w-full max-w-3xl bg-white border-4 border-black shadow-[10px_10px_0px_#000] p-8 text-center">
+                        <div class="h-2 w-full bg-gray-200 mb-6"><div class="h-full bg-red-500 animate-[width_3s_linear_forwards] w-full origin-left duration-[3000ms] transition-all" id="timerBar"></div></div>
+                        <h2 class="text-4xl font-black mb-8 uppercase leading-tight">A self-driving car loses its brakes.</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <button onclick="trolleyVote('A')" class="brutal-btn p-8 bg-blue-100 hover:bg-blue-300 h-40 flex flex-col items-center justify-center">
+                                <span class="text-4xl mb-2">👶</span>
+                                <span class="font-bold">Hit 1 Baby (Future Dictator)</span>
+                            </button>
+                            <button onclick="trolleyVote('B')" class="brutal-btn p-8 bg-red-100 hover:bg-red-300 h-40 flex flex-col items-center justify-center">
+                                <span class="text-4xl mb-2">👵</span>
+                                <span class="font-bold">Hit 5 Grandmas (Nice ones)</span>
+                            </button>
+                        </div>
+                        <div id="trolleyResult" class="mt-8 font-black text-2xl hidden">
+                            YOU KILLED THE GRANDMAS. <span class="text-green-600">67% OF HUMANS AGREED.</span>
+                        </div>
+                    </div>
+                </div>`;
+            
+            window.trolleyVote = (c) => {
+                document.getElementById('trolleyResult').classList.remove('hidden');
+            }
+        }
+
+        // ==========================================
+        // 7. SIZE OF DEBT: INFINITE SCROLL
+        // ==========================================
+        function initDebt(container, header) {
+            header.innerText = "Size of the Debt ($34T)";
+            container.innerHTML = `
+                <div class="fixed top-32 right-10 z-50 bg-black text-red-500 font-mono text-2xl p-4 border-4 border-red-500">
+                    DEBT: $<span id="debtClock">34,000,000,000,000</span>
+                </div>
+                <div class="overflow-x-auto h-[80vh] flex items-end pb-20 px-20 bg-slate-200 border-b-8 border-gray-400 whitespace-nowrap">
+                    <div class="inline-block mx-10 text-center">
+                        <div class="w-[1px] h-[1px] bg-green-600 mb-2 mx-auto"></div>
+                        <div class="font-bold text-xs">$100</div>
+                    </div>
+                    <div class="inline-block mx-20 text-center">
+                        <div class="w-[20px] h-[20px] bg-green-500 border border-green-800 mb-2 mx-auto"></div>
+                        <div class="font-bold">$1M (Couch)</div>
+                    </div>
+                    <div class="inline-block mx-40 text-center">
+                        <div class="w-[100px] h-[300px] bg-green-600 border-2 border-green-900 mb-2 mx-auto relative flex items-center justify-center text-white font-bold">
+                            $1B
+                        </div>
+                        <div class="font-bold">Burj Khalifa Scale</div>
+                    </div>
+                    <div class="inline-block mx-40 text-center">
+                        <div class="w-[500px] h-[500px] bg-green-700 border-4 border-green-950 mb-2 mx-auto grid grid-cols-10 grid-rows-10">
+                            </div>
+                        <div class="font-bold text-2xl">$1 Trillion</div>
+                    </div>
+                    <div class="inline-block mx-40">
+                        <div class="flex">
+                            <div class="w-[2000px] h-[2000px] bg-green-800 flex items-center justify-center text-white text-9xl font-black">
+                                $34 TRILLION
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            
+            setInterval(() => {
+                const el = document.getElementById('debtClock');
+                if(el) {
+                    let val = parseInt(el.innerText.replace(/,/g, '')) + 10000;
+                    el.innerText = val.toLocaleString();
+                }
+            }, 1000);
+        }
+
+        // ==========================================
+        // 8. PASSWORD 2026: SECURITY THEATER
+        // ==========================================
+        function initPassword(container, header) {
+            header.innerText = "Password Game 2026";
+            container.innerHTML = `
+                <div class="max-w-xl mx-auto pt-20 px-4">
+                    <input id="pwInput" type="text" class="w-full text-2xl p-4 border-4 border-black font-mono outline-none focus:bg-pink-50 transition" placeholder="Choose a password" oninput="checkRules()">
+                    <div id="rulesList" class="mt-8 space-y-4"></div>
+                </div>`;
+            
+            const rules = [
+                {id: 1, text: "Rule 1: Must be at least 5 characters.", check: (s) => s.length >= 5},
+                {id: 2, text: "Rule 2: Must include a number.", check: (s) => /\d/.test(s)},
+                {id: 3, text: "Rule 3: Must include '🥚' (Paul).", check: (s) => s.includes('🥚')},
+                {id: 4, text: "Rule 4: Digits must sum to 25.", check: (s) => {
+                    const nums = s.match(/\d/g);
+                    if(!nums) return false;
+                    return nums.reduce((a,b)=>parseInt(a)+parseInt(b), 0) === 25;
+                }},
+                {id: 5, text: "Rule 5: Keep Paul safe (Do not delete him).", check: (s) => true} 
+            ];
+
+            let activeRules = 1;
+            
+            window.checkRules = () => {
+                const val = document.getElementById('pwInput').value;
+                const list = document.getElementById('rulesList');
+                list.innerHTML = '';
+                
+                let allPassed = true;
+                for(let i=0; i<activeRules; i++) {
+                    const r = rules[i];
+                    const passed = r.check(val);
+                    const div = document.createElement('div');
+                    div.className = passed ? "text-green-600 font-bold bg-green-100 p-2 border border-green-500" : "text-red-600 font-bold bg-red-100 p-2 border border-red-500 shake-hard";
+                    div.innerText = (passed ? "✅ " : "❌ ") + r.text;
+                    list.appendChild(div);
+                    if(!passed) allPassed = false;
+                }
+
+                if(allPassed && activeRules < rules.length) {
+                    activeRules++;
+                    checkRules();
+                }
+            }
+            window.checkRules();
+        }
+
+        // ==========================================
+        // 9. BUY THE UNIVERSE: TYPE III CLICKER
+        // ==========================================
+        function initUniverse(container, header, stage) {
+            header.innerText = "Buy The Universe";
+            stage.classList.add('universe-bg');
+            document.getElementById('gameNav').style.background = "#000";
+            document.getElementById('gameNav').style.color = "#00ff99";
+            document.getElementById('gameNav').style.borderColor = "#00ff99";
+            
+            let energy = 100n; // BigInt
+            
+            container.innerHTML = `
+                <div class="text-center pt-20 pb-40">
+                    <div class="text-xs uppercase tracking-[0.5em] mb-4 text-gray-400">Universal Energy</div>
+                    <div id="uEnergy" class="text-5xl md:text-7xl font-bold font-mono text-[#00ff99] mb-12">100</div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+                        <button onclick="buyUni(100n, 1n)" class="border border-[#00ff99] p-8 hover:bg-[#00ff99] hover:text-black transition group">
+                            <h3 class="text-2xl font-bold uppercase mb-2">Asteroid Field</h3>
+                            <p class="text-sm opacity-70 group-hover:opacity-100">Cost: 100 | +1/sec</p>
+                        </button>
+                        <button onclick="buyUni(50000n, 500n)" class="border border-[#00ff99] p-8 hover:bg-[#00ff99] hover:text-black transition group">
+                            <h3 class="text-2xl font-bold uppercase mb-2">Planet Earth</h3>
+                            <p class="text-sm opacity-70 group-hover:opacity-100">Cost: 50k | +500/sec</p>
+                        </button>
+                        <button onclick="buyUni(10000000n, 50000n)" class="border border-[#00ff99] p-8 hover:bg-[#00ff99] hover:text-black transition group">
+                            <h3 class="text-2xl font-bold uppercase mb-2">Dyson Swarm</h3>
+                            <p class="text-sm opacity-70 group-hover:opacity-100">Cost: 10M | +50k/sec</p>
+                        </button>
+                    </div>
+                </div>`;
+
+            let income = 0n;
+            
+            window.buyUni = (cost, inc) => {
+                if(energy >= cost) {
+                    energy -= cost;
+                    income += inc;
+                    updateUni();
+                }
+            };
+
+            // Game Loop
+            if(window.gameInterval) clearInterval(window.gameInterval);
+            window.gameInterval = setInterval(() => {
+                energy += income;
+                updateUni();
+            }, 1000);
+
+            function updateUni() {
+                const el = document.getElementById('uEnergy');
+                if(el) el.innerText = energy.toLocaleString();
+            }
+        }
+
     </script>
 </body>
 </html>
