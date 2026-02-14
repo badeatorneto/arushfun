@@ -5,154 +5,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARUSH.FUN</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fff; color: #000; }
-        .neal-card { border: 3px solid #000; border-radius: 15px; transition: transform 0.2s; cursor: pointer; overflow: hidden; height: 180px; position: relative; }
-        .neal-card:hover { transform: scale(1.02); }
-        .game-container { display: none; }
-        /* Elon Game Specifics */
-        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; }
-        .sticky-money { position: sticky; top: 0; z-index: 100; background: #2ecc71; color: white; border-bottom: 4px solid #000; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff; }
+        .neal-card { border: 4px solid #000; border-radius: 20px; transition: all 0.2s; cursor: pointer; }
+        .neal-card:hover { transform: translateY(-5px); box-shadow: 8px 8px 0px #000; }
+        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: 0.1s; }
+        .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+        .game-view { display: none; }
+        .active-view { display: block; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #000; border-radius: 5px; }
     </style>
 </head>
-<body>
+<body class="bg-[#f0f2f5]">
 
-    <div id="homeScreen" class="py-12 px-4">
-        <div class="max-w-4xl mx-auto text-center mb-12">
-            <h1 class="text-7xl font-black tracking-tighter mb-2 uppercase">ARUSH<span class="text-gray-400">.</span>FUN</h1>
-            <p class="text-xl font-bold text-gray-600">games and stuff by arush</p>
+    <div id="homeView" class="game-view active-view min-h-screen flex flex-col items-center justify-center p-6">
+        <div class="text-center mb-12">
+            <h1 class="text-8xl font-[900] tracking-tighter mb-2 italic">ARUSH<span class="text-blue-500">.</span>FUN</h1>
+            <p class="text-2xl font-bold uppercase tracking-widest opacity-40">games and stuff by arush</p>
         </div>
-
-        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div onclick="showGame('timeGame')" class="neal-card bg-blue-50 flex flex-col items-center justify-center p-6 text-center">
-                <div class="text-5xl mb-2">⏳</div>
-                <h2 class="text-3xl font-black uppercase tracking-tighter">The Price of Time</h2>
-                <p class="font-bold opacity-60">What is your life worth?</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
+            <div onclick="switchView('timeGame')" class="neal-card bg-yellow-400 p-8 flex flex-col items-center text-center">
+                <span class="text-7xl mb-4">⌛</span>
+                <h2 class="text-3xl font-black uppercase">The Price of Time</h2>
+                <p class="font-bold opacity-80 mt-2">Spend your life hours like cash.</p>
             </div>
-
-            <div onclick="showGame('elonGame')" class="neal-card bg-green-50 flex flex-col items-center justify-center p-6 text-center">
-                <div class="text-5xl mb-2">🚀</div>
-                <h2 class="text-3xl font-black uppercase tracking-tighter">Spend Elon's Money</h2>
-                <p class="font-bold opacity-60">Spending $800,000,000,000</p>
+            <div onclick="switchView('elonGame')" class="neal-card bg-green-400 p-8 flex flex-col items-center text-center">
+                <span class="text-7xl mb-4">🚀</span>
+                <h2 class="text-3xl font-black uppercase">Spend Elon's Money</h2>
+                <p class="font-bold opacity-80 mt-2">Spend $800,000,000,000.</p>
             </div>
         </div>
     </div>
 
-    <div id="timeGame" class="game-container">
-        <nav class="p-4 border-b-2 border-black flex justify-between items-center">
-            <button onclick="goHome()" class="font-black uppercase">← Back to Arush.fun</button>
-            <h1 class="font-black uppercase">The Price of Time</h1>
-        </nav>
-        <div class="p-20 text-center font-black text-2xl">⏳ Time Game Loaded (Logic Active)</div>
-    </div>
-
-    <div id="elonGame" class="game-container">
-        <nav class="p-4 bg-white border-b-4 border-black flex justify-between items-center sticky top-0 z-[110]">
-            <button onclick="goHome()" class="font-black uppercase px-4 py-2 border-2 border-black hover:bg-black hover:text-white transition">← Home</button>
-            <div id="moneyDisplay" class="text-3xl font-black tracking-tighter text-green-600">$800,000,000,000</div>
-        </nav>
-
-        <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="elonGrid">
-            </div>
-
+    <div id="elonGame" class="game-view bg-white min-h-screen">
+        <nav class="sticky top-0 bg-white border-b-4 border-black p-4 z-50 flex justify-between items-center">
+            <button onclick="switchView('homeView')" class="brutal-btn px-6 py-2 font-black uppercase bg-white">← Home</button>
+            <div id="elonMoney" class="text-4xl font-black tracking-tighter text-green-600">$800,000,000,000</div>
+            <div class="w-32"></div> </nav>
+        <div id="elonGrid" class="max-w-7xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
         <div class="max-w-2xl mx-auto my-20 p-8 border-4 border-black bg-white shadow-[10px_10px_0px_#000]">
-            <h2 class="text-center font-black text-4xl uppercase mb-6">Arush.fun Receipt</h2>
-            <div id="receiptList" class="space-y-2 font-bold text-lg mb-6"></div>
-            <div id="receiptTotal" class="text-center font-black text-2xl border-t-4 border-black pt-4 text-green-600">Total: $0</div>
+            <h2 class="text-center font-black text-3xl uppercase mb-6 border-b-4 border-black pb-2">Elon's Receipt</h2>
+            <div id="elonReceipt" class="space-y-2 font-bold text-lg mb-6"></div>
+            <div id="elonTotal" class="text-center font-black text-2xl border-t-4 border-black pt-4">Total: $0</div>
+        </div>
+    </div>
+
+    <div id="timeGame" class="game-view bg-slate-50 min-h-screen">
+        <nav class="border-b-4 border-black p-4 bg-white flex justify-between items-center sticky top-0 z-50">
+            <button onclick="switchView('homeView')" class="brutal-btn px-6 py-2 font-black uppercase bg-white">← Home</button>
+            <div class="text-center">
+                <p id="timeBudget" class="text-3xl font-black text-yellow-600">$0</p>
+                <p id="timeTotal" class="text-[10px] font-bold uppercase">Hours Used: 0 / 700,800</p>
+            </div>
+            <button onclick="saveTimeGame()" class="brutal-btn px-6 py-2 font-black uppercase bg-green-400">Save Life</button>
+        </nav>
+        <div class="max-w-6xl mx-auto p-6 flex flex-col lg:flex-row gap-8">
+            <div class="lg:w-2/3">
+                <select id="jobSelect" onchange="changeJob(this.value)" class="w-full p-4 border-4 border-black font-black text-xl mb-6 bg-white outline-none">
+                    <option value="0">Student ($12/hr)</option>
+                    <option value="1">Software Engineer ($100/hr)</option>
+                    <option value="2">Billionaire ($1,000,000/hr)</option>
+                </select>
+                <div id="timeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            </div>
+            <div class="lg:w-1/3">
+                <div class="border-4 border-black p-4 bg-white h-[500px] flex flex-col">
+                    <h3 class="font-black border-b-2 border-black mb-4">LIFE HISTORY</h3>
+                    <div id="timeHistory" class="overflow-y-auto flex-grow text-xs font-bold space-y-2 uppercase opacity-70"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- NAVIGATION LOGIC ---
-        function showGame(id) {
-            document.getElementById('homeScreen').style.display = 'none';
-            document.getElementById(id).style.display = 'block';
-            if(id === 'elonGame') initElon();
-        }
-
-        function goHome() {
-            document.getElementById('homeScreen').style.display = 'block';
-            document.querySelectorAll('.game-container').forEach(g => g.style.display = 'none');
+        // --- SHARED NAVIGATION ---
+        function switchView(viewId) {
+            document.querySelectorAll('.game-view').forEach(v => v.classList.remove('active-view'));
+            document.getElementById(viewId).classList.add('active-view');
+            window.scrollTo(0,0);
         }
 
         // --- ELON GAME LOGIC ---
-        let balance = 800000000000;
-        let inventory = {};
-
-        // 150 ITEMS - Sorted Least to Most Expensive
-        const rawElonItems = [
-            ["Taco Bell Box", 5, "🌮"], ["Starbucks", 6, "☕"], ["Netflix", 15, "🎬"], ["Movie Ticket", 18, "🎟️"], 
-            ["Book", 25, "📖"], ["Video Game", 70, "🎮"], ["AirPods", 249, "🎧"], ["Designer Shoes", 800, "👟"],
-            ["iPhone 15", 1100, "📱"], ["Gaming PC", 3500, "🖥️"], ["Used Car", 12000, "🚗"], ["Luxury Watch", 18000, "⌚"],
-            ["Tesla Model 3", 45000, "🔋"], ["Home Cinema", 60000, "🔊"], ["Gold Bar", 75000, "🧈"], ["Full Wedding", 100000, "👰"],
-            ["Lamborghini", 500000, "🏎️"], ["Gold Toilet", 1000000, "🚽"], ["Luxury Villa", 5000000, "🏡"], ["Private Jet", 75000000, "🛩️"],
-            ["Super Yacht", 250000000, "🚢"], ["NBA Team", 3000000000, "🏀"], ["Burj Khalifa", 1500000000, "🏙️"], ["Aircraft Carrier", 13000000000, "⚓"],
-            ["Acquire X", 44000000000, "❌"], ["Nintendo", 55000000000, "🍄"], ["End Hunger", 400000000000, "🍲"], ["The Moon", 500000000000, "🌙"]
-            // (Note: To keep code clean, I've used a subset, but the sort logic below works for any amount of items)
+        const elonData = { balance: 800000000000, inventory: {} };
+        const elonItems = [
+            ["Big Mac", 5, "🍔"], ["Starbucks Latte", 6, "☕"], ["Netflix (Year)", 180, "📺"], ["AirPods Pro", 249, "🎧"],
+            ["Gaming PC", 3500, "🖥️"], ["Used Honda Civic", 12000, "🚗"], ["Rolex Watch", 15000, "⌚"], ["Tesla Model 3", 45000, "🔋"],
+            ["Ferrari SF90", 520000, "🏎️"], ["Luxury Apartment", 2000000, "🏢"], ["Private Island", 50000000, "🏝️"], ["Private Jet", 75000000, "🛩️"],
+            ["Super Yacht", 300000000, "🚢"], ["NBA Team", 3000000000, "🏀"], ["Burj Khalifa", 1500000000, "🏙️"], ["Nuclear Plant", 9000000000, "☢️"],
+            ["Acquire McDonald's", 190000000000, "🍟"], ["The Moon", 500000000000, "🌙"], ["Acquire Google", 1500000000000, "🔍"]
         ];
-
-        // Function to generate full 150 items programmatically for demonstration
-        function generate150Items() {
-            let fullList = [...rawElonItems];
-            for (let i = 0; i < 122; i++) {
-                fullList.push([`Rare Artifact #${i+1}`, 100000 * (i * 2), "🏺"]);
-            }
-            // Sort by price: Least to Most
-            return fullList.sort((a, b) => a[1] - b[1]);
+        // Generate up to 150 programmatically for full list
+        const categories = ["Collectable", "Luxury", "Infrastructure", "Mega-Corp", "Galactic"];
+        for(let i=1; i<=131; i++) {
+            const price = 500 * Math.pow(1.15, i + 10);
+            elonItems.push([`Exclusive ${categories[i%5]} #${i}`, Math.floor(price), "💎"]);
         }
+        elonItems.sort((a,b) => a[1] - b[1]);
 
-        const elonItems = generate150Items();
-
-        function initElon() {
+        function renderElon() {
             const grid = document.getElementById('elonGrid');
             grid.innerHTML = '';
-            elonItems.forEach((item, idx) => {
-                const count = inventory[item[0]] || 0;
-                const card = document.createElement('div');
-                card.className = "border-4 border-black p-6 bg-white text-center shadow-[5px_5px_0px_#000]";
-                card.innerHTML = `
-                    <div class="text-6xl mb-4">${item[2]}</div>
-                    <div class="font-black uppercase text-sm h-10 mb-2">${item[0]}</div>
-                    <div class="text-green-600 font-bold mb-4">$${item[1].toLocaleString()}</div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="changeElon(${idx}, -1)" class="flex-1 border-2 border-black font-black py-1 hover:bg-red-500">-</button>
-                        <div class="w-8 font-black">${count}</div>
-                        <button onclick="changeElon(${idx}, 1)" class="flex-1 border-2 border-black font-black py-1 hover:bg-green-500">+</button>
-                    </div>
-                `;
-                grid.appendChild(card);
+            elonItems.forEach((item, i) => {
+                const count = elonData.inventory[item[0]] || 0;
+                grid.innerHTML += `
+                    <div class="border-4 border-black p-6 bg-white flex flex-col items-center shadow-[5px_5px_0px_#000]">
+                        <span class="text-6xl mb-4">${item[2]}</span>
+                        <h3 class="font-black text-sm uppercase text-center h-10">${item[0]}</h3>
+                        <p class="text-green-600 font-bold mb-4">$${item[1].toLocaleString()}</p>
+                        <div class="flex items-center gap-2 w-full">
+                            <button onclick="changeElon(${i}, -1)" class="brutal-btn bg-red-400 flex-1 py-1 font-black">-</button>
+                            <span class="w-8 text-center font-black">${count}</span>
+                            <button onclick="changeElon(${i}, 1)" class="brutal-btn bg-green-400 flex-1 py-1 font-black">+</button>
+                        </div>
+                    </div>`;
             });
-            updateElonUI();
+            updateElonReceipt();
         }
 
-        function changeElon(idx, delta) {
-            const item = elonItems[idx];
-            if (delta > 0 && balance >= item[1]) {
-                balance -= item[1];
-                inventory[item[0]] = (inventory[item[0]] || 0) + 1;
-            } else if (delta < 0 && inventory[item[0]] > 0) {
-                balance += item[1];
-                inventory[item[0]]--;
+        function changeElon(i, d) {
+            const item = elonItems[i];
+            if(d > 0 && elonData.balance >= item[1]) {
+                elonData.balance -= item[1];
+                elonData.inventory[item[0]] = (elonData.inventory[item[0]] || 0) + 1;
+            } else if(d < 0 && elonData.inventory[item[0]] > 0) {
+                elonData.balance += item[1];
+                elonData.inventory[item[0]]--;
             }
-            initElon();
+            document.getElementById('elonMoney').innerText = "$" + elonData.balance.toLocaleString();
+            renderElon();
         }
 
-        function updateElonUI() {
-            document.getElementById('moneyDisplay').innerText = "$" + balance.toLocaleString();
-            const receipt = document.getElementById('receiptList');
-            receipt.innerHTML = '';
+        function updateElonReceipt() {
+            const list = document.getElementById('elonReceipt');
             let total = 0;
-            for (let name in inventory) {
-                if (inventory[name] > 0) {
-                    const item = elonItems.find(i => i[0] === name);
-                    const cost = item[1] * inventory[name];
+            list.innerHTML = '';
+            for(let name in elonData.inventory) {
+                if(elonData.inventory[name] > 0) {
+                    const price = elonItems.find(it => it[0] === name)[1];
+                    const cost = price * elonData.inventory[name];
                     total += cost;
-                    receipt.innerHTML += `<div class="flex justify-between"><span>${name} x${inventory[name]}</span><span>$${cost.toLocaleString()}</span></div>`;
+                    list.innerHTML += `<div class="flex justify-between"><span>${name} x${elonData.inventory[name]}</span><span>$${cost.toLocaleString()}</span></div>`;
                 }
             }
-            document.getElementById('receiptTotal').innerText = "Total: $" + total.toLocaleString();
+            document.getElementById('elonTotal').innerText = "Total: $" + total.toLocaleString();
         }
+
+        // --- PRICE OF TIME LOGIC ---
+        const jobs = [{n: "Student", w: 12, b: 250000}, {n: "Eng", w: 100, b: 2000000}, {n: "CEO", w: 1000000, b: 250000000000}];
+        const timeItems = [["Pizza", 0.5, "🍕"], ["Movie", 2.5, "🍿"], ["Raise Child", 160000, "👶"], ["Mars Trip", 20000, "🚀"]];
+        let timeState = { jobIdx: 0, budget: 250000, used: 0, history: [] };
+
+        function initTimeGame() {
+            const grid = document.getElementById('timeGrid');
+            grid.innerHTML = '';
+            timeItems.forEach((item, i) => {
+                grid.innerHTML += `
+                    <div class="border-4 border-black p-4 bg-white flex justify-between items-center shadow-[4px_4px_0px_#000]">
+                        <div><p class="font-black uppercase">${item[0]}</p><p class="text-[10px] font-bold opacity-50">${item[1]} HRS</p></div>
+                        <button onclick="buyTime(${i})" class="brutal-btn bg-black text-white px-4 py-2 font-black text-xs">BUY</button>
+                    </div>`;
+            });
+            loadTimeGame();
+            updateTimeUI();
+        }
+
+        function buyTime(i) {
+            const item = timeItems[i];
+            const cost = item[1] * jobs[timeState.jobIdx].w;
+            if(timeState.budget >= cost) {
+                timeState.budget -= cost;
+                timeState.used += item[1];
+                timeState.history.unshift(`Spent $${cost.toLocaleString()} to ${item[0]} (${item[1]} hrs)`);
+                updateTimeUI();
+            }
+        }
+
+        function updateTimeUI() {
+            document.getElementById('timeBudget').innerText = "$" + timeState.budget.toLocaleString();
+            document.getElementById('timeTotal').innerText = `Hours Used: ${timeState.used.toLocaleString()} / 700,800`;
+            document.getElementById('timeHistory').innerHTML = timeState.history.map(h => `<p class="border-l-2 border-black pl-2">${h}</p>`).join('');
+        }
+
+        function saveTimeGame() {
+            localStorage.setItem('arushTimeSave', JSON.stringify(timeState));
+            alert("Life Saved!");
+        }
+
+        function loadTimeGame() {
+            const s = localStorage.getItem('arushTimeSave');
+            if(s && confirm("Resume previous life?")) {
+                timeState = JSON.parse(s);
+                document.getElementById('jobSelect').value = timeState.jobIdx;
+            }
+        }
+
+        function changeJob(val) {
+            timeState.jobIdx = parseInt(val);
+            timeState.budget = jobs[timeState.jobIdx].b;
+            timeState.used = 0;
+            timeState.history = [];
+            updateTimeUI();
+        }
+
+        // Start
+        renderElon();
+        initTimeGame();
     </script>
 </body>
 </html>
