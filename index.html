@@ -5,216 +5,201 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARUSH.FUN</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@700&family=VT323&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fff; }
-        .neal-card { border: 4px solid #000; border-radius: 20px; transition: all 0.2s; cursor: pointer; }
-        .neal-card:hover { transform: translateY(-5px); box-shadow: 8px 8px 0px #000; }
-        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: 0.1s; }
+        :root { --brutal-shadow: 6px 6px 0px #000; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; overflow-x: hidden; }
+        .neal-card { border: 4px solid #000; border-radius: 20px; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+        .neal-card:hover { transform: translateY(-5px); box-shadow: var(--brutal-shadow); }
+        .game-view { display: none; min-height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; }
+        .active { display: block; }
+        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: 0.1s; background: white; font-weight: 800; text-transform: uppercase; padding: 0.5rem 1.5rem; }
         .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-        .game-view { display: none; }
-        .active-view { display: block; }
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #000; border-radius: 5px; }
+        
+        /* Game Specific Styles */
+        .retro-90s { background: #c0c0c0; font-family: 'MS Sans Serif', sans-serif; border: 2px solid #fff; border-right-color: #808080; border-bottom-color: #808080; }
+        .universe-dark { background: #050505; color: #00ff99; font-family: 'Space Grotesk', sans-serif; }
     </style>
 </head>
-<body class="bg-[#f0f2f5]">
+<body>
 
-    <div id="homeView" class="game-view active-view min-h-screen flex flex-col items-center justify-center p-6">
-        <div class="text-center mb-12">
-            <h1 class="text-8xl font-[900] tracking-tighter mb-2 italic">ARUSH<span class="text-blue-500">.</span>FUN</h1>
-            <p class="text-2xl font-bold uppercase tracking-widest opacity-40">games and stuff by arush</p>
+    <div id="homeView" class="game-view active p-8 md:p-20">
+        <div class="max-w-6xl mx-auto text-center mb-16">
+            <h1 class="text-7xl md:text-9xl font-black italic tracking-tighter uppercase">ARUSH<span class="text-blue-600">.</span>FUN</h1>
+            <p class="text-xl font-bold opacity-40 tracking-widest uppercase">9 Games & Stuff by Arush</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
-            <div onclick="switchView('timeGame')" class="neal-card bg-yellow-400 p-8 flex flex-col items-center text-center">
-                <span class="text-7xl mb-4">⌛</span>
-                <h2 class="text-3xl font-black uppercase">The Price of Time</h2>
-                <p class="font-bold opacity-80 mt-2">Spend your life hours like cash.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto" id="mainGrid">
             </div>
-            <div onclick="switchView('elonGame')" class="neal-card bg-green-400 p-8 flex flex-col items-center text-center">
-                <span class="text-7xl mb-4">🚀</span>
-                <h2 class="text-3xl font-black uppercase">Spend Elon's Money</h2>
-                <p class="font-bold opacity-80 mt-2">Spend $800,000,000,000.</p>
-            </div>
-        </div>
     </div>
 
-    <div id="elonGame" class="game-view bg-white min-h-screen">
-        <nav class="sticky top-0 bg-white border-b-4 border-black p-4 z-50 flex justify-between items-center">
-            <button onclick="switchView('homeView')" class="brutal-btn px-6 py-2 font-black uppercase bg-white">← Home</button>
-            <div id="elonMoney" class="text-4xl font-black tracking-tighter text-green-600">$800,000,000,000</div>
-            <div class="w-32"></div> </nav>
-        <div id="elonGrid" class="max-w-7xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-        <div class="max-w-2xl mx-auto my-20 p-8 border-4 border-black bg-white shadow-[10px_10px_0px_#000]">
-            <h2 class="text-center font-black text-3xl uppercase mb-6 border-b-4 border-black pb-2">Elon's Receipt</h2>
-            <div id="elonReceipt" class="space-y-2 font-bold text-lg mb-6"></div>
-            <div id="elonTotal" class="text-center font-black text-2xl border-t-4 border-black pt-4">Total: $0</div>
-        </div>
-    </div>
-
-    <div id="timeGame" class="game-view bg-slate-50 min-h-screen">
-        <nav class="border-b-4 border-black p-4 bg-white flex justify-between items-center sticky top-0 z-50">
-            <button onclick="switchView('homeView')" class="brutal-btn px-6 py-2 font-black uppercase bg-white">← Home</button>
-            <div class="text-center">
-                <p id="timeBudget" class="text-3xl font-black text-yellow-600">$0</p>
-                <p id="timeTotal" class="text-[10px] font-bold uppercase">Hours Used: 0 / 700,800</p>
-            </div>
-            <button onclick="saveTimeGame()" class="brutal-btn px-6 py-2 font-black uppercase bg-green-400">Save Life</button>
+    <div id="gameStage" class="game-view bg-white">
+        <nav class="p-4 border-b-4 border-black flex justify-between items-center bg-white sticky top-0 z-50">
+            <button onclick="exitGame()" class="brutal-btn text-sm">← ARUSH.FUN</button>
+            <h2 id="gameTitle" class="font-black uppercase tracking-tighter text-xl">Game Name</h2>
+            <div class="w-20"></div>
         </nav>
-        <div class="max-w-6xl mx-auto p-6 flex flex-col lg:flex-row gap-8">
-            <div class="lg:w-2/3">
-                <select id="jobSelect" onchange="changeJob(this.value)" class="w-full p-4 border-4 border-black font-black text-xl mb-6 bg-white outline-none">
-                    <option value="0">Student ($12/hr)</option>
-                    <option value="1">Software Engineer ($100/hr)</option>
-                    <option value="2">Billionaire ($1,000,000/hr)</option>
-                </select>
-                <div id="timeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-            </div>
-            <div class="lg:w-1/3">
-                <div class="border-4 border-black p-4 bg-white h-[500px] flex flex-col">
-                    <h3 class="font-black border-b-2 border-black mb-4">LIFE HISTORY</h3>
-                    <div id="timeHistory" class="overflow-y-auto flex-grow text-xs font-bold space-y-2 uppercase opacity-70"></div>
-                </div>
-            </div>
-        </div>
+        <div id="gameContent" class="p-4 md:p-10 min-h-[calc(100vh-80px)]"></div>
     </div>
 
     <script>
-        // --- SHARED NAVIGATION ---
-        function switchView(viewId) {
-            document.querySelectorAll('.game-view').forEach(v => v.classList.remove('active-view'));
-            document.getElementById(viewId).classList.add('active-view');
-            window.scrollTo(0,0);
-        }
-
-        // --- ELON GAME LOGIC ---
-        const elonData = { balance: 800000000000, inventory: {} };
-        const elonItems = [
-            ["Big Mac", 5, "🍔"], ["Starbucks Latte", 6, "☕"], ["Netflix (Year)", 180, "📺"], ["AirPods Pro", 249, "🎧"],
-            ["Gaming PC", 3500, "🖥️"], ["Used Honda Civic", 12000, "🚗"], ["Rolex Watch", 15000, "⌚"], ["Tesla Model 3", 45000, "🔋"],
-            ["Ferrari SF90", 520000, "🏎️"], ["Luxury Apartment", 2000000, "🏢"], ["Private Island", 50000000, "🏝️"], ["Private Jet", 75000000, "🛩️"],
-            ["Super Yacht", 300000000, "🚢"], ["NBA Team", 3000000000, "🏀"], ["Burj Khalifa", 1500000000, "🏙️"], ["Nuclear Plant", 9000000000, "☢️"],
-            ["Acquire McDonald's", 190000000000, "🍟"], ["The Moon", 500000000000, "🌙"], ["Acquire Google", 1500000000000, "🔍"]
+        const games = [
+            { id: 'time', title: "The Price of Time", emoji: "⌛", color: "bg-yellow-300" },
+            { id: 'elon', title: "Spend Elon's Money", emoji: "🚀", color: "bg-green-400" },
+            { id: 'butterfly', title: "Butterfly Effect", emoji: "🦋", color: "bg-blue-400" },
+            { id: 'inventory', title: "Earth's Inventory", emoji: "📦", color: "bg-orange-400" },
+            { id: 'capsule', title: "Internet Capsule", emoji: "💾", color: "bg-purple-400" },
+            { id: 'trolley', title: "AI Trolley Problem", emoji: "🚃", color: "bg-red-400" },
+            { id: 'debt', title: "Size of the Debt", emoji: "📉", color: "bg-slate-300" },
+            { id: 'password', title: "Password 2026", emoji: "⌨️", color: "bg-zinc-200" },
+            { id: 'universe', title: "Buy The Universe", emoji: "🌌", color: "bg-black", text: "text-white" }
         ];
-        // Generate up to 150 programmatically for full list
-        const categories = ["Collectable", "Luxury", "Infrastructure", "Mega-Corp", "Galactic"];
-        for(let i=1; i<=131; i++) {
-            const price = 500 * Math.pow(1.15, i + 10);
-            elonItems.push([`Exclusive ${categories[i%5]} #${i}`, Math.floor(price), "💎"]);
-        }
-        elonItems.sort((a,b) => a[1] - b[1]);
 
-        function renderElon() {
-            const grid = document.getElementById('elonGrid');
-            grid.innerHTML = '';
-            elonItems.forEach((item, i) => {
-                const count = elonData.inventory[item[0]] || 0;
-                grid.innerHTML += `
-                    <div class="border-4 border-black p-6 bg-white flex flex-col items-center shadow-[5px_5px_0px_#000]">
-                        <span class="text-6xl mb-4">${item[2]}</span>
-                        <h3 class="font-black text-sm uppercase text-center h-10">${item[0]}</h3>
-                        <p class="text-green-600 font-bold mb-4">$${item[1].toLocaleString()}</p>
-                        <div class="flex items-center gap-2 w-full">
-                            <button onclick="changeElon(${i}, -1)" class="brutal-btn bg-red-400 flex-1 py-1 font-black">-</button>
-                            <span class="w-8 text-center font-black">${count}</span>
-                            <button onclick="changeElon(${i}, 1)" class="brutal-btn bg-green-400 flex-1 py-1 font-black">+</button>
-                        </div>
-                    </div>`;
-            });
-            updateElonReceipt();
+        function initHome() {
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = games.map(g => `
+                <div onclick="launchGame('${g.id}')" class="neal-card ${g.color} ${g.text || 'text-black'}">
+                    <span class="text-6xl mb-4">${g.emoji}</span>
+                    <h3 class="text-2xl font-black uppercase">${g.title}</h3>
+                </div>
+            `).join('');
         }
 
-        function changeElon(i, d) {
-            const item = elonItems[i];
-            if(d > 0 && elonData.balance >= item[1]) {
-                elonData.balance -= item[1];
-                elonData.inventory[item[0]] = (elonData.inventory[item[0]] || 0) + 1;
-            } else if(d < 0 && elonData.inventory[item[0]] > 0) {
-                elonData.balance += item[1];
-                elonData.inventory[item[0]]--;
+        function launchGame(id) {
+            document.getElementById('homeView').classList.remove('active');
+            document.getElementById('gameStage').classList.add('active');
+            const game = games.find(g => g.id === id);
+            document.getElementById('gameTitle').innerText = game.title;
+            renderGame(id);
+        }
+
+        function exitGame() {
+            document.getElementById('gameStage').classList.remove('active');
+            document.getElementById('homeView').classList.add('active');
+            document.getElementById('gameContent').innerHTML = '';
+        }
+
+        function renderGame(id) {
+            const container = document.getElementById('gameContent');
+            switch(id) {
+                case 'butterfly':
+                    container.innerHTML = `
+                        <div class="max-w-2xl mx-auto text-center">
+                            <div class="text-4xl font-black mb-8" id="bf-story">You wake up. The sun is hitting your face.</div>
+                            <div class="flex flex-col gap-4" id="bf-choices">
+                                <button onclick="bfNext('Snoozed for 10 mins', 'The bus leaves without you. You take a later one and sit next to a stranger who offers you a job.', 1)" class="brutal-btn p-6">Snooze for 10 minutes</button>
+                                <button onclick="bfNext('Got up immediately', 'You catch the early bus. It crashes. You survive, but you miss the job interview of your life.', -1)" class="brutal-btn p-6">Get up immediately</button>
+                            </div>
+                            <div class="mt-12 p-4 border-4 border-black bg-white">
+                                <p class="font-bold uppercase opacity-50 text-xs">Global Impact Counter</p>
+                                <div id="bf-counter" class="text-5xl font-black">0</div>
+                            </div>
+                        </div>`;
+                    break;
+                case 'inventory':
+                    container.innerHTML = `
+                        <div class="max-w-4xl mx-auto">
+                            <div class="bg-black text-white p-4 mb-8 text-center font-bold">CARGO CAPACITY: <span id="cargo-cap">100</span>% REMAINING</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="inv-items"></div>
+                        </div>`;
+                    const items = [["8 Billion Humans", 60], ["The Internet", 30], ["3 Trillion Trees", 50], ["Music", 10], ["Pizza", 5], ["Shakespeare", 2]];
+                    const invDiv = document.getElementById('inv-items');
+                    items.forEach(it => {
+                        invDiv.innerHTML += `
+                            <button onclick="saveItem('${it[0]}', ${it[1]})" class="brutal-btn flex justify-between items-center p-4">
+                                <span>${it[0]}</span><span class="text-red-500">-${it[1]}%</span>
+                            </button>`;
+                    });
+                    break;
+                case 'capsule':
+                    container.className = "p-0 bg-[#c0c0c0]";
+                    container.innerHTML = `
+                        <div class="h-[5000px] w-full relative pt-20" style="background: linear-gradient(#c0c0c0, #e0e0e0, #fff, #000);">
+                            <div class="sticky top-40 text-center font-black">
+                                <p class="text-xs uppercase">Scroll through time</p>
+                                <h1 id="year-label" class="text-9xl opacity-20">1991</h1>
+                            </div>
+                            <div class="absolute top-[500px] left-10 p-4 retro-90s w-64 shadow-xl">The First Website is born.</div>
+                            <div class="absolute top-[1500px] right-10 p-4 border-4 border-black bg-white w-64">2004: Facebook Launches.</div>
+                            <div class="absolute top-[3000px] left-10 p-4 border-4 border-black bg-black text-white w-64 italic">2026: ARUSH.FUN Goes Viral.</div>
+                        </div>`;
+                    window.onscroll = () => {
+                        const year = 1991 + Math.floor(window.scrollY / 150);
+                        if(document.getElementById('year-label')) document.getElementById('year-label').innerText = year;
+                    };
+                    break;
+                case 'trolley':
+                    container.innerHTML = `
+                        <div class="max-w-2xl mx-auto text-center py-20">
+                            <h3 class="text-3xl font-black mb-10">A self-driving car's brakes fail.</h3>
+                            <div class="grid grid-cols-2 gap-8">
+                                <div class="p-8 border-4 border-black bg-red-100">
+                                    <p class="mb-4 font-bold">Hit 5 Grandmas</p>
+                                    <button onclick="trolleyChoice()" class="brutal-btn bg-red-500 text-white w-full">CHOOSE</button>
+                                </div>
+                                <div class="p-8 border-4 border-black bg-blue-100">
+                                    <p class="mb-4 font-bold">Hit 1 AI Developer</p>
+                                    <button onclick="trolleyChoice()" class="brutal-btn bg-blue-500 text-white w-full">CHOOSE</button>
+                                </div>
+                            </div>
+                            <div id="trolley-stats" class="mt-10 hidden font-black text-xl text-green-600">64% of people saved the developer.</div>
+                        </div>`;
+                    break;
+                case 'universe':
+                    container.parentElement.classList.add('universe-dark');
+                    container.innerHTML = `
+                        <div class="text-center">
+                            <div class="text-6xl font-black mb-10 tracking-widest" id="u-money">1,000,000,000,000,000,000,000,000,000,000,000 Credits</div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <button class="p-10 border-2 border-[#0f9] bg-transparent hover:bg-[#0f9] hover:text-black font-black uppercase">G-Type Star (500Q)</button>
+                                <button class="p-10 border-2 border-[#0f9] bg-transparent hover:bg-[#0f9] hover:text-black font-black uppercase">Supermassive Black Hole (1S)</button>
+                                <button class="p-10 border-2 border-[#0f9] bg-transparent hover:bg-[#0f9] hover:text-black font-black uppercase">Andromeda Galaxy (500S)</button>
+                            </div>
+                        </div>`;
+                    break;
+                case 'debt':
+                    container.innerHTML = `
+                        <div class="overflow-x-auto whitespace-nowrap py-40 bg-gray-100 border-y-4 border-black">
+                            <div class="inline-block w-[10cm] h-20 bg-green-200 border-2 border-green-800 text-center leading-[80px] font-bold mr-20">$100 BILL</div>
+                            <div class="inline-block w-[1000px] h-40 bg-green-400 border-4 border-green-900 text-center leading-[160px] font-black mr-40">$1 MILLION (Couch Size)</div>
+                            <div class="inline-block w-[5000px] h-80 bg-green-600 border-8 border-green-950 text-white text-center leading-[320px] font-black">$34 TRILLION (Moon Orbit)</div>
+                        </div>`;
+                    break;
+                case 'password':
+                    container.innerHTML = `
+                        <div class="max-w-xl mx-auto py-20 text-center">
+                            <p class="font-bold mb-2">Rule 1: Password must include the current temperature on Mars.</p>
+                            <input type="text" id="pw-input" class="w-full p-4 border-4 border-black text-2xl font-black focus:bg-red-50 outline-none" placeholder="Enter password...">
+                            <div id="pw-msg" class="text-red-600 font-bold mt-4 uppercase">❌ Rule 1 Failed</div>
+                        </div>`;
+                    break;
+                default:
+                    container.innerHTML = `<h1 class="text-center text-4xl font-black uppercase mt-20">Coming Soon: ${id} Logic</h1>`;
             }
-            document.getElementById('elonMoney').innerText = "$" + elonData.balance.toLocaleString();
-            renderElon();
         }
 
-        function updateElonReceipt() {
-            const list = document.getElementById('elonReceipt');
-            let total = 0;
-            list.innerHTML = '';
-            for(let name in elonData.inventory) {
-                if(elonData.inventory[name] > 0) {
-                    const price = elonItems.find(it => it[0] === name)[1];
-                    const cost = price * elonData.inventory[name];
-                    total += cost;
-                    list.innerHTML += `<div class="flex justify-between"><span>${name} x${elonData.inventory[name]}</span><span>$${cost.toLocaleString()}</span></div>`;
-                }
-            }
-            document.getElementById('elonTotal').innerText = "Total: $" + total.toLocaleString();
+        // --- MINI GAME LOGIC HANDLERS ---
+        function bfNext(choice, story, impact) {
+            document.getElementById('bf-story').innerText = story;
+            document.getElementById('bf-choices').innerHTML = `<button onclick="location.reload()" class="brutal-btn p-6">Your life ended. Restart?</button>`;
+            const count = document.getElementById('bf-counter');
+            count.innerText = parseInt(count.innerText) + (impact * 1000000);
         }
 
-        // --- PRICE OF TIME LOGIC ---
-        const jobs = [{n: "Student", w: 12, b: 250000}, {n: "Eng", w: 100, b: 2000000}, {n: "CEO", w: 1000000, b: 250000000000}];
-        const timeItems = [["Pizza", 0.5, "🍕"], ["Movie", 2.5, "🍿"], ["Raise Child", 160000, "👶"], ["Mars Trip", 20000, "🚀"]];
-        let timeState = { jobIdx: 0, budget: 250000, used: 0, history: [] };
-
-        function initTimeGame() {
-            const grid = document.getElementById('timeGrid');
-            grid.innerHTML = '';
-            timeItems.forEach((item, i) => {
-                grid.innerHTML += `
-                    <div class="border-4 border-black p-4 bg-white flex justify-between items-center shadow-[4px_4px_0px_#000]">
-                        <div><p class="font-black uppercase">${item[0]}</p><p class="text-[10px] font-bold opacity-50">${item[1]} HRS</p></div>
-                        <button onclick="buyTime(${i})" class="brutal-btn bg-black text-white px-4 py-2 font-black text-xs">BUY</button>
-                    </div>`;
-            });
-            loadTimeGame();
-            updateTimeUI();
+        let totalSaved = 0;
+        function saveItem(name, cost) {
+            let cap = document.getElementById('cargo-cap');
+            let current = parseInt(cap.innerText);
+            if(current >= cost) {
+                cap.innerText = current - cost;
+                alert(`Saved ${name}!`);
+            } else { alert("Cargo full! Earth is deleting..."); }
         }
 
-        function buyTime(i) {
-            const item = timeItems[i];
-            const cost = item[1] * jobs[timeState.jobIdx].w;
-            if(timeState.budget >= cost) {
-                timeState.budget -= cost;
-                timeState.used += item[1];
-                timeState.history.unshift(`Spent $${cost.toLocaleString()} to ${item[0]} (${item[1]} hrs)`);
-                updateTimeUI();
-            }
+        function trolleyChoice() {
+            document.getElementById('trolley-stats').classList.remove('hidden');
         }
 
-        function updateTimeUI() {
-            document.getElementById('timeBudget').innerText = "$" + timeState.budget.toLocaleString();
-            document.getElementById('timeTotal').innerText = `Hours Used: ${timeState.used.toLocaleString()} / 700,800`;
-            document.getElementById('timeHistory').innerHTML = timeState.history.map(h => `<p class="border-l-2 border-black pl-2">${h}</p>`).join('');
-        }
-
-        function saveTimeGame() {
-            localStorage.setItem('arushTimeSave', JSON.stringify(timeState));
-            alert("Life Saved!");
-        }
-
-        function loadTimeGame() {
-            const s = localStorage.getItem('arushTimeSave');
-            if(s && confirm("Resume previous life?")) {
-                timeState = JSON.parse(s);
-                document.getElementById('jobSelect').value = timeState.jobIdx;
-            }
-        }
-
-        function changeJob(val) {
-            timeState.jobIdx = parseInt(val);
-            timeState.budget = jobs[timeState.jobIdx].b;
-            timeState.used = 0;
-            timeState.history = [];
-            updateTimeUI();
-        }
-
-        // Start
-        renderElon();
-        initTimeGame();
+        initHome();
     </script>
 </body>
 </html>
