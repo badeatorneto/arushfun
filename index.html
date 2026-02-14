@@ -497,8 +497,15 @@ arkOptions.forEach(o=>{
         function initCapsule(container, header, stage) {
             header.innerText = "Internet Time Capsule";
             document.getElementById('gameNav').classList.remove('bg-white', 'border-black'); // Custom Nav
-            container.innerHTML = `
-            container.innerHTML += `
+           container.innerHTML = `
+<div id="capsule-scroll" class="h-[5000px] w-full relative">
+    <div class="fixed top-24 left-4 font-mono z-50 bg-black text-white p-2">
+        YEAR: <span id="yearDisplay">1990</span>
+    </div>
+</div>
+`;
+
+container.innerHTML += `
 <select id="yearSelect" class="fixed top-24 right-6 border-2 border-black p-2">
 <option>1995</option>
 <option>2005</option>
@@ -510,6 +517,7 @@ arkOptions.forEach(o=>{
 document.getElementById("yearSelect").onchange = function(){
     document.getElementById("yearDisplay").innerText = this.value;
 };
+
 
                 <div id="capsule-scroll" class="h-[5000px] w-full relative">
                     <div class="fixed top-24 left-4 font-mono z-50 bg-black text-white p-2">YEAR: <span id="yearDisplay">1990</span></div>
@@ -585,15 +593,19 @@ for(let i=1;i<=30;i++){
         // ==========================================
         function initDebt(container, header) {
             header.innerText = "Size of the Debt ($34T)";
-            container.innerHTML = `
-            container.innerHTML += `<div class="overflow-y-auto h-[70vh]" id="debtList"></div>`;
-
+           container.innerHTML = `
+<div class="overflow-y-auto h-[70vh]" id="debtList"></div>
+<div class="fixed top-32 right-10 z-50 bg-black text-red-500 font-mono text-2xl p-4 border-4 border-red-500">
+    DEBT: $<span id="debtClock">34,000,000,000,000</span>
+</div>
+`;
 for(let i=1;i<=25;i++){
     document.getElementById("debtList").innerHTML += `
     <div class="p-6 border-b border-gray-400">
         Comparison ${i}: Massive economic scale reference
     </div>`;
 }
+
 const debtComparisons = [];
 
 const comparePool = [
@@ -638,15 +650,26 @@ for(let i=1;i<=25;i++){
                     <div id="rulesList" class="mt-8 space-y-4"></div>
                 </div>`;
             
-          const rules = [];
+          const rules = [
+    {id: 1, text: "Rule 1: Must be at least 5 characters.", check: (s) => s.length >= 5},
+    {id: 2, text: "Rule 2: Must include a number.", check: (s) => /\d/.test(s)},
+    {id: 3, text: "Rule 3: Must include '🥚' (Paul).", check: (s) => s.includes('🥚')},
+    {id: 4, text: "Rule 4: Digits must sum to 25.", check: (s) => {
+        const nums = s.match(/\d/g);
+        if(!nums) return false;
+        return nums.reduce((a,b)=>parseInt(a)+parseInt(b), 0) === 25;
+    }},
+    {id: 5, text: "Rule 5: Keep Paul safe.", check: (s) => true}
+];
 
-for(let i=1;i<=50;i++){
-    if(i<=10) rules.push(`Rule ${i}: Must include at least ${i} characters.`);
-    else if(i<=20) rules.push(`Rule ${i}: Must include ${i-10} symbols.`);
-    else if(i<=30) rules.push(`Rule ${i}: Must contain a prime number.`);
-    else if(i<=40) rules.push(`Rule ${i}: Must reference a constellation.`);
-    else if(i<=49) rules.push(`Rule ${i}: Must satisfy rule ${i-7}.`);
+for(let i=6;i<=50;i++){
+    rules.push({
+        id:i,
+        text:"Rule "+i+": Additional escalating constraint.",
+        check:(s)=> s.length >= i
+    });
 }
+
 
 rules.push("Rule 50: Must be exactly the same backwards, but only spiritually.");
 
@@ -690,11 +713,26 @@ rules.push("Rule 50: Must be exactly the same backwards, but only spiritually.")
             
             let energy = 100n; // BigInt
             
-            container.innerHTML = `
-                <div class="text-center pt-20 pb-40">
-                    <div class="text-xs uppercase tracking-[0.5em] mb-4 text-gray-400">Universal Energy</div>
-                    <div id="uEnergy" class="text-5xl md:text-7xl font-bold font-mono text-[#00ff99] mb-12">100</div>
-                for(let i=1;i<=75;i++){
+           container.innerHTML = `
+<div class="text-center pt-20 pb-40">
+    <div class="text-xs uppercase tracking-[0.5em] mb-4 text-gray-400">Universal Energy</div>
+    <div id="uEnergy" class="text-5xl md:text-7xl font-bold font-mono text-[#00ff99] mb-12">100</div>
+    <div id="uniShop" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"></div>
+</div>`;
+const shop = document.getElementById("uniShop");
+
+for(let i=1;i<=75;i++){
+    const cost = BigInt(1000*i*i);
+    const inc = BigInt(i*5);
+
+    shop.innerHTML += `
+    <button onclick="buyUni(${cost}n,${inc}n)"
+    class="border border-[#00ff99] p-4">
+    Cosmic Asset ${i}<br>
+    Cost: ${cost}
+    </button>`;
+}
+
     const cost = BigInt(1000*i*i);
     const inc = BigInt(i*5);
     container.innerHTML += `
