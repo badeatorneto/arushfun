@@ -168,14 +168,20 @@
                     </div>
                 </div>`;
 
-            const market = [
-                {n: "Netflix Sub", cost: 730, type: "Wants", desc: "Drains 2h/day for a year"},
-                {n: "Puppy", cost: 5000, type: "Love", desc: "Walks take time. Lots of it."},
-                {n: "University Degree", cost: 35000, type: "Needs", desc: "4 years of youth gone."},
-                {n: "Bad Relationship", cost: 17000, type: "Regrets", desc: "2 years you won't get back."},
-                {n: "Commute (Career)", cost: 40000, type: "Work", desc: "Sitting in traffic."},
-                {n: "Doomscrolling", cost: 80000, type: "Regrets", desc: "10 years on phone screens."},
-            ];
+           const market = [];
+const baseItems = [
+"Gym Membership","Streaming Subscription","University Degree","Travel Year",
+"Gaming Marathon","Startup Attempt","Learning Guitar","Side Hustle",
+"Road Trips","Reading Books"
+];
+
+for(let i=1;i<=75;i++){
+    market.push({
+        n: baseItems[i % baseItems.length] + " #" + i,
+        cost: 200 * i,
+        desc: "Consumes measurable life hours."
+    });
+}
 
             const marketDiv = document.getElementById('timeMarket');
             market.forEach(item => {
@@ -230,13 +236,51 @@
                     <div id="elonGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"></div>
                 </div>`;
 
-            const items = [
-                {n: "Big Mac", p: 5, icon: "🍔"}, {n: "Netflix Year", p: 200, icon: "📺"},
-                {n: "Rolex", p: 15000, icon: "⌚"}, {n: "Tesla Model S", p: 90000, icon: "🚗"},
-                {n: "House", p: 450000, icon: "🏡"}, {n: "Private Jet", p: 60000000, icon: "🛩️"},
-                {n: "Mona Lisa", p: 860000000, icon: "🖼️"}, {n: "Twitter (X)", p: 44000000000, icon: "✖️"},
-                {n: "Mars Colony", p: 100000000000, icon: "🪐"}
-            ];
+           const items = [];
+
+const cheapItems = [
+"Water Bottle","Notebook","Street Tacos","Movie Ticket","Coffee Machine",
+"Gaming Mouse","Mechanical Keyboard","Smartphone","VR Headset",
+"Designer Sneakers","Luxury Watch","Drone","Electric Scooter",
+"Home Gym Setup","Art Tablet","Studio Microphone","Camera Kit",
+"Premium PC Build","Motorbike","Sports Car","Beach House",
+"Mountain Cabin","Penthouse Suite","Private Chef Contract",
+"Personal Trainer","Luxury Wardrobe","Crypto Mining Farm",
+"Indie Game Studio","Restaurant Chain","Boutique Hotel",
+"Tech Startup","Film Production","Record Label",
+"Space Tourism Ticket","Mars Simulation Habitat",
+"Rocket Prototype","Supercomputer","AI Research Lab",
+"Robotics Factory","Biotech Company","Satellite Fleet",
+"Private Island","Mega Yacht","Skyscraper",
+"Underground Bunker","Ocean Research Base",
+"Moon Mining Operation","Floating City",
+"Fusion Reactor","Artificial Intelligence Core"
+];
+
+for(let i = 0; i < 150; i++){
+    let name;
+    let price;
+
+    if(i < 50){
+        name = cheapItems[i % 20] + " #" + (i+1);
+        price = (i+1) * 50;
+    }
+    else if(i < 100){
+        name = cheapItems[i % 35] + " #" + (i+1);
+        price = (i+1) * 1000000;
+    }
+    else{
+        name = cheapItems[i % cheapItems.length] + " #" + (i+1);
+        price = (i+1) * 2000000000;
+    }
+
+    items.push({
+        n: name,
+        p: price,
+        icon: i < 50 ? "🛒" : i < 100 ? "💎" : "🪐"
+    });
+}
+
 
             const grid = document.getElementById('elonGrid');
             items.forEach(item => {
@@ -267,15 +311,72 @@
         function initButterfly(container, header) {
             header.innerText = "Butterfly Effect Simulator";
             let chaos = 0;
-            const nodes = {
-                1: { t: "The Alarm Rings.", c: [ {t: "Snooze (10m)", next: 2, impact: 5}, {t: "Wake Up Now", next: 3, impact: 0} ] },
-                2: { t: "You missed the bus.", c: [ {t: "Run to work", next: 4, impact: 10}, {t: "Call in sick", next: 5, impact: 20} ] },
-                3: { t: "You catch the bus.", c: [ {t: "Sit by weirdo", next: 6, impact: 2}, {t: "Stand up", next: 7, impact: 0} ] },
-                4: { t: "You get hit by a bike. Broken leg.", c: [] },
-                5: { t: "You watch TV all day. You see a lottery ad.", c: [] },
-                6: { t: "The weirdo is a CEO. He hires you.", c: [] },
-                7: { t: "Normal day. Nothing happens.", c: [] }
-            };
+           let nodes = {};
+
+const eventPool = [
+"You wake up earlier than usual.",
+"You ignore your alarm.",
+"You try something uncomfortable.",
+"You message someone you normally wouldn’t.",
+"You take a different route home.",
+"You start a new hobby.",
+"You speak up in a meeting.",
+"You stay silent.",
+"You post something online.",
+"You delete a draft message.",
+"You take a financial risk.",
+"You hesitate.",
+"You help someone.",
+"You refuse to help.",
+"You make a bold decision.",
+"You procrastinate.",
+"You learn something new.",
+"You quit something.",
+"You double down.",
+"You walk away."
+];
+
+// Generate 200 connected nodes
+for(let i = 1; i <= 200; i++){
+
+    let text;
+
+    if(i < 50){
+        text = eventPool[i % eventPool.length] + " (Minor Ripple #" + i + ")";
+    }
+    else if(i < 120){
+        text = eventPool[i % eventPool.length] + " (Unexpected Consequence #" + i + ")";
+    }
+    else if(i < 180){
+        text = eventPool[i % eventPool.length] + " (Chain Reaction #" + i + ")";
+    }
+    else{
+        text = eventPool[i % eventPool.length] + " (Reality Destabilizing #" + i + ")";
+    }
+
+    nodes[i] = {
+        t: text,
+        c: [
+            {
+                t: "Lean Into It",
+                next: i < 200 ? i+1 : null,
+                impact: 2
+            },
+            {
+                t: "Avoid It",
+                next: i < 200 ? i+1 : null,
+                impact: 1
+            }
+        ]
+    };
+}
+
+// Final outcome
+nodes[200] = {
+    t: "All 200 decisions cascade into full systemic chaos. Governments glitch. Markets spiral. The sky flickers. You Are Definitely Fun At Parties.",
+    c: []
+};
+
 
             container.innerHTML = `
                 <div class="flex flex-col items-center justify-center min-h-[80vh] bg-slate-100 p-4">
@@ -333,14 +434,21 @@
                     <button onclick="launchArk()" class="fixed bottom-10 right-10 border-2 border-green-400 bg-black text-green-400 px-8 py-4 font-black hover:bg-green-900 uppercase">Launch Ark</button>
                 </div>`;
             
-            const items = [
-                {n: "1 Billion Humans", v: 40, w: 40, s: -20},
-                {n: "Seed Bank", v: 5, w: 5, s: 50},
-                {n: "Internet Servers", v: 20, w: 10, s: -10},
-                {n: "Livestock", v: 30, w: 30, s: -15},
-                {n: "Oxygen Scrubbers", v: 10, w: 10, s: 40},
-                {n: "Art & Culture", v: 5, w: 2, s: 0},
-            ];
+           const items = [];
+const arkOptions = [
+"Seed Vault","AI Core","Medical Archives","Livestock DNA",
+"Engineers","Scientists","Artists","Clean Water Reserve",
+"Ocean Samples","Forests","Bees","Coffee Beans",
+"Music Library","Cultural Archives","Robotics Lab",
+"Satellite Systems","Solar Reactors","Farming Tools",
+"Medical Equipment","Construction Drones",
+"Educational Records","Maps","Internet Servers",
+"Energy Storage","Navigation Systems"
+];
+
+arkOptions.forEach(o=>{
+    items.push({ n:o, v:4, w:4, s:5 });
+});
 
             let stats = {v:100, w:100, s:0};
             
@@ -383,6 +491,19 @@
             header.innerText = "Internet Time Capsule";
             document.getElementById('gameNav').classList.remove('bg-white', 'border-black'); // Custom Nav
             container.innerHTML = `
+            container.innerHTML += `
+<select id="yearSelect" class="fixed top-24 right-6 border-2 border-black p-2">
+<option>1995</option>
+<option>2005</option>
+<option>2015</option>
+<option>2025</option>
+</select>
+`;
+
+document.getElementById("yearSelect").onchange = function(){
+    document.getElementById("yearDisplay").innerText = this.value;
+};
+
                 <div id="capsule-scroll" class="h-[5000px] w-full relative">
                     <div class="fixed top-24 left-4 font-mono z-50 bg-black text-white p-2">YEAR: <span id="yearDisplay">1990</span></div>
                     
@@ -424,6 +545,9 @@
         // ==========================================
         // 6. ABSURD TROLLEY: AI ETHICS
         // ==========================================
+        let scenario = 1;
+const maxScenarios = 30;
+
         function initTrolley(container, header) {
             header.innerText = "Absurd Trolley Problem";
             container.innerHTML = `
@@ -447,8 +571,17 @@
                     </div>
                 </div>`;
             
-            window.trolleyVote = (c) => {
-                document.getElementById('trolleyResult').classList.remove('hidden');
+           window.trolleyVote = () => {
+    scenario++;
+    if(scenario > maxScenarios){
+        document.getElementById('trolleyResult').innerText =
+        "Ethics Engine Complete. Humanity remains confused.";
+        return;
+    }
+    document.querySelector("h2").innerText =
+    "Scenario " + scenario + ": Increasingly ridiculous dilemma.";
+};
+
             }
         }
 
@@ -458,6 +591,15 @@
         function initDebt(container, header) {
             header.innerText = "Size of the Debt ($34T)";
             container.innerHTML = `
+            container.innerHTML += `<div class="overflow-y-auto h-[70vh]" id="debtList"></div>`;
+
+for(let i=1;i<=25;i++){
+    document.getElementById("debtList").innerHTML += `
+    <div class="p-6 border-b border-gray-400">
+        Comparison ${i}: Massive economic scale reference
+    </div>`;
+}
+
                 <div class="fixed top-32 right-10 z-50 bg-black text-red-500 font-mono text-2xl p-4 border-4 border-red-500">
                     DEBT: $<span id="debtClock">34,000,000,000,000</span>
                 </div>
@@ -511,6 +653,14 @@
                 </div>`;
             
             const rules = [
+                for(let i=6;i<=50;i++){
+    rules.push({
+        id:i,
+        text:"Rule "+i+": Additional escalating constraint.",
+        check:(s)=> s.length >= i
+    });
+}
+
                 {id: 1, text: "Rule 1: Must be at least 5 characters.", check: (s) => s.length >= 5},
                 {id: 2, text: "Rule 2: Must include a number.", check: (s) => /\d/.test(s)},
                 {id: 3, text: "Rule 3: Must include '🥚' (Paul).", check: (s) => s.includes('🥚')},
@@ -564,20 +714,17 @@
                 <div class="text-center pt-20 pb-40">
                     <div class="text-xs uppercase tracking-[0.5em] mb-4 text-gray-400">Universal Energy</div>
                     <div id="uEnergy" class="text-5xl md:text-7xl font-bold font-mono text-[#00ff99] mb-12">100</div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-                        <button onclick="buyUni(100n, 1n)" class="border border-[#00ff99] p-8 hover:bg-[#00ff99] hover:text-black transition group">
-                            <h3 class="text-2xl font-bold uppercase mb-2">Asteroid Field</h3>
-                            <p class="text-sm opacity-70 group-hover:opacity-100">Cost: 100 | +1/sec</p>
-                        </button>
-                        <button onclick="buyUni(50000n, 500n)" class="border border-[#00ff99] p-8 hover:bg-[#00ff99] hover:text-black transition group">
-                            <h3 class="text-2xl font-bold uppercase mb-2">Planet Earth</h3>
-                            <p class="text-sm opacity-70 group-hover:opacity-100">Cost: 50k | +500/sec</p>
-                        </button>
-                        <button onclick="buyUni(10000000n, 50000n)" class="border border-[#00ff99] p-8 hover:bg-[#00ff99] hover:text-black transition group">
-                            <h3 class="text-2xl font-bold uppercase mb-2">Dyson Swarm</h3>
-                            <p class="text-sm opacity-70 group-hover:opacity-100">Cost: 10M | +50k/sec</p>
-                        </button>
+                for(let i=1;i<=75;i++){
+    const cost = BigInt(1000*i*i);
+    const inc = BigInt(i*5);
+    container.innerHTML += `
+    <button onclick="buyUni(${cost}n,${inc}n)"
+    class="border border-[#00ff99] p-4">
+    Cosmic Asset ${i}<br>
+    Cost: ${cost}
+    </button>`;
+}
+
                     </div>
                 </div>`;
 
