@@ -2493,7 +2493,7 @@ checkAuth();
 
     <div class="sticky-header money-gradient p-6">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div id="money" class="text-4xl md:text-6xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] tracking-tighter">$800,000,000,000</div>
+           <div id="money" class="text-4xl md:text-6xl font-black text-black drop-shadow-[2px_2px_0px_rgba(255,255,255,1)] tracking-tighter">$800,000,000,000</div>
             <div class="hidden md:block text-right">
                 <div id="percentage" class="bg-black text-white px-3 py-1 font-bold rounded">0.000% Spent</div>
             </div>
@@ -2640,42 +2640,17 @@ checkAuth();
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        <style>
-    /* Replace the style inside the template with this */
-    body { 
-        font-family: 'Inter', sans-serif; 
-        background-color: #ffffff !important; 
-        color: #000000 !important; 
-        margin: 0;
-        padding: 0;
-    }
-
-    /* High Contrast Borders */
-    .neal-border { 
-        border: 4px solid #000000 !important; 
-        border-radius: 0px !important; /* Sharp corners look more 'Neal.fun' */
-    }
-
-    /* Neal.fun Style Cards */
-    .card-shadow { 
-        box-shadow: 8px 8px 0px 0px #000000 !important; 
-        border: 4px solid #000000 !important;
-        background: white !important;
-        transition: transform 0.1s;
-    }
-
-    .card-shadow:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 10px 10px 0px 0px #000000 !important;
-    }
-
-    /* Text Contrast */
-    .text-zinc-500, .text-gray-500 { color: #000000 !important; opacity: 0.7; }
-    .text-zinc-900, .text-gray-900 { color: #000000 !important; font-weight: 900; }
-
-    /* The "Time" Accent Color */
-    .bg-yellow-400 { background-color: #facc15 !important; color: #000 !important; }
-    </style>
+    <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+    .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+    .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+    .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
+    .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+    .item-card:hover { transform: rotate(-1deg); }
+    .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+</style>
 </head>
 <body class="bg-slate-50 text-black dark:bg-zinc-950 dark:text-white pb-10">
     <header class="sticky-header p-6 bg-white dark:bg-zinc-900">
