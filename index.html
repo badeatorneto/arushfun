@@ -2474,7 +2474,7 @@ checkAuth();
         .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
         .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
         .item-card:hover { transform: rotate(-1deg); }
-        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; }
+        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
     </style>
@@ -2678,7 +2678,6 @@ checkAuth();
     </style>
 </head>
 <body class="bg-slate-50 text-black dark:bg-zinc-950 dark:text-white pb-10">
-
     <header class="sticky-header p-6 bg-white dark:bg-zinc-900">
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-4">
@@ -2797,16 +2796,11 @@ checkAuth();
                 opt.innerText = `${p.name} ($${p.wage}/hr)`;
                 selector.appendChild(opt);
             });
-
-            // LOAD FEATURE
+// LOAD FEATURE - AUTO-LOAD WITHOUT POPUP
             const saved = localStorage.getItem('timeLifeSave');
             if (saved) {
-                if (confirm("Resume your previous life?")) {
-                    state = JSON.parse(saved);
-                    document.getElementById('wageSelector').value = state.profIdx;
-                } else {
-                    resetState(0);
-                }
+                state = JSON.parse(saved);
+                document.getElementById('wageSelector').value = state.profIdx;
             } else {
                 resetState(0);
             }
