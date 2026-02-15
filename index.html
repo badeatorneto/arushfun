@@ -74,7 +74,7 @@
         <div id="gameHeaderInfo" class="font-black uppercase text-xl tracking-tight">GAME TITLE</div>
         <div class="w-24"></div>
     </nav>
-    <div id="gameContent" class="min-h-screen"></div>
+    <div id="gameContent" class="min-h-screen bg-white"></div>
 </div>
 
 <script>
@@ -97,6 +97,8 @@ function loadGame(id) {
     stage.className = "view-container active";
     document.getElementById('gameNav').className = "sticky top-0 z-50 bg-white border-b-4 border-black px-6 py-3 flex justify-between items-center shadow-lg";
 
+    content.innerHTML = ''; // Clear previous
+
     switch(id) {
         case 'time':      initTimeGame(content, header); break;
         case 'elon':      initElonGame(content, header); break;
@@ -110,14 +112,15 @@ function loadGame(id) {
     }
 }
 
-// Helper to safely escape quotes in srcdoc
 function escapeSrcdoc(str) {
     return str.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
 }
 
-// ==================== PASTE ALL 9 GAME HTML STRINGS BELOW ====================
+function createIframe(html) {
+    return `<div style="height: calc(100vh - 80px); background:#fff;"><iframe srcdoc="${escapeSrcdoc(html)}" scrolling="yes" style="width:100%; height:100%; border:none; display:block;"></iframe></div>`;
+}
 
-// 1. Price of Time — paste your index (13).html here
+// ==================== PASTE YOUR 3 CUSTOM GAMES HERE ====================
 const timeGameHTML = `<!DOCTYPE html>
 <html lang="en" class="light">
 <head>
@@ -125,7 +128,7 @@ const timeGameHTML = `<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Price of Time: Persistence</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style type="text/css">@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}</style>
+    <style type="text/css">@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}</style>
     <style>
         body { font-family: 'Inter', sans-serif; transition: background 0.3s; }
         .neal-border { border: 4px solid currentColor; border-radius: 12px; }
@@ -371,10 +374,8 @@ const timeGameHTML = `<!DOCTYPE html>
 
         init();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce108d6d9ba2e0e',t:'MTc3MTExODk2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce12855a9b1da55',t:'MTc3MTEyMDI1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>`;
-
-// 2. Spend Elon's Money — paste your pasted-text.txt here
 const elonGameHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -545,7 +546,6 @@ const elonGameHTML = `<!DOCTYPE html>
 </body>
 </html>`;
 
-// 3. Password Checker — paste your index (12).html here
 const passwordCheckerHTML = `<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -2951,304 +2951,277 @@ function checkAuth(){
 checkAuth();
 
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce107713a695e2b',t:'MTc3MTExODkxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce1298a5fa555a9',t:'MTc3MTEyMDMwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>`;
 
-// 4-9. The other 6 games (I already provided complete working versions — just leave them as-is)
-const butterflyHTML = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>Butterfly Effect</title>\n' +
-'    <script src="https://cdn.tailwindcss.com"></script>\n' +
-'    <style>\n' +
-'        body { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; padding: 2rem; }\n' +
-'        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0 #000; background: white; padding: 1rem 2rem; font-weight: 900; text-transform: uppercase; cursor: pointer; }\n' +
-'        .brutal-btn:active { transform: translate(2px,2px); box-shadow: 0 0 0; }\n' +
-'    </style>\n' +
-'</head>\n' +
-'<body class="max-w-4xl mx-auto">\n' +
-'    <h1 class="text-5xl font-black mb-8 text-center">Butterfly Effect Simulator</h1>\n' +
-'    <p class="text-center mb-12 text-lg">200 tiny decisions. Every choice adds chaos. Can you reach 100% and become "Definitely Fun At Parties"?</p>\n' +
-'    <div id="story" class="text-center mb-12">\n' +
-'        <h2 id="storyText" class="text-3xl font-black mb-8">Start your chain of decisions...</h2>\n' +
-'        <div id="options" class="flex flex-wrap justify-center gap-4"></div>\n' +
-'    </div>\n' +
-'    <div class="text-center text-3xl font-bold text-red-600" id="chaosMeter">Chaos: 0%</div>\n' +
-'\n' +
-'    <script>\n' +
-'        let chaos = 0;\n' +
-'        let step = 1;\n' +
-'        const totalSteps = 200;\n' +
-'\n' +
-'        function render() {\n' +
-'            document.getElementById("storyText").innerText = step <= totalSteps ? "Decision #" + step + ": A small choice appears..." : "Final outcome:";\n' +
-'            const opts = document.getElementById("options");\n' +
-'            opts.innerHTML = "";\n' +
-'\n' +
-'            if (step > totalSteps) {\n' +
-'                const final = chaos >= 300 ? "You Are Definitely Fun At Parties." : "The timeline remained stable. Boring.";\n' +
-'                document.getElementById("storyText").innerHTML = \'<span class="text-red-600 text-5xl">\' + final + \'</span>\';\n' +
-'                opts.innerHTML = \'<button class="brutal-btn" onclick="location.reload()">Restart</button>\';\n' +
-'                return;\n' +
-'            }\n' +
-'\n' +
-'            ["Lean into chaos (+3%)", "Play it safe (+1%)"].forEach((text, i) => {\n' +
-'                const btn = document.createElement("button");\n' +
-'                btn.className = "brutal-btn";\n' +
-'                btn.textContent = text;\n' +
-'                btn.onclick = () => {\n' +
-'                    chaos += i === 0 ? 3 : 1;\n' +
-'                    document.getElementById("chaosMeter").innerText = "Chaos: " + Math.min(100, Math.floor(chaos / 3)) + "%";\n' +
-'                    step++;\n' +
-'                    render();\n' +
-'                };\n' +
-'                opts.appendChild(btn);\n' +
-'            });\n' +
-'        }\n' +
-'        render();\n' +
-'    </script>\n' +
-'</body>\n' +
+// 4-9. The other 6 games (safe concatenation — NO backticks!)
+const butterflyHTML = '<!DOCTYPE html>' +
+'<html lang="en">' +
+'<head>' +
+'    <meta charset="UTF-8">' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+'    <title>Butterfly Effect</title>' +
+'    <script src="https://cdn.tailwindcss.com"></script>' +
+'    <style>' +
+'        body { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; padding: 2rem; }' +
+'        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0 #000; background: white; padding: 1rem 2rem; font-weight: 900; text-transform: uppercase; cursor: pointer; }' +
+'        .brutal-btn:active { transform: translate(2px,2px); box-shadow: 0 0 0; }' +
+'    </style>' +
+'</head>' +
+'<body class="max-w-4xl mx-auto">' +
+'    <h1 class="text-5xl font-black mb-8 text-center">Butterfly Effect Simulator</h1>' +
+'    <p class="text-center mb-12 text-lg">200 tiny decisions. Every choice adds chaos. Can you reach 100% and become "Definitely Fun At Parties"?</p>' +
+'    <div id="story" class="text-center mb-12">' +
+'        <h2 id="storyText" class="text-3xl font-black mb-8">Start your chain of decisions...</h2>' +
+'        <div id="options" class="flex flex-wrap justify-center gap-4"></div>' +
+'    </div>' +
+'    <div class="text-center text-3xl font-bold text-red-600" id="chaosMeter">Chaos: 0%</div>' +
+'    <script>' +
+'        let chaos = 0;' +
+'        let step = 1;' +
+'        const totalSteps = 200;' +
+'        function render() {' +
+'            document.getElementById("storyText").innerText = step <= totalSteps ? "Decision #" + step + ": A small choice appears..." : "Final outcome:";' +
+'            const opts = document.getElementById("options");' +
+'            opts.innerHTML = "";' +
+'            if (step > totalSteps) {' +
+'                const final = chaos >= 300 ? "You Are Definitely Fun At Parties." : "The timeline remained stable. Boring.";' +
+'                document.getElementById("storyText").innerHTML = \'<span class="text-red-600 text-5xl">\' + final + \'</span>\';' +
+'                opts.innerHTML = \'<button class="brutal-btn" onclick="location.reload()">Restart</button>\';' +
+'                return;' +
+'            }' +
+'            ["Lean into chaos (+3%)", "Play it safe (+1%)"].forEach((text, i) => {' +
+'                const btn = document.createElement("button");' +
+'                btn.className = "brutal-btn";' +
+'                btn.textContent = text;' +
+'                btn.onclick = () => {' +
+'                    chaos += i === 0 ? 3 : 1;' +
+'                    document.getElementById("chaosMeter").innerText = "Chaos: " + Math.min(100, Math.floor(chaos / 3)) + "%";' +
+'                    step++;' +
+'                    render();' +
+'                };' +
+'                opts.appendChild(btn);' +
+'            });' +
+'        }' +
+'        render();' +
+'    </script>' +
+'</body>' +
 '</html>';
 
-const arkHTML = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>Earth\'s Inventory</title>\n' +
-'    <script src="https://cdn.tailwindcss.com"></script>\n' +
-'    <style>\n' +
-'        body { background: #111; color: #0f0; font-family: monospace; padding: 2rem; }\n' +
-'    </style>\n' +
-'</head>\n' +
-'<body>\n' +
-'    <h1 class="text-4xl mb-8 text-center">Earth\'s Final Inventory</h1>\n' +
-'    <div class="grid grid-cols-3 text-center mb-8">\n' +
-'        <div>VOLUME: <span id="vol">100</span>%</div>\n' +
-'        <div>WEIGHT: <span id="wgt">100</span>%</div>\n' +
-'        <div>SUSTAIN: <span id="sus">0</span></div>\n' +
-'    </div>\n' +
-'    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="items"></div>\n' +
-'    <button onclick="launch()" class="fixed bottom-8 right-8 bg-black text-green-400 border-4 border-green-400 px-8 py-4 font-black">LAUNCH ARK</button>\n' +
-'\n' +
-'    <script>\n' +
-'        const items = ["Seed Vault","AI Core","Cat Videos","Coffee Beans","Internet Archive","Pineapple Pizza Recipe","Printer Ink","Dad Jokes","Solar Panels","Bees"];\n' +
-'        let vol = 100, wgt = 100, sus = 0;\n' +
-'        items.forEach((name, i) => {\n' +
-'            const v = 5 + i; const w = 4 + i % 6; const s = 3 + i % 5;\n' +
-'            const div = document.createElement("div");\n' +
-'            div.className = "border border-green-400 p-4 cursor-pointer";\n' +
-'            div.innerHTML = "[ ] " + name + "<br><small>Vol:" + v + " Wgt:" + w + " Sus:" + s + "</small>";\n' +
-'            div.onclick = () => {\n' +
-'                if (div.classList.contains("bg-green-900")) {\n' +
-'                    div.classList.remove("bg-green-900");\n' +
-'                    div.innerHTML = div.innerHTML.replace("[X]", "[ ]");\n' +
-'                    vol += v; wgt += w; sus -= s;\n' +
-'                } else {\n' +
-'                    if (vol < v || wgt < w) return alert("No capacity");\n' +
-'                    div.classList.add("bg-green-900");\n' +
-'                    div.innerHTML = div.innerHTML.replace("[ ]", "[X]");\n' +
-'                    vol -= v; wgt -= w; sus += s;\n' +
-'                }\n' +
-'                document.getElementById("vol").innerText = vol;\n' +
-'                document.getElementById("wgt").innerText = wgt;\n' +
-'                document.getElementById("sus").innerText = sus;\n' +
-'            };\n' +
-'            document.getElementById("items").appendChild(div);\n' +
-'        });\n' +
-'\n' +
-'        function launch() {\n' +
-'            alert(sus > 60 ? "Colony thrives forever." : "Colony fails in hilarious ways.");\n' +
-'        }\n' +
-'    </script>\n' +
-'</body>\n' +
+const arkHTML = '<!DOCTYPE html>' +
+'<html lang="en">' +
+'<head>' +
+'    <meta charset="UTF-8">' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+'    <title>Earth\'s Inventory</title>' +
+'    <script src="https://cdn.tailwindcss.com"></script>' +
+'    <style>' +
+'        body { background: #111; color: #0f0; font-family: monospace; padding: 2rem; }' +
+'    </style>' +
+'</head>' +
+'<body>' +
+'    <h1 class="text-4xl mb-8 text-center">Earth\'s Final Inventory</h1>' +
+'    <div class="grid grid-cols-3 text-center mb-8">' +
+'        <div>VOLUME: <span id="vol">100</span>%</div>' +
+'        <div>WEIGHT: <span id="wgt">100</span>%</div>' +
+'        <div>SUSTAIN: <span id="sus">0</span></div>' +
+'    </div>' +
+'    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="items"></div>' +
+'    <button onclick="launch()" class="fixed bottom-8 right-8 bg-black text-green-400 border-4 border-green-400 px-8 py-4 font-black">LAUNCH ARK</button>' +
+'    <script>' +
+'        const items = ["Seed Vault","AI Core","Cat Videos","Coffee Beans","Internet Archive","Pineapple Pizza Recipe","Printer Ink","Dad Jokes","Solar Panels","Bees"];' +
+'        let vol = 100, wgt = 100, sus = 0;' +
+'        items.forEach((name, i) => {' +
+'            const v = 5 + i; const w = 4 + i % 6; const s = 3 + i % 5;' +
+'            const div = document.createElement("div");' +
+'            div.className = "border border-green-400 p-4 cursor-pointer";' +
+'            div.innerHTML = "[ ] " + name + "<br><small>Vol:" + v + " Wgt:" + w + " Sus:" + s + "</small>";' +
+'            div.onclick = () => {' +
+'                if (div.classList.contains("bg-green-900")) {' +
+'                    div.classList.remove("bg-green-900");' +
+'                    div.innerHTML = div.innerHTML.replace("[X]", "[ ]");' +
+'                    vol += v; wgt += w; sus -= s;' +
+'                } else {' +
+'                    if (vol < v || wgt < w) return alert("No capacity");' +
+'                    div.classList.add("bg-green-900");' +
+'                    div.innerHTML = div.innerHTML.replace("[ ]", "[X]");' +
+'                    vol -= v; wgt -= w; sus += s;' +
+'                }' +
+'                document.getElementById("vol").innerText = vol;' +
+'                document.getElementById("wgt").innerText = wgt;' +
+'                document.getElementById("sus").innerText = sus;' +
+'            };' +
+'            document.getElementById("items").appendChild(div);' +
+'        });' +
+'        function launch() {' +
+'            alert(sus > 60 ? "Colony thrives forever." : "Colony fails in hilarious ways.");' +
+'        }' +
+'    </script>' +
+'</body>' +
 '</html>';
 
-const trolleyHTML = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>Absurd Trolley</title>\n' +
-'    <script src="https://cdn.tailwindcss.com"></script>\n' +
-'</head>\n' +
-'<body class="p-12 bg-red-50">\n' +
-'    <h1 class="text-5xl font-black text-center mb-12">Absurd Trolley Problem</h1>\n' +
-'    <div id="scene" class="text-center"></div>\n' +
-'\n' +
-'    <script>\n' +
-'        let scenario = 0;\n' +
-'        const scenarios = [\n' +
-'            "5 people vs 1 person",\n' +
-'            "5 philosophers vs 1 influencer",\n' +
-'            "5 vegans vs 1 BBQ chef",\n' +
-'            "The trolley is heading toward the concept of weekends",\n' +
-'            "Pull lever to divert to your future self"\n' +
-'        ];\n' +
-'\n' +
-'        function render() {\n' +
-'            document.getElementById("scene").innerHTML = \n' +
-'                "<p class=\\"text-3xl font-bold mb-12\\">" + (scenarios[scenario] || "Ethics complete. Humanity confused.") + "</p>" +\n' +
-'                "<div class=\\"flex gap-8 justify-center\\">" +\n' +
-'                    "<button class=\\"brutal-btn bg-red-600 text-white px-12 py-6 text-xl\\" onclick=\\"choose(true)\\">PULL</button>" +\n' +
-'                    "<button class=\\"brutal-btn bg-gray-600 text-white px-12 py-6 text-xl\\" onclick=\\"choose(false)\\">DO NOTHING</button>" +\n' +
-'                "</div>";\n' +
-'        }\n' +
-'\n' +
-'        function choose(pull) {\n' +
-'            alert(pull ? "You pulled. Controversial." : "You did nothing. Also controversial.");\n' +
-'            scenario++;\n' +
-'            render();\n' +
-'        }\n' +
-'        render();\n' +
-'    </script>\n' +
-'</body>\n' +
+const trolleyHTML = '<!DOCTYPE html>' +
+'<html lang="en">' +
+'<head>' +
+'    <meta charset="UTF-8">' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+'    <title>Absurd Trolley</title>' +
+'    <script src="https://cdn.tailwindcss.com"></script>' +
+'</head>' +
+'<body class="p-12 bg-red-50">' +
+'    <h1 class="text-5xl font-black text-center mb-12">Absurd Trolley Problem</h1>' +
+'    <div id="scene" class="text-center"></div>' +
+'    <script>' +
+'        let scenario = 0;' +
+'        const scenarios = ["5 people vs 1 person","5 philosophers vs 1 influencer","5 vegans vs 1 BBQ chef","The trolley is heading toward the concept of weekends","Pull lever to divert to your future self"];' +
+'        function render() {' +
+'            document.getElementById("scene").innerHTML = "<p class=\\"text-3xl font-bold mb-12\\">" + (scenarios[scenario] || "Ethics complete. Humanity confused.") + "</p>" + "<div class=\\"flex gap-8 justify-center\\">" + "<button class=\\"brutal-btn bg-red-600 text-white px-12 py-6 text-xl\\" onclick=\\"choose(true)\\">PULL</button>" + "<button class=\\"brutal-btn bg-gray-600 text-white px-12 py-6 text-xl\\" onclick=\\"choose(false)\\">DO NOTHING</button>" + "</div>";' +
+'        }' +
+'        function choose(pull) {' +
+'            alert(pull ? "You pulled. Controversial." : "You did nothing. Also controversial.");' +
+'            scenario++;' +
+'            render();' +
+'        }' +
+'        render();' +
+'    </script>' +
+'</body>' +
 '</html>';
 
-const debtHTML = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>Size of the Debt</title>\n' +
-'    <script src="https://cdn.tailwindcss.com"></script>\n' +
-'</head>\n' +
-'<body class="p-8">\n' +
+const debtHTML = '<!DOCTYPE html>' +
+'<html lang="en">' +
+'<head>' +
+'    <meta charset="UTF-8">' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+'    <title>Size of the Debt</title>' +
+'    <script src="https://cdn.tailwindcss.com"></script>' +
+'</head>' +
+'<body class="p-8">' +
 '    <div class="fixed top-8 right-8 bg-red-600 text-white p-6 text-3xl font-black border-4 border-black">$' +
-'        '<span id="clock">34,000,000,000,000</span>' +
-'    '</div>\n' +
-'    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">\n' +
-'        ' + Array(25).fill().map((_,i) => `<div class="bg-white border-4 border-black p-8"><div class="text-6xl mb-4">📉</div><div class="text-2xl font-black">Comparison #${i+1}: Something massive ×${i+1}</div></div>`).join('') + '\n' +
-'    </div>\n' +
-'\n' +
-'    <script>\n' +
-'        let debt = 34000000000000;\n' +
-'        setInterval(() => {\n' +
-'            debt += 30000000;\n' +
-'            document.getElementById("clock").innerText = debt.toLocaleString();\n' +
-'        }, 1000);\n' +
-'    </script>\n' +
-'</body>\n' +
+'        <span id="clock">34,000,000,000,000</span>' +
+'    </div>' +
+'    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">' +
+'        ' + Array(25).fill().map((_,i) => `<div class="bg-white border-4 border-black p-8"><div class="text-6xl mb-4">📉</div><div class="text-2xl font-black">Comparison #${i+1}: Something massive ×${i+1}</div></div>`).join('') + 
+'    </div>' +
+'    <script>' +
+'        let debt = 34000000000000;' +
+'        setInterval(() => {' +
+'            debt += 30000000;' +
+'            document.getElementById("clock").innerText = debt.toLocaleString();' +
+'        }, 1000);' +
+'    </script>' +
+'</body>' +
 '</html>';
 
-const password2026HTML = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>Password 2026</title>\n' +
-'    <script src="https://cdn.tailwindcss.com"></script>\n' +
-'</head>\n' +
-'<body class="p-12 bg-pink-50">\n' +
-'    <h1 class="text-5xl font-black text-center mb-12">Password Game 2026</h1>\n' +
-'    <div class="max-w-2xl mx-auto">\n' +
-'        <input id="pw" type="text" class="w-full p-6 text-3xl border-4 border-black font-mono" placeholder="Start typing..." oninput="check()">\n' +
-'        <div id="rules" class="mt-12 space-y-4"></div>\n' +
-'    </div>\n' +
-'\n' +
-'    <script>\n' +
-'        const rules = Array.from({length: 50}, (_, i) => ({\n' +
-'            text: i < 10 ? ["8+ chars","number","uppercase","symbol","no \\'password\\'","include \\'2026\\'","emoji","digits sum 25","30+ chars","palindrome"][i] : "Rule " + (i+1) + ": Getting ridiculous...",\n' +
-'            check: (s) => s.length > i * 2\n' +
-'        }));\n' +
-'        let active = 1;\n' +
-'\n' +
-'        function check() {\n' +
-'            const val = document.getElementById("pw").value;\n' +
-'            const list = document.getElementById("rules");\n' +
-'            list.innerHTML = "";\n' +
-'            let allGood = true;\n' +
-'            for (let i = 0; i < active; i++) {\n' +
-'                const passed = rules[i].check(val);\n' +
-'                list.innerHTML += "<div class=\\"" + (passed ? "text-green-600" : "text-red-600") + " font-black\\">" + (passed ? "✓" : "✗") + " " + rules[i].text + "</div>";\n' +
-'                if (!passed) allGood = false;\n' +
-'            }\n' +
-'            if (allGood && active < 50) { active++; check(); }\n' +
-'        }\n' +
-'    </script>\n' +
-'</body>\n' +
+const password2026HTML = '<!DOCTYPE html>' +
+'<html lang="en">' +
+'<head>' +
+'    <meta charset="UTF-8">' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+'    <title>Password 2026</title>' +
+'    <script src="https://cdn.tailwindcss.com"></script>' +
+'</head>' +
+'<body class="p-12 bg-pink-50">' +
+'    <h1 class="text-5xl font-black text-center mb-12">Password Game 2026</h1>' +
+'    <div class="max-w-2xl mx-auto">' +
+'        <input id="pw" type="text" class="w-full p-6 text-3xl border-4 border-black font-mono" placeholder="Start typing..." oninput="check()">' +
+'        <div id="rules" class="mt-12 space-y-4"></div>' +
+'    </div>' +
+'    <script>' +
+'        const rules = Array.from({length: 50}, (_, i) => ({' +
+'            text: i < 10 ? ["8+ chars","number","uppercase","symbol","no \\'password\\'","include \\'2026\\'","emoji","digits sum 25","30+ chars","palindrome"][i] : "Rule " + (i+1) + ": Getting ridiculous...",' +
+'            check: (s) => s.length > i * 2' +
+'        }));' +
+'        let active = 1;' +
+'        function check() {' +
+'            const val = document.getElementById("pw").value;' +
+'            const list = document.getElementById("rules");' +
+'            list.innerHTML = "";' +
+'            let allGood = true;' +
+'            for (let i = 0; i < active; i++) {' +
+'                const passed = rules[i].check(val);' +
+'                list.innerHTML += "<div class=\\"" + (passed ? "text-green-600" : "text-red-600") + " font-black\\">" + (passed ? "✓" : "✗") + " " + rules[i].text + "</div>";' +
+'                if (!passed) allGood = false;' +
+'            }' +
+'            if (allGood && active < 50) { active++; check(); }' +
+'        }' +
+'    </script>' +
+'</body>' +
 '</html>';
 
-const universeHTML = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-'    <title>Buy The Universe</title>\n' +
-'    <script src="https://cdn.tailwindcss.com"></script>\n' +
-'    <style>body { background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); color: #00ff99; font-family: \'Space Grotesk\', sans-serif; padding: 2rem; }</style>\n' +
-'</head>\n' +
-'<body class="text-center">\n' +
-'    <h1 class="text-6xl font-black mb-8">Buy The Universe</h1>\n' +
-'    <div class="text-5xl font-mono mb-12" id="energy">5000</div>\n' +
-'    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto" id="shop"></div>\n' +
-'\n' +
-'    <script>\n' +
-'        let energy = 5000, income = 0;\n' +
-'        const names = ["Dust","Asteroid","Planet","Star","Galaxy","Black Hole","Dimension","Multiverse"];\n' +
-'        const shop = document.getElementById("shop");\n' +
-'        for (let i = 1; i <= 75; i++) {\n' +
-'            const cost = i * i * 50;\n' +
-'            const inc = i * 5;\n' +
-'            shop.innerHTML += "<div class=\\"border border-[#00ff99] p-8 cursor-pointer\\" onclick=\\"if(energy>=" + cost + "){energy-=" + cost + ";income+=" + inc + ";document.getElementById(\\'energy\\').innerText=energy;}\\">" + names[i%names.length] + " #" + i + "<br>" + cost + " Energy (+ " + inc + "/s)</div>";\n' +
-'        }\n' +
-'        setInterval(() => {\n' +
-'            energy += income;\n' +
-'            document.getElementById("energy").innerText = energy;\n' +
-'        }, 1000);\n' +
-'    </script>\n' +
-'</body>\n' +
+const universeHTML = '<!DOCTYPE html>' +
+'<html lang="en">' +
+'<head>' +
+'    <meta charset="UTF-8">' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+'    <title>Buy The Universe</title>' +
+'    <script src="https://cdn.tailwindcss.com"></script>' +
+'    <style>body { background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); color: #00ff99; font-family: "Space Grotesk", sans-serif; padding: 2rem; }</style>' +
+'</head>' +
+'<body class="text-center">' +
+'    <h1 class="text-6xl font-black mb-8">Buy The Universe</h1>' +
+'    <div class="text-5xl font-mono mb-12" id="energy">5000</div>' +
+'    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto" id="shop"></div>' +
+'    <script>' +
+'        let energy = 5000, income = 0;' +
+'        const names = ["Dust","Asteroid","Planet","Star","Galaxy","Black Hole","Dimension","Multiverse"];' +
+'        const shop = document.getElementById("shop");' +
+'        for (let i = 1; i <= 75; i++) {' +
+'            const cost = i * i * 50;' +
+'            const inc = i * 5;' +
+'            shop.innerHTML += "<div class=\\"border border-[#00ff99] p-8 cursor-pointer\\" onclick=\\"if(energy>=" + cost + "){energy-=" + cost + ";income+=" + inc + ";document.getElementById(\\'energy\\').innerText=energy;}\\">" + names[i%names.length] + " #" + i + "<br>" + cost + " Energy (+ " + inc + "/s)</div>";' +
+'        }' +
+'        setInterval(() => {' +
+'            energy += income;' +
+'            document.getElementById("energy").innerText = energy;' +
+'        }, 1000);' +
+'    </script>' +
+'</body>' +
 '</html>';
-
-// ==================== INIT FUNCTIONS (use the HTML strings above) ====================
-
+// ==================== INIT FUNCTIONS ====================
 function initTimeGame(container, header) {
     header.innerText = "The Price of Time";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(timeGameHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(timeGameHTML);
 }
 
 function initElonGame(container, header) {
     header.innerText = "Spend Elon's Money";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(elonGameHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(elonGameHTML);
 }
 
 function initCapsule(container, header) {
     header.innerText = "Password Checker";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(passwordCheckerHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(passwordCheckerHTML);
 }
 
 function initButterfly(container, header) {
     header.innerText = "Butterfly Effect";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(butterflyHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(butterflyHTML);
 }
 
 function initArk(container, header) {
     header.innerText = "Earth's Inventory";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(arkHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(arkHTML);
 }
 
 function initTrolley(container, header) {
     header.innerText = "Absurd Trolley";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(trolleyHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(trolleyHTML);
 }
 
 function initDebt(container, header) {
     header.innerText = "Size of the Debt";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(debtHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(debtHTML);
 }
 
 function initPassword(container, header) {
     header.innerText = "Password 2026";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(password2026HTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(password2026HTML);
 }
 
 function initUniverse(container, header) {
     header.innerText = "Buy The Universe";
-    container.innerHTML = `<iframe srcdoc="${escapeSrcdoc(universeHTML)}" style="width:100%; height:calc(100vh - 80px); border:none;"></iframe>`;
+    container.innerHTML = createIframe(universeHTML);
 }
-
-</script>
+  </script>
 </body>
 </html>
