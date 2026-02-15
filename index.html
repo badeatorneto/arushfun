@@ -8,26 +8,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     <style>
-        /* Find .app-iframe in your main style block and update it to this */
+        
 .app-iframe {
     width: 100%;
     height: calc(100vh - 64px);
     border: none;
     display: none;
-    background: white; /* This ensures the game isn't see-through to the black background */
+    background-color: #ffffff; /* Add this line */
 }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; background: #000; margin: 0; }
+}
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; background: #ffffff; margin: 0; color: #000; }
+      
         .navbar {
-            background: #111; color: white; border-bottom: 4px solid #000;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; height: 64px;
-        }
-        .nav-link { 
-            padding: 15px 20px; font-weight: 800; text-transform: uppercase; 
-            cursor: pointer; transition: all 0.2s; border-bottom: 4px solid transparent;
-        }
-        .nav-link:hover { background: rgba(255,255,255,0.1); }
-        .nav-link.active { border-bottom: 4px solid #facc15; color: #facc15; }
+    background: #ffffff; 
+    color: #000000; 
+    border-bottom: 2px solid #eeeeee; /* Thinner, lighter border */
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 64px;
+}
+
+.nav-link { 
+    color: #555555; /* Grayish text for inactive links */
+}
+
+.nav-link.active { 
+    border-bottom: 4px solid #000000; /* Black bottom bar for active game */
+    color: #000000; 
+}
         
         .app-iframe { width: 100%; height: calc(100vh - 64px); border: none; display: none; }
         .app-iframe.active { display: block; }
