@@ -8,14 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     <style>
-        /* Find .app-iframe in your main style block and update it to this */
-.app-iframe {
-    width: 100%;
-    height: calc(100vh - 64px);
-    border: none;
-    display: none;
-    background: white; /* This ensures the game isn't see-through to the black background */
-}
+        .app-iframe {
+            width: 100%;
+            height: calc(100vh - 64px);
+            border: none;
+            display: none;
+            background: white;
+        }
         body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; background: #000; margin: 0; }
         .navbar {
             background: #111; color: white; border-bottom: 4px solid #000;
@@ -38,472 +37,15 @@
     <nav class="navbar">
         <div class="flex items-center">
             <span class="text-xl font-black tracking-tighter text-yellow-400 mr-10">ARUSH.FUN</span>
-            <div id="btn-checker" class="nav-link active" onclick="showApp('checker')">Password Checker</div>
+            <div id="btn-trolley" class="nav-link active" onclick="showApp('trolley')">Trolley Problems</div>
             <div id="btn-elon" class="nav-link" onclick="showApp('elon')">Elon's Money</div>
             <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
         </div>
     </nav>
 
-    <iframe id="checker" class="app-iframe active"></iframe>
+    <iframe id="trolley" class="app-iframe active"></iframe>
     <iframe id="elon" class="app-iframe"></iframe>
     <iframe id="time" class="app-iframe"></iframe>
-
-    <template id="code-elon">
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spend Elon's $800B</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
-        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
-        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-        .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
-        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
-        .item-card:hover { transform: rotate(-1deg); }
-        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
-    </style>
-</head>
-<body class="pb-20">
-
-    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
-        <div class="max-w-4xl mx-auto">
-            <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 rotate-2">
-                <span class="font-black text-xl uppercase tracking-tighter">Ultimate 2026 Edition</span>
-            </div>
-            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Spend Elon's Money</h1>
-            <p class="text-xl font-bold opacity-70">Elon Musk's net worth is <strong>$800,000,000,000</strong>.<br>If you spent $1,000,000 every single day, it would take you 2,191 years to finish.</p>
-        </div>
-    </header>
-
-    <div class="sticky-header money-gradient p-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-           <div id="money" class="text-4xl md:text-6xl font-black text-black drop-shadow-[2px_2px_0px_rgba(255,255,255,1)] tracking-tighter">$800,000,000,000</div>
-            <div class="hidden md:block text-right">
-                <div id="percentage" class="bg-black text-white px-3 py-1 font-bold rounded">0.000% Spent</div>
-            </div>
-        </div>
-    </div>
-
-    <main class="max-w-7xl mx-auto p-6">
-        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            </div>
-    </main>
-
-    <section class="max-w-2xl mx-auto px-6 mt-12">
-        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">The Damage</h2>
-            <div id="receipt-list" class="space-y-4 mb-8 font-bold text-lg"></div>
-            <div id="receipt-total" class="text-3xl font-black text-center pt-6 border-t-4 border-black">Total: $0</div>
-        </div>
-    </section>
-
-    <script>
-        const initialBalance = 800000000000;
-        let balance = initialBalance;
-        let inventory = {};
-
-        const rawItems = [
-            // MUNDANE (1-30)
-            ["Taco Bell Cravings Box", 5, "🌮"], ["Starbucks Coffee", 6, "☕"], ["Netflix Subscription", 15, "🎬"], ["New Video Game", 70, "🎮"], ["AirPods Pro", 249, "🎧"], 
-            ["Latest iPhone", 1100, "📱"], ["Gaming PC", 3500, "🖥️"], ["Used Honda Civic", 12000, "🚗"], ["Luxury Watch", 15000, "⌚"], ["University Degree", 120000, "🎓"],
-            ["Designer Handbag", 4500, "👜"], ["Peloton Bike", 2500, "🚴"], ["Full Home Gym", 15000, "🏋️"], ["Diamond Ring", 10000, "💍"], ["Gold Bar", 75000, "🧈"],
-            ["Tesla Model 3", 45000, "🔋"], ["First Class Ticket", 12000, "✈️"], ["Personal Chef (Year)", 80000, "👨‍🍳"], ["Home Cinema", 50000, "🔊"], ["Wedding", 35000, "👰"],
-            ["Rolex Daytona", 40000, "🕙"], ["Hermès Birkin", 25000, "👝"], ["Bitcoin", 65000, "🪙"], ["Pizza Shop", 250000, "🍕"], ["Year of Rent (LA)", 60000, "🏠"],
-            ["Hot Tub", 8000, "🛀"], ["Ski Trip (Luxe)", 20000, "🎿"], ["CryptoPunk NFT", 150000, "🖼️"], ["Charity Donation", 100000, "🤝"], ["A Single Share of Berkshire Hathaway", 600000, "📈"],
-
-            // WEALTHY (31-70)
-            ["Tesla Roadster", 200000, "🏎️"], ["Lamborghini Revuelto", 600000, "🐂"], ["Pagani Huayra", 3500000, "🔱"], ["Private Island (Bahamas)", 45000000, "🏝️"], ["Luxury Yacht", 120000000, "🚢"],
-            ["Private Jet", 75000000, "🛩️"], ["Malibu Mansion", 85000000, "🏰"], ["Penthouse in London", 55000000, "🏢"], ["NBA Team", 3500000000, "🏀"], ["F1 Team", 1200000000, "🏎️"],
-            ["Helicopter", 4000000, "🚁"], ["Vineyard in Tuscany", 15000000, "🍷"], ["Da Vinci Painting", 450000000, "🎨"], ["Private Museum", 200000000, "🏛️"], ["Super Bowl Ad", 7000000, "📺"],
-            ["Boeing 747", 400000000, "✈️"], ["1,000,000 Trees", 1000000, "🌳"], ["Town in Italy", 25000000, "🏘️"], ["Jurassic Fossil", 12000000, "🦖"], ["Stradivarius Violin", 16000000, "🎻"],
-            ["Rare Comic Book", 3000000, "📕"], ["Moon Rock", 5000000, "🪨"], ["Private Concert (Beyoncé)", 5000000, "🎤"], ["Undersea Base", 500000000, "🌊"], ["Golden Toilet", 1000000, "🚽"],
-
-            // CORPORATE & HISTORIC (71-110)
-            ["Nuclear Power Plant", 9000000000, "☢️"], ["Aircraft Carrier", 13000000000, "⚓"], ["Burj Khalifa", 1500000000, "🏙️"], ["SpaceX Rocket Launch", 65000000, "🚀"], ["Acquire McDonald's Corp", 210000000000, "🍟"],
-            ["Buy Nintendo", 55000000000, "🍄"], ["Buy Netflix Corp", 240000000000, "📺"], ["The Great Sphinx", 1500000000, "🦁"], ["End World Hunger (10 Years)", 400000000000, "🥣"], ["Colonize Mars", 100000000000, "🪐"],
-            ["Panama Canal", 45000000000, "🌊"], ["Mona Lisa", 900000000, "🖼️"], ["Build New NYC Subway Line", 15000000000, "🚇"], ["Olympic Games Host", 12000000000, "🏅"], ["Statue of Liberty", 500000000, "🗽"],
-            ["Acquire Ferrari", 75000000000, "🏎️"], ["100 Ghost Cities", 50000000000, "🏙️"], ["The Moon", 500000000000, "🌙"], ["AGI Research Lab", 150000000000, "🧠"], ["Hyperloop Network", 25000000000, "🚄"],
-            ["Global Clean Water Project", 15000000000, "💧"], ["Acquire Manchester United", 6000000000, "⚽"], ["Buy The New York Times", 3500000000, "📰"], ["Acquire Spotify", 45000000000, "🎵"],
-
-            // ABSURD & FINAL (111-150)
-            ["Acquire X (Twitter) Again", 44000000000, "🐦"], ["Starship Fleet (1000 Ships)", 20000000000, "🚀"], ["Dyson Swarm (Stage 1)", 300000000000, "☀️"], ["Buy a Small Country", 150000000000, "🗺️"], ["Acquire Adobe", 230000000000, "🖌️"],
-            ["Vertical Farm for Earth", 180000000000, "🥗"], ["Quantum Supercomputer", 10000000000, "💻"], ["Robot Maid Army", 5000000000, "🤖"], ["Ocean Cleanup Fleet", 12000000000, "🐳"], ["Acquire Uber", 160000000000, "🚕"],
-            ["Build a Space Elevator", 90000000000, "🏗️"], ["Asteroid Mining Rig", 75000000000, "☄️"], ["Global 10G Network", 120000000000, "🛰️"], ["Artificial Sun", 25000000000, "☀️"], ["Acquire Rolex", 10000000000, "⌚"],
-            ["Human Brain Cloud Backup", 300000000000, "☁️"], ["Personal Army of 100k Drones", 2000000000, "🚁"], ["Acquire Airbnb", 100000000000, "🏘️"], ["Buy All NFL Teams", 150000000000, "🏈"], ["The Eiffel Tower", 1200000000, "🗼"],
-            ["Clone a Woolly Mammoth", 50000000, "🦣"], ["Stonehenge", 500000000, "🪨"], ["Amazon Rainforest Protection", 25000000000, "🌴"], ["Acquire Lego", 15000000000, "🧱"], ["Infinite Pizza for Everyone", 80000000000, "🍕"],
-            ["1 Billion iPhones", 1000000000000, "📱"], ["Buy Starbucks Corp", 110000000000, "☕"], ["Green Sahara Project", 65000000000, "🏜️"], ["Antarctic Resort", 1000000000, "❄️"], ["Personal Reality (VR World)", 50000000000, "🕶️"],
-            ["Buy Twitch", 15000000000, "👾"], ["Acquire Zoom", 20000000000, "📹"], ["10,000 Superyachts", 1000000000000, "🛥️"], ["Acquire Fortnite", 30000000000, "🔫"], ["Buy the Mona Lisa Twice", 1800000000, "🖼️"],
-            ["A Liter of Scorpion Venom", 10000000, "🦂"], ["Acquire Chanel", 20000000000, "💄"], ["Acquire Reddit", 10000000000, "🧡"], ["Space Tourism Port", 8000000000, "🌌"], ["The Concept of Time", 799000000000, "⏳"]
-        ];
-
-        const items = rawItems.map(i => ({ name: i[0], price: i[1], img: i[2] }));
-
-        function formatMoney(num) {
-            return "$" + num.toLocaleString();
-        }
-
-        function updateUI() {
-            document.getElementById('money').innerText = formatMoney(balance);
-            const spent = initialBalance - balance;
-            const perc = (spent / initialBalance * 100).toFixed(4);
-            document.getElementById('percentage').innerText = `${perc}% Spent`;
-            renderItems();
-            renderReceipt();
-        }
-
-        function buy(index) {
-            const item = items[index];
-            if (balance >= item.price) {
-                balance -= item.price;
-                inventory[item.name] = (inventory[item.name] || 0) + 1;
-                updateUI();
-            }
-        }
-
-        function sell(index) {
-            const item = items[index];
-            if (inventory[item.name] > 0) {
-                balance += item.price;
-                inventory[item.name]--;
-                updateUI();
-            }
-        }
-
-        function renderItems() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            items.forEach((item, index) => {
-                const count = inventory[item.name] || 0;
-                const card = document.createElement('div');
-                card.className = "item-card p-6 flex flex-col items-center text-center";
-                card.innerHTML = `
-                    <div class="text-7xl mb-6 select-none">${item.img}</div>
-                    <div class="text-lg font-black uppercase mb-1 leading-tight h-12 flex items-center">${item.name}</div>
-                    <div class="text-green-600 font-extrabold text-xl mb-6">${formatMoney(item.price)}</div>
-                    <div class="flex items-center gap-3 w-full">
-                        <button onclick="sell(${index})" class="neubrutal bg-red-500 text-white flex-1 py-3 font-black uppercase text-xs ${count === 0 ? 'opacity-20 grayscale pointer-events-none' : ''}">Sell</button>
-                        <div class="w-12 text-center font-black text-xl">${count}</div>
-                        <button onclick="buy(${index})" class="neubrutal bg-green-500 text-white flex-1 py-3 font-black uppercase text-xs ${balance < item.price ? 'opacity-20 grayscale pointer-events-none' : ''}">Buy</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderReceipt() {
-            const list = document.getElementById('receipt-list');
-            const totalEl = document.getElementById('receipt-total');
-            list.innerHTML = '';
-            let totalSpent = 0;
-
-            for (const [name, count] of Object.entries(inventory)) {
-                if (count > 0) {
-                    const item = items.find(i => i.name === name);
-                    const cost = item.price * count;
-                    totalSpent += cost;
-                    list.innerHTML += `<div class="flex justify-between items-end gap-4"><span class="flex-1 border-b-2 border-dotted border-black pb-1">${name} x${count}</span><span class="text-green-600">$${cost.toLocaleString()}</span></div>`;
-                }
-            }
-            if (totalSpent === 0) list.innerHTML = `<div class="text-center opacity-30 py-10">Your cart is empty. Start spending Elon's money.</div>`;
-            totalEl.innerText = "TOTAL SPENT: " + formatMoney(totalSpent);
-        }
-
-        updateUI();
-    </script>
-</body>
-</html>
-        </template>
-
-    <template id="code-time">
-        <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Price of Time: Persistence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-    <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
-    .neal-border { border: 3px solid #000; }
-    .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
-    .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-    .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
-    .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
-    .item-card:hover { transform: rotate(-1deg); }
-    .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
-    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
-</style>
-</head>
-<body class="bg-slate-50 text-black pb-10">
-    <header class="sticky-header p-6 bg-white">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-4xl font-black uppercase tracking-tighter">The Price of Time</h1>
-                <div class="flex gap-2">
-                    <button onclick="saveLife()" class="px-4 py-2 neal-border font-black text-xs uppercase bg-green-500 text-white">Save Life</button>
-                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase bg-gray-200">Theme</button>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
-                <div class="lg:col-span-2">
-                    <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
-                    <select id="wageSelector" class="w-full p-3 neal-border bg-white font-black text-lg outline-none cursor-pointer">
-                        </select>
-                </div>
-                <div class="text-right">
-                    <p class="text-[10px] font-black uppercase opacity-50">Disposable Wealth</p>
-                    <p id="budgetDisplay" class="text-5xl font-black text-green-500 tracking-tighter leading-none">$0</p>
-                </div>
-            </div>
-            <div class="mt-6">
-                <div class="flex justify-between text-[10px] font-black uppercase mb-1">
-                    <span>Life Consumed</span>
-                    <span id="timeText">0 / 700,800 hrs</span>
-                </div>
-                <div class="h-6 neal-border bg-gray-200 overflow-hidden">
-                    <div id="progressFill" class="h-full bg-gradient-to-r from-green-400 to-red-500 transition-all duration-700" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="itemGrid"></div>
-<div class="lg:col-span-1">
-    <div class="neal-border p-4 bg-white h-[600px] flex flex-col sticky top-[300px]">
-        <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Life Receipt</h2>
-                <div id="historyLog" class="history-scroll overflow-y-auto flex-grow text-[11px] font-bold space-y-2 uppercase">
-                    <p class="opacity-30 italic">No events yet...</p>
-                </div>
-                <div class="border-t-4 border-current pt-4 mt-4">
-                    <button onclick="resetLife()" class="w-full p-2 bg-red-600 text-white font-black rounded-lg text-xs uppercase">Reset Everything</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        const people = [
-            { name: "Student", wage: 12, budget: 250000 },
-            { name: "Barista", wage: 18, budget: 400000 },
-            { name: "Teacher", wage: 30, budget: 800000 },
-            { name: "Nurse", wage: 45, budget: 1500000 },
-            { name: "Electrician", wage: 60, budget: 2000000 },
-            { name: "Chef", wage: 40, budget: 950000 },
-            { name: "Software Eng", wage: 85, budget: 3000000 },
-            { name: "Pilot", wage: 130, budget: 4500000 },
-            { name: "Surgeon", wage: 280, budget: 10000000 },
-            { name: "Lawyer", wage: 400, budget: 15000000 },
-            { name: "Pop Star", wage: 5000, budget: 60000000 },
-            { name: "Pro Athlete", wage: 18000, budget: 200000000 },
-            { name: "Hedge Fund Manager", wage: 60000, budget: 1200000000 },
-            { name: "Movie Director", wage: 9000, budget: 90000000 },
-            { name: "Influencer", wage: 1800, budget: 6000000 },
-            { name: "Oil Tycoon", wage: 120000, budget: 15000000000 },
-            { name: "Tech Billionaire", wage: 1200000, budget: 250000000000 }
-        ];
-
-        const items = [
-      { name: "Coffee Break", hours: 0.25, emoji: "☕" },
-{ name: "Eat a Pizza", hours: 0.5, emoji: "🍕" },
-{ name: "Take a Nap", hours: 1, emoji: "😴" },
-{ name: "Watch a Movie", hours: 2, emoji: "🍿" },
-{ name: "Run a Marathon", hours: 4, emoji: "🏃" },
-{ name: "Night Out", hours: 8, emoji: "💃" },
-{ name: "Read a Book", hours: 8, emoji: "📖" },
-{ name: "Build a PC", hours: 10, emoji: "🖥️" },
-{ name: "Complete Ironman", hours: 12, emoji: "🏊" },
-{ name: "Binge Netflix", hours: 50, emoji: "📺" },
-{ name: "Beat Dark Souls", hours: 60, emoji: "🎮" },
-{ name: "Rebuild Engine", hours: 80, emoji: "🔧" },
-{ name: "Plant a Garden", hours: 100, emoji: "🌱" },
-{ name: "Cross Country Road Trip", hours: 168, emoji: "🛣️" },
-{ name: "Get Fit", hours: 200, emoji: "💪" },
-{ name: "Learn to Cook", hours: 300, emoji: "👨‍🍳" },
-{ name: "Launch a Podcast", hours: 300, emoji: "🎙️" },
-{ name: "Brew Perfect Beer", hours: 400, emoji: "🍺" },
-{ name: "Write a Novel", hours: 500, emoji: "✍️" },
-{ name: "Climb Everest", hours: 500, emoji: "🏔️" },
-{ name: "Learn Photography", hours: 500, emoji: "📷" },
-{ name: "Master Public Speaking", hours: 500, emoji: "🗣️" },
-{ name: "Learn Language", hours: 600, emoji: "🌍" },
-{ name: "Train Service Dog", hours: 600, emoji: "🐕" },
-{ name: "Learn Woodworking", hours: 800, emoji: "🪵" },
-{ name: "Write an Album", hours: 800, emoji: "🎵" },
-{ name: "Learn to Code", hours: 1000, emoji: "💻" },
-{ name: "Meditation Practice", hours: 1000, emoji: "🧘" },
-{ name: "Become Sommelier", hours: 1000, emoji: "🍷" },
-{ name: "Restore Classic Car", hours: 1200, emoji: "🚗" },
-{ name: "Hike Appalachian Trail", hours: 1200, emoji: "🥾" },
-{ name: "Become a Pilot", hours: 1500, emoji: "🛩️" },
-{ name: "Sail Around World", hours: 2000, emoji: "⛵" },
-{ name: "Learn Guitar", hours: 2000, emoji: "🎸" },
-{ name: "Master Yoga", hours: 2000, emoji: "🤸" },
-{ name: "Build a House", hours: 3000, emoji: "🏠" },
-{ name: "Start a Business", hours: 5000, emoji: "💼" },
-{ name: "Travel the World", hours: 8760, emoji: "✈️" },
-{ name: "Master Piano", hours: 10000, emoji: "🎹" },
-{ name: "Become Chess Master", hours: 10000, emoji: "♟️" },
-{ name: "Get a PhD", hours: 12000, emoji: "🎓" },
-{ name: "Paint Sistine Chapel", hours: 14000, emoji: "🎨" },
-{ name: "Mars Mission", hours: 20000, emoji: "🚀" },
-{ name: "Social Media Scroll", hours: 25000, emoji: "📱" },
-{ name: "Win an Oscar", hours: 50000, emoji: "🏆" },
-{ name: "Become President", hours: 70000, emoji: "🇺🇸" },
-{ name: "Cure a Disease", hours: 80000, emoji: "🔬" },
-{ name: "Wait for GTA 6", hours: 90000, emoji: "⏳" },
-{ name: "Raise a Child", hours: 160000, emoji: "👶" },
-{ name: "Build a Pyramid", hours: 175000, emoji: "📐" }
-        ];
-
-        let state = {
-            profIdx: 0,
-            budget: 0,
-            timeSpent: 0,
-            history: []
-        };
-
-        const totalLifeHours = 700800;
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playSfx(f, d) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + d);
-            o.connect(g); g.connect(audioCtx.destination);
-            o.start(); o.stop(audioCtx.currentTime + d);
-        }
-
-        function init() {
-            const selector = document.getElementById('wageSelector');
-            people.forEach((p, i) => {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = `${p.name} ($${p.wage}/hr)`;
-                selector.appendChild(opt);
-            });
-// LOAD FEATURE - AUTO-LOAD WITHOUT POPUP
-            const saved = localStorage.getItem('timeLifeSave');
-            if (saved) {
-                state = JSON.parse(saved);
-                document.getElementById('wageSelector').value = state.profIdx;
-            } else {
-                resetState(0);
-            }
-            updateUI();
-        }
-
-        function resetState(idx) {
-            state.profIdx = idx;
-            state.budget = people[idx].budget;
-            state.timeSpent = 0;
-            state.history = [];
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('budgetDisplay').innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(state.budget);
-            document.getElementById('timeText').innerText = `${Math.floor(state.timeSpent).toLocaleString()} / ${totalLifeHours.toLocaleString()} hrs`;
-            document.getElementById('progressFill').style.width = Math.min((state.timeSpent / totalLifeHours) * 100, 100) + '%';
-            
-            if (people[state.profIdx].wage >= 1000000) document.body.classList.add('paradox-active');
-            else document.body.classList.remove('paradox-active');
-
-            renderItems();
-            renderHistory();
-        }
-
-        function buyItem(itemIdx) {
-            const item = items[itemIdx];
-            const currentWage = people[state.profIdx].wage;
-            const cost = (item.hours * currentWage) * 0.5;
-
-            if (state.budget >= cost) {
-                state.budget -= cost;
-                state.timeSpent += item.hours;
-                
-                const entry = `You spent $${cost.toLocaleString()} of your ${people[state.profIdx].name} salary to ${item.name} (${item.hours} hrs).`;
-                state.history.unshift(entry); // Add to top
-                
-                playSfx(800, 0.1);
-                updateUI();
-            } else {
-                playSfx(150, 0.3);
-                alert("Insufficient funds!");
-            }
-        }
-
-        function renderItems() {
-            const grid = document.getElementById('itemGrid');
-            const currentWage = people[state.profIdx].wage;
-            grid.innerHTML = '';
-            items.forEach((item, i) => {
-                const cost = (item.hours * currentWage) * 0.5;
-                const card = document.createElement('div');
-                card.className = "p-4 neal-border bg-white flex flex-col items-center card-shadow";
-                card.innerHTML = `
-                    <div class="text-4xl mb-2">${item.emoji}</div>
-                    <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
-                    <p class="text-[9px] font-bold opacity-40 uppercase mb-3">${item.hours.toLocaleString()} HRS</p>
-                    <button class="btn-buy w-full bg-black text-white dark:bg-white dark:text-black font-black py-2 rounded-lg text-[10px]" onclick="buyItem(${i})">
-                        BUY $${cost >= 1e6 ? (cost/1e6).toFixed(1) + 'M' : cost.toLocaleString()}
-                    </button>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderHistory() {
-            const log = document.getElementById('historyLog');
-            if (state.history.length === 0) {
-                log.innerHTML = `<p class="opacity-30 italic">No events yet...</p>`;
-                return;
-            }
-            log.innerHTML = state.history.map(entry => `
-                <div class="border-l-4 border-current pl-2 py-1 mb-2 bg-gray-50 dark:bg-zinc-800">
-                    ${entry}
-                </div>
-            `).join('');
-        }
-
-        function saveLife() {
-            localStorage.setItem('timeLifeSave', JSON.stringify(state));
-            playSfx(1200, 0.2);
-            alert("Life progress saved to browser memory!");
-        }
-
-        function resetLife() {
-            if(confirm("Erase all progress?")) {
-                localStorage.removeItem('timeLifeSave');
-                resetState(document.getElementById('wageSelector').value);
-            }
-        }
-
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            playSfx(400, 0.1);
-        }
-
-        document.getElementById('wageSelector').addEventListener('change', (e) => resetState(e.target.value));
-
-        init();
-    </script>
-</body>
-</html>
-        </template>
 
     <template id="code-trolley">
         <!DOCTYPE html>
@@ -896,7 +438,463 @@
     </script>
 </body>
 </html>
-          </template>
+    </template>
+
+    <template id="code-elon">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spend Elon's $800B</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+        .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+        .item-card:hover { transform: rotate(-1deg); }
+        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 rotate-2">
+                <span class="font-black text-xl uppercase tracking-tighter">Ultimate 2026 Edition</span>
+            </div>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Spend Elon's Money</h1>
+            <p class="text-xl font-bold opacity-70">Elon Musk's net worth is <strong>$800,000,000,000</strong>.<br>If you spent $1,000,000 every single day, it would take you 2,191 years to finish.</p>
+        </div>
+    </header>
+
+    <div class="sticky-header money-gradient p-6">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+           <div id="money" class="text-4xl md:text-6xl font-black text-black drop-shadow-[2px_2px_0px_rgba(255,255,255,1)] tracking-tighter">$800,000,000,000</div>
+            <div class="hidden md:block text-right">
+                <div id="percentage" class="bg-black text-white px-3 py-1 font-bold rounded">0.000% Spent</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto p-6">
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+    </main>
+
+    <section class="max-w-2xl mx-auto px-6 mt-12">
+        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
+            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">The Damage</h2>
+            <div id="receipt-list" class="space-y-4 mb-8 font-bold text-lg"></div>
+            <div id="receipt-total" class="text-3xl font-black text-center pt-6 border-t-4 border-black">Total: $0</div>
+        </div>
+    </section>
+
+    <script>
+        const initialBalance = 800000000000;
+        let balance = initialBalance;
+        let inventory = {};
+
+        const rawItems = [
+            // MUNDANE (1-30)
+            ["Taco Bell Cravings Box", 5, "🌮"], ["Starbucks Coffee", 6, "☕"], ["Netflix Subscription", 15, "🎬"], ["New Video Game", 70, "🎮"], ["AirPods Pro", 249, "🎧"], 
+            ["Latest iPhone", 1100, "📱"], ["Gaming PC", 3500, "🖥️"], ["Used Honda Civic", 12000, "🚗"], ["Luxury Watch", 15000, "⌚"], ["University Degree", 120000, "🎓"],
+            ["Designer Handbag", 4500, "👜"], ["Peloton Bike", 2500, "🚴"], ["Full Home Gym", 15000, "🏋️"], ["Diamond Ring", 10000, "💍"], ["Gold Bar", 75000, "🧈"],
+            ["Tesla Model 3", 45000, "🔋"], ["First Class Ticket", 12000, "✈️"], ["Personal Chef (Year)", 80000, "👨‍🍳"], ["Home Cinema", 50000, "🔊"], ["Wedding", 35000, "👰"],
+            ["Rolex Daytona", 40000, "🕙"], ["Hermès Birkin", 25000, "👝"], ["Bitcoin", 65000, "🪙"], ["Pizza Shop", 250000, "🍕"], ["Year of Rent (LA)", 60000, "🏠"],
+            ["Hot Tub", 8000, "🛀"], ["Ski Trip (Luxe)", 20000, "🎿"], ["CryptoPunk NFT", 150000, "🖼️"], ["Charity Donation", 100000, "🤝"], ["A Single Share of Berkshire Hathaway", 600000, "📈"],
+
+            // WEALTHY (31-70)
+            ["Tesla Roadster", 200000, "🏎️"], ["Lamborghini Revuelto", 600000, "🐂"], ["Pagani Huayra", 3500000, "🔱"], ["Private Island (Bahamas)", 45000000, "🏝️"], ["Luxury Yacht", 120000000, "🚢"],
+            ["Private Jet", 75000000, "🛩️"], ["Malibu Mansion", 85000000, "🏰"], ["Penthouse in London", 55000000, "🏢"], ["NBA Team", 3500000000, "🏀"], ["F1 Team", 1200000000, "🏎️"],
+            ["Helicopter", 4000000, "🚁"], ["Vineyard in Tuscany", 15000000, "🍷"], ["Da Vinci Painting", 450000000, "🎨"], ["Private Museum", 200000000, "🏛️"], ["Super Bowl Ad", 7000000, "📺"],
+            ["Boeing 747", 400000000, "✈️"], ["1,000,000 Trees", 1000000, "🌳"], ["Town in Italy", 25000000, "🏘️"], ["Jurassic Fossil", 12000000, "🦖"], ["Stradivarius Violin", 16000000, "🎻"],
+            ["Rare Comic Book", 3000000, "📕"], ["Moon Rock", 5000000, "🪨"], ["Private Concert (Beyoncé)", 5000000, "🎤"], ["Undersea Base", 500000000, "🌊"], ["Golden Toilet", 1000000, "🚽"],
+
+            // CORPORATE & HISTORIC (71-110)
+            ["Nuclear Power Plant", 9000000000, "☢️"], ["Aircraft Carrier", 13000000000, "⚓"], ["Burj Khalifa", 1500000000, "🏙️"], ["SpaceX Rocket Launch", 65000000, "🚀"], ["Acquire McDonald's Corp", 210000000000, "🍟"],
+            ["Buy Nintendo", 55000000000, "🍄"], ["Buy Netflix Corp", 240000000000, "📺"], ["The Great Sphinx", 1500000000, "🦁"], ["End World Hunger (10 Years)", 400000000000, "🥣"], ["Colonize Mars", 100000000000, "🪐"],
+            ["Panama Canal", 45000000000, "🌊"], ["Mona Lisa", 900000000, "🖼️"], ["Build New NYC Subway Line", 15000000000, "🚇"], ["Olympic Games Host", 12000000000, "🏅"], ["Statue of Liberty", 500000000, "🗽"],
+            ["Acquire Ferrari", 75000000000, "🏎️"], ["100 Ghost Cities", 50000000000, "🏙️"], ["The Moon", 500000000000, "🌙"], ["AGI Research Lab", 150000000000, "🧠"], ["Hyperloop Network", 25000000000, "🚄"],
+            ["Global Clean Water Project", 15000000000, "💧"], ["Acquire Manchester United", 6000000000, "⚽"], ["Buy The New York Times", 3500000000, "📰"], ["Acquire Spotify", 45000000000, "🎵"],
+
+            // ABSURD & FINAL (111-150)
+            ["Acquire X (Twitter) Again", 44000000000, "🐦"], ["Starship Fleet (1000 Ships)", 20000000000, "🚀"], ["Dyson Swarm (Stage 1)", 300000000000, "☀️"], ["Buy a Small Country", 150000000000, "🗺️"], ["Acquire Adobe", 230000000000, "🖌️"],
+            ["Vertical Farm for Earth", 180000000000, "🥗"], ["Quantum Supercomputer", 10000000000, "💻"], ["Robot Maid Army", 5000000000, "🤖"], ["Ocean Cleanup Fleet", 12000000000, "🐳"], ["Acquire Uber", 160000000000, "🚕"],
+            ["Build a Space Elevator", 90000000000, "🏗️"], ["Asteroid Mining Rig", 75000000000, "☄️"], ["Global 10G Network", 120000000000, "🛰️"], ["Artificial Sun", 25000000000, "☀️"], ["Acquire Rolex", 10000000000, "⌚"],
+            ["Human Brain Cloud Backup", 300000000000, "☁️"], ["Personal Army of 100k Drones", 2000000000, "🚁"], ["Acquire Airbnb", 100000000000, "🏘️"], ["Buy All NFL Teams", 150000000000, "🏈"], ["The Eiffel Tower", 1200000000, "🗼"],
+            ["Clone a Woolly Mammoth", 50000000, "🦣"], ["Stonehenge", 500000000, "🪨"], ["Amazon Rainforest Protection", 25000000000, "🌴"], ["Acquire Lego", 15000000000, "🧱"], ["Infinite Pizza for Everyone", 80000000000, "🍕"],
+            ["1 Billion iPhones", 1000000000000, "📱"], ["Buy Starbucks Corp", 110000000000, "☕"], ["Green Sahara Project", 65000000000, "🏜️"], ["Antarctic Resort", 1000000000, "❄️"], ["Personal Reality (VR World)", 50000000000, "🕶️"],
+            ["Buy Twitch", 15000000000, "👾"], ["Acquire Zoom", 20000000000, "📹"], ["10,000 Superyachts", 1000000000000, "🛥️"], ["Acquire Fortnite", 30000000000, "🔫"], ["Buy the Mona Lisa Twice", 1800000000, "🖼️"],
+            ["A Liter of Scorpion Venom", 10000000, "🦂"], ["Acquire Chanel", 20000000000, "💄"], ["Acquire Reddit", 10000000000, "🧡"], ["Space Tourism Port", 8000000000, "🌌"], ["The Concept of Time", 799000000000, "⏳"]
+        ];
+
+        const items = rawItems.map(i => ({ name: i[0], price: i[1], img: i[2] }));
+
+        function formatMoney(num) {
+            return "$" + num.toLocaleString();
+        }
+
+        function updateUI() {
+            document.getElementById('money').innerText = formatMoney(balance);
+            const spent = initialBalance - balance;
+            const perc = (spent / initialBalance * 100).toFixed(4);
+            document.getElementById('percentage').innerText = `${perc}% Spent`;
+            renderItems();
+            renderReceipt();
+        }
+
+        function buy(index) {
+            const item = items[index];
+            if (balance >= item.price) {
+                balance -= item.price;
+                inventory[item.name] = (inventory[item.name] || 0) + 1;
+                updateUI();
+            }
+        }
+
+        function sell(index) {
+            const item = items[index];
+            if (inventory[item.name] > 0) {
+                balance += item.price;
+                inventory[item.name]--;
+                updateUI();
+            }
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            items.forEach((item, index) => {
+                const count = inventory[item.name] || 0;
+                const card = document.createElement('div');
+                card.className = "item-card p-6 flex flex-col items-center text-center";
+                card.innerHTML = `
+                    <div class="text-7xl mb-6 select-none">${item.img}</div>
+                    <div class="text-lg font-black uppercase mb-1 leading-tight h-12 flex items-center">${item.name}</div>
+                    <div class="text-green-600 font-extrabold text-xl mb-6">${formatMoney(item.price)}</div>
+                    <div class="flex items-center gap-3 w-full">
+                        <button onclick="sell(${index})" class="neubrutal bg-red-500 text-white flex-1 py-3 font-black uppercase text-xs ${count === 0 ? 'opacity-20 grayscale pointer-events-none' : ''}">Sell</button>
+                        <div class="w-12 text-center font-black text-xl">${count}</div>
+                        <button onclick="buy(${index})" class="neubrutal bg-green-500 text-white flex-1 py-3 font-black uppercase text-xs ${balance < item.price ? 'opacity-20 grayscale pointer-events-none' : ''}">Buy</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderReceipt() {
+            const list = document.getElementById('receipt-list');
+            const totalEl = document.getElementById('receipt-total');
+            list.innerHTML = '';
+            let totalSpent = 0;
+
+            for (const [name, count] of Object.entries(inventory)) {
+                if (count > 0) {
+                    const item = items.find(i => i.name === name);
+                    const cost = item.price * count;
+                    totalSpent += cost;
+                    list.innerHTML += `<div class="flex justify-between items-end gap-4"><span class="flex-1 border-b-2 border-dotted border-black pb-1">${name} x${count}</span><span class="text-green-600">$${cost.toLocaleString()}</span></div>`;
+                }
+            }
+            if (totalSpent === 0) list.innerHTML = `<div class="text-center opacity-30 py-10">Your cart is empty. Start spending Elon's money.</div>`;
+            totalEl.innerText = "TOTAL SPENT: " + formatMoney(totalSpent);
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
+    </template>
+
+    <template id="code-time">
+        <!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Price of Time</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+    .neal-border { border: 3px solid #000; }
+    .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+    .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+    .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
+    .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+    .item-card:hover { transform: rotate(-1deg); }
+    .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+</style>
+</head>
+<body class="bg-slate-50 text-black pb-10">
+    <header class="sticky-header p-6 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-4xl font-black uppercase tracking-tighter">The Price of Time</h1>
+                <div class="flex gap-2">
+                    <button onclick="saveLife()" class="px-4 py-2 neal-border font-black text-xs uppercase bg-green-500 text-white">Save Life</button>
+                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase bg-gray-200">Theme</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
+                <div class="lg:col-span-2">
+                    <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
+                    <select id="wageSelector" class="w-full p-3 neal-border bg-white font-black text-lg outline-none cursor-pointer">
+                        </select>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black uppercase opacity-50">Disposable Wealth</p>
+                    <p id="budgetDisplay" class="text-5xl font-black text-green-500 tracking-tighter leading-none">$0</p>
+                </div>
+            </div>
+            <div class="mt-6">
+                <div class="flex justify-between text-[10px] font-black uppercase mb-1">
+                    <span>Life Consumed</span>
+                    <span id="timeText">0 / 700,800 hrs</span>
+                </div>
+                <div class="h-6 neal-border bg-gray-200 overflow-hidden">
+                    <div id="progressFill" class="h-full bg-gradient-to-r from-green-400 to-red-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="itemGrid"></div>
+<div class="lg:col-span-1">
+    <div class="neal-border p-4 bg-white h-[600px] flex flex-col sticky top-[300px]">
+        <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Life Receipt</h2>
+                <div id="historyLog" class="history-scroll overflow-y-auto flex-grow text-[11px] font-bold space-y-2 uppercase">
+                    <p class="opacity-30 italic">No events yet...</p>
+                </div>
+                <div class="border-t-4 border-current pt-4 mt-4">
+                    <button onclick="resetLife()" class="w-full p-2 bg-red-600 text-white font-black rounded-lg text-xs uppercase">Reset Everything</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const people = [
+            { name: "Student", wage: 12, budget: 250000 },
+            { name: "Barista", wage: 18, budget: 400000 },
+            { name: "Teacher", wage: 30, budget: 800000 },
+            { name: "Nurse", wage: 45, budget: 1500000 },
+            { name: "Electrician", wage: 60, budget: 2000000 },
+            { name: "Chef", wage: 40, budget: 950000 },
+            { name: "Software Eng", wage: 85, budget: 3000000 },
+            { name: "Pilot", wage: 130, budget: 4500000 },
+            { name: "Surgeon", wage: 280, budget: 10000000 },
+            { name: "Lawyer", wage: 400, budget: 15000000 },
+            { name: "Pop Star", wage: 5000, budget: 60000000 },
+            { name: "Pro Athlete", wage: 18000, budget: 200000000 },
+            { name: "Hedge Fund Manager", wage: 60000, budget: 1200000000 },
+            { name: "Movie Director", wage: 9000, budget: 90000000 },
+            { name: "Influencer", wage: 1800, budget: 6000000 },
+            { name: "Oil Tycoon", wage: 120000, budget: 15000000000 },
+            { name: "Tech Billionaire", wage: 1200000, budget: 250000000000 }
+        ];
+
+        const items = [
+      { name: "Coffee Break", hours: 0.25, emoji: "☕" },
+{ name: "Eat a Pizza", hours: 0.5, emoji: "🍕" },
+{ name: "Take a Nap", hours: 1, emoji: "😴" },
+{ name: "Watch a Movie", hours: 2, emoji: "🍿" },
+{ name: "Run a Marathon", hours: 4, emoji: "🏃" },
+{ name: "Night Out", hours: 8, emoji: "💃" },
+{ name: "Read a Book", hours: 8, emoji: "📖" },
+{ name: "Build a PC", hours: 10, emoji: "🖥️" },
+{ name: "Complete Ironman", hours: 12, emoji: "🏊" },
+{ name: "Binge Netflix", hours: 50, emoji: "📺" },
+{ name: "Beat Dark Souls", hours: 60, emoji: "🎮" },
+{ name: "Rebuild Engine", hours: 80, emoji: "🔧" },
+{ name: "Plant a Garden", hours: 100, emoji: "🌱" },
+{ name: "Cross Country Road Trip", hours: 168, emoji: "🛣️" },
+{ name: "Get Fit", hours: 200, emoji: "💪" },
+{ name: "Learn to Cook", hours: 300, emoji: "👨‍🍳" },
+{ name: "Launch a Podcast", hours: 300, emoji: "🎙️" },
+{ name: "Brew Perfect Beer", hours: 400, emoji: "🍺" },
+{ name: "Write a Novel", hours: 500, emoji: "✍️" },
+{ name: "Climb Everest", hours: 500, emoji: "🏔️" },
+{ name: "Learn Photography", hours: 500, emoji: "📷" },
+{ name: "Master Public Speaking", hours: 500, emoji: "🗣️" },
+{ name: "Learn Language", hours: 600, emoji: "🌍" },
+{ name: "Train Service Dog", hours: 600, emoji: "🐕" },
+{ name: "Learn Woodworking", hours: 800, emoji: "🪵" },
+{ name: "Write an Album", hours: 800, emoji: "🎵" },
+{ name: "Learn to Code", hours: 1000, emoji: "💻" },
+{ name: "Meditation Practice", hours: 1000, emoji: "🧘" },
+{ name: "Become Sommelier", hours: 1000, emoji: "🍷" },
+{ name: "Restore Classic Car", hours: 1200, emoji: "🚗" },
+{ name: "Hike Appalachian Trail", hours: 1200, emoji: "🥾" },
+{ name: "Become a Pilot", hours: 1500, emoji: "🛩️" },
+{ name: "Sail Around World", hours: 2000, emoji: "⛵" },
+{ name: "Learn Guitar", hours: 2000, emoji: "🎸" },
+{ name: "Master Yoga", hours: 2000, emoji: "🤸" },
+{ name: "Build a House", hours: 3000, emoji: "🏠" },
+{ name: "Start a Business", hours: 5000, emoji: "💼" },
+{ name: "Travel the World", hours: 8760, emoji: "✈️" },
+{ name: "Master Piano", hours: 10000, emoji: "🎹" },
+{ name: "Become Chess Master", hours: 10000, emoji: "♟️" },
+{ name: "Get a PhD", hours: 12000, emoji: "🎓" },
+{ name: "Paint Sistine Chapel", hours: 14000, emoji: "🎨" },
+{ name: "Mars Mission", hours: 20000, emoji: "🚀" },
+{ name: "Social Media Scroll", hours: 25000, emoji: "📱" },
+{ name: "Win an Oscar", hours: 50000, emoji: "🏆" },
+{ name: "Become President", hours: 70000, emoji: "🇺🇸" },
+{ name: "Cure a Disease", hours: 80000, emoji: "🔬" },
+{ name: "Wait for GTA 6", hours: 90000, emoji: "⏳" },
+{ name: "Raise a Child", hours: 160000, emoji: "👶" },
+{ name: "Build a Pyramid", hours: 175000, emoji: "📐" }
+        ];
+
+        let state = {
+            profIdx: 0,
+            budget: 0,
+            timeSpent: 0,
+            history: []
+        };
+
+        const totalLifeHours = 700800;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSfx(f, d) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.frequency.value = f;
+            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + d);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + d);
+        }
+
+        function init() {
+            const selector = document.getElementById('wageSelector');
+            people.forEach((p, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `${p.name} ($${p.wage}/hr)`;
+                selector.appendChild(opt);
+            });
+
+            const saved = localStorage.getItem('timeLifeSave');
+            if (saved) {
+                state = JSON.parse(saved);
+                document.getElementById('wageSelector').value = state.profIdx;
+            } else {
+                resetState(0);
+            }
+            updateUI();
+        }
+
+        function resetState(idx) {
+            state.profIdx = idx;
+            state.budget = people[idx].budget;
+            state.timeSpent = 0;
+            state.history = [];
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('budgetDisplay').innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(state.budget);
+            document.getElementById('timeText').innerText = `${Math.floor(state.timeSpent).toLocaleString()} / ${totalLifeHours.toLocaleString()} hrs`;
+            document.getElementById('progressFill').style.width = Math.min((state.timeSpent / totalLifeHours) * 100, 100) + '%';
+            
+            if (people[state.profIdx].wage >= 1000000) document.body.classList.add('paradox-active');
+            else document.body.classList.remove('paradox-active');
+
+            renderItems();
+            renderHistory();
+        }
+
+        function buyItem(itemIdx) {
+            const item = items[itemIdx];
+            const currentWage = people[state.profIdx].wage;
+            const cost = (item.hours * currentWage) * 0.5;
+
+            if (state.budget >= cost) {
+                state.budget -= cost;
+                state.timeSpent += item.hours;
+                
+                const entry = `You spent $${cost.toLocaleString()} of your ${people[state.profIdx].name} salary to ${item.name} (${item.hours} hrs).`;
+                state.history.unshift(entry);
+                
+                playSfx(800, 0.1);
+                updateUI();
+            } else {
+                playSfx(150, 0.3);
+                alert("Insufficient funds!");
+            }
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('itemGrid');
+            const currentWage = people[state.profIdx].wage;
+            grid.innerHTML = '';
+            items.forEach((item, i) => {
+                const cost = (item.hours * currentWage) * 0.5;
+                const card = document.createElement('div');
+                card.className = "p-4 neal-border bg-white flex flex-col items-center card-shadow";
+                card.innerHTML = `
+                    <div class="text-4xl mb-2">${item.emoji}</div>
+                    <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
+                    <p class="text-[9px] font-bold opacity-40 uppercase mb-3">${item.hours.toLocaleString()} HRS</p>
+                    <button class="btn-buy w-full bg-black text-white font-black py-2 rounded-lg text-[10px]" onclick="buyItem(${i})">
+                        BUY $${cost >= 1e6 ? (cost/1e6).toFixed(1) + 'M' : cost.toLocaleString()}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderHistory() {
+            const log = document.getElementById('historyLog');
+            if (state.history.length === 0) {
+                log.innerHTML = `<p class="opacity-30 italic">No events yet...</p>`;
+                return;
+            }
+            log.innerHTML = state.history.map(entry => `
+                <div class="border-l-4 border-current pl-2 py-1 mb-2 bg-gray-50">
+                    ${entry}
+                </div>
+            `).join('');
+        }
+
+        function saveLife() {
+            localStorage.setItem('timeLifeSave', JSON.stringify(state));
+            playSfx(1200, 0.2);
+            alert("Life progress saved to browser memory!");
+        }
+
+        function resetLife() {
+            if(confirm("Erase all progress?")) {
+                localStorage.removeItem('timeLifeSave');
+                resetState(document.getElementById('wageSelector').value);
+            }
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            playSfx(400, 0.1);
+        }
+
+        document.getElementById('wageSelector').addEventListener('change', (e) => resetState(e.target.value));
+
+        init();
+    </script>
+</body>
+</html>
+    </template>
 
     <script>
         function showApp(appId) {
@@ -906,14 +904,11 @@
             document.getElementById("btn-" + appId).classList.add("active");
         }
 
-        // This runs as soon as the page loads to "inject" your games into the frames
         window.onload = () => {
-            document.getElementById("checker").srcdoc = document.getElementById("code-checker").innerHTML;
+            document.getElementById("trolley").srcdoc = document.getElementById("code-trolley").innerHTML;
             document.getElementById("elon").srcdoc = document.getElementById("code-elon").innerHTML;
             document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
         };
     </script>
-     </template>
-
 </body>
 </html>
