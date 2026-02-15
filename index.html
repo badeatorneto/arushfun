@@ -2652,21 +2652,21 @@ checkAuth();
     .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
 </style>
 </head>
-<body class="bg-slate-50 text-black dark:bg-zinc-950 dark:text-white pb-10">
-    <header class="sticky-header p-6 bg-white dark:bg-zinc-900">
+<body class="bg-slate-50 text-black pb-10">
+    <header class="sticky-header p-6 bg-white">
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-4xl font-black uppercase tracking-tighter">The Price of Time</h1>
                 <div class="flex gap-2">
                     <button onclick="saveLife()" class="px-4 py-2 neal-border font-black text-xs uppercase bg-green-500 text-white">Save Life</button>
-                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase">Theme</button>
+                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase bg-gray-200">Theme</button>
                 </div>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
                 <div class="lg:col-span-2">
                     <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
-                    <select id="wageSelector" class="w-full p-3 neal-border bg-transparent font-black text-lg outline-none cursor-pointer">
+                    <select id="wageSelector" class="w-full p-3 neal-border bg-white font-black text-lg outline-none cursor-pointer">
                         </select>
                 </div>
                 <div class="text-right">
@@ -2674,14 +2674,13 @@ checkAuth();
                     <p id="budgetDisplay" class="text-5xl font-black text-green-500 tracking-tighter leading-none">$0</p>
                 </div>
             </div>
-
             <div class="mt-6">
                 <div class="flex justify-between text-[10px] font-black uppercase mb-1">
                     <span>Life Consumed</span>
                     <span id="timeText">0 / 700,800 hrs</span>
                 </div>
-                <div class="h-6 neal-border bg-gray-200 dark:bg-zinc-800 overflow-hidden">
-                    <div id="progressFill" class="h-full bg-current transition-all duration-700" style="width: 0%"></div>
+                <div class="h-6 neal-border bg-gray-200 overflow-hidden">
+                    <div id="progressFill" class="h-full bg-gradient-to-r from-green-400 to-red-500 transition-all duration-700" style="width: 0%"></div>
                 </div>
             </div>
         </div>
@@ -2829,7 +2828,7 @@ checkAuth();
             items.forEach((item, i) => {
                 const cost = (item.hours * currentWage) * 0.5;
                 const card = document.createElement('div');
-                card.className = "p-4 neal-border bg-white dark:bg-zinc-800 flex flex-col items-center card-shadow";
+                card.className = "p-4 neal-border bg-white flex flex-col items-center card-shadow";
                 card.innerHTML = `
                     <div class="text-4xl mb-2">${item.emoji}</div>
                     <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
