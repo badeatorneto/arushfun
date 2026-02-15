@@ -40,12 +40,14 @@
             <div id="btn-trolley" class="nav-link active" onclick="showApp('trolley')">Trolley Problems</div>
             <div id="btn-elon" class="nav-link" onclick="showApp('elon')">Elon's Money</div>
             <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
+            <div id="btn-nuke" class="nav-link" onclick="showApp('nuke')">Nuke Launcher</div>
         </div>
     </nav>
 
     <iframe id="trolley" class="app-iframe active"></iframe>
     <iframe id="elon" class="app-iframe"></iframe>
     <iframe id="time" class="app-iframe"></iframe>
+    <iframe id="nuke" class="app-iframe"></iframe>
 
     <template id="code-trolley">
         <!DOCTYPE html>
@@ -441,7 +443,7 @@
     </template>
 
     <template id="code-elon">
-        <!DOCTYPE html>
+          <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -613,7 +615,7 @@
     </template>
 
     <template id="code-time">
-        <!DOCTYPE html>
+          <!DOCTYPE html>
 <html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
@@ -896,6 +898,669 @@
 </html>
     </template>
 
+    <template id="code-nuke">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuke Launcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+        .item-card:hover { transform: rotate(-1deg); }
+        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+        #map { height: 500px; width: 100%; border: 4px solid #000; z-index: 1; cursor: crosshair; }
+        .impact-gradient { background: linear-gradient(135deg, #ff4757, #ff6348); }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .launch-btn {
+            transition: all 0.3s;
+        }
+        .launch-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+        .launch-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .target-marker {
+            animation: targetPulse 1s infinite;
+        }
+        @keyframes targetPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block p-2 bg-red-500 border-4 border-black mb-4 rotate-2">
+                <span class="font-black text-xl uppercase tracking-tighter text-white">⚠️ SIMULATION ONLY ⚠️</span>
+            </div>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Nuke Launcher</h1>
+            <p class="text-xl font-bold opacity-70">Select your weapon, choose a target, and calculate the devastating impact.<br><strong>Educational demonstration of nuclear weapon effects.</strong></p>
+        </div>
+    </header>
+
+    <div class="sticky-header impact-gradient p-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-3xl md:text-5xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] tracking-tighter">
+                    <span id="selectedNuke">Select a Weapon</span>
+                </div>
+                <div class="text-right">
+                    <div class="bg-black text-white px-3 py-1 font-bold rounded mb-2">
+                        <span id="totalLaunched">0</span> Launched
+                    </div>
+                </div>
+            </div>
+            <button id="launchBtn" onclick="confirmLaunch()" disabled class="launch-btn neubrutal bg-red-600 text-white py-4 px-8 font-black uppercase text-2xl w-full disabled:bg-gray-400">
+                🚀 LAUNCH NUCLEAR STRIKE
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto p-6">
+        <!-- MAP SECTION -->
+        <div class="mb-8">
+            <div class="neubrutal bg-white p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-3xl font-black uppercase">Target Selection</h2>
+                    <div id="targetCoords" class="text-sm font-bold text-gray-600">No target selected</div>
+                </div>
+                <p class="mb-4 font-bold text-gray-700">Click anywhere on the map to set your target coordinates.</p>
+                <div id="map"></div>
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <button onclick="resetMap()" class="neubrutal bg-gray-700 text-white py-3 font-black uppercase">Reset View</button>
+                    <button onclick="clearAllImpacts()" class="neubrutal bg-red-600 text-white py-3 font-black uppercase">Clear All</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NUKE SELECTION GRID -->
+        <h2 class="text-3xl font-black uppercase mb-6">Arsenal (Chronological Order)</h2>
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        </div>
+    </main>
+
+    <!-- DAMAGE REPORT -->
+    <section class="max-w-4xl mx-auto px-6 mt-12">
+        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
+            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">Damage Report</h2>
+            <div id="damage-report" class="space-y-4 mb-8">
+                <div class="text-center opacity-30 py-10">No strikes launched yet. Select a weapon and target.</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const nukes = [
+            // HISTORICAL (1945-1960s)
+            { 
+                name: "Davy Crockett", 
+                yield: 0.02,
+                year: 1961,
+                emoji: "💥", 
+                description: "Smallest tactical nuke",
+                fireball: 0.03,
+                radiation: 0.4,
+                airblast5: 0.6,
+                airblast3: 0.8,
+                type: "historical"
+            },
+            { 
+                name: "W54 Warhead", 
+                yield: 0.25,
+                year: 1961,
+                emoji: "⚡", 
+                description: "Man-portable weapon",
+                fireball: 0.08,
+                radiation: 0.9,
+                airblast5: 1.2,
+                airblast3: 1.6,
+                type: "historical"
+            },
+            { 
+                name: "Little Boy", 
+                yield: 15,
+                year: 1945,
+                emoji: "☢️", 
+                description: "Hiroshima bomb",
+                fireball: 0.22,
+                radiation: 1.8,
+                airblast5: 2.4,
+                airblast3: 3.2,
+                type: "historical"
+            },
+            { 
+                name: "Fat Man", 
+                yield: 21,
+                year: 1945,
+                emoji: "💣", 
+                description: "Nagasaki bomb",
+                fireball: 0.25,
+                radiation: 2.0,
+                airblast5: 2.7,
+                airblast3: 3.5,
+                type: "historical"
+            },
+            { 
+                name: "Ivy Mike", 
+                yield: 10400,
+                year: 1952,
+                emoji: "🔬", 
+                description: "First H-bomb test",
+                fireball: 4.2,
+                radiation: 16.0,
+                airblast5: 21.0,
+                airblast3: 29.0,
+                type: "historical"
+            },
+            { 
+                name: "Castle Bravo", 
+                yield: 15000,
+                year: 1954,
+                emoji: "🌋", 
+                description: "Largest US test",
+                fireball: 5.0,
+                radiation: 18.5,
+                airblast5: 24.0,
+                airblast3: 33.5,
+                type: "historical"
+            },
+            { 
+                name: "Tsar Bomba", 
+                yield: 50000,
+                year: 1961,
+                emoji: "🔆", 
+                description: "Largest ever detonated",
+                fireball: 7.5,
+                radiation: 28.0,
+                airblast5: 36.0,
+                airblast3: 50.0,
+                type: "historical"
+            },
+
+            // MODERN (1970s-present)
+            { 
+                name: "W76 Warhead", 
+                yield: 100,
+                year: 1978,
+                emoji: "🚀", 
+                description: "US submarine ICBM",
+                fireball: 0.5,
+                radiation: 3.2,
+                airblast5: 4.2,
+                airblast3: 5.8,
+                type: "modern"
+            },
+            { 
+                name: "W87 Warhead", 
+                yield: 300,
+                year: 1986,
+                emoji: "🔥", 
+                description: "Modern ICBM warhead",
+                fireball: 0.8,
+                radiation: 4.5,
+                airblast5: 6.0,
+                airblast3: 8.3,
+                type: "modern"
+            },
+            { 
+                name: "B61 Tactical", 
+                yield: 340,
+                year: 1968,
+                emoji: "🎯", 
+                description: "Variable yield bomb",
+                fireball: 0.9,
+                radiation: 4.8,
+                airblast5: 6.3,
+                airblast3: 8.8,
+                type: "modern"
+            },
+            { 
+                name: "W88 Warhead", 
+                yield: 475,
+                year: 1988,
+                emoji: "⚔️", 
+                description: "Trident II missile",
+                fireball: 1.0,
+                radiation: 5.5,
+                airblast5: 7.2,
+                airblast3: 10.0,
+                type: "modern"
+            },
+            { 
+                name: "RS-28 Sarmat", 
+                yield: 800,
+                year: 2023,
+                emoji: "🛰️", 
+                description: "Russian 'Satan 2'",
+                fireball: 1.2,
+                radiation: 6.0,
+                airblast5: 7.8,
+                airblast3: 10.8,
+                type: "modern"
+            },
+            { 
+                name: "B83 Bomb", 
+                yield: 1200,
+                year: 1983,
+                emoji: "💀", 
+                description: "Most powerful US weapon",
+                fireball: 1.5,
+                radiation: 7.2,
+                airblast5: 9.5,
+                airblast3: 13.2,
+                type: "modern"
+            },
+
+            // THEORETICAL / FICTIONAL
+            { 
+                name: "Cobalt Bomb", 
+                yield: 500,
+                year: 0,
+                emoji: "☠️", 
+                description: "Doomsday device (theoretical)",
+                fireball: 1.0,
+                radiation: 45.0,
+                airblast5: 7.5,
+                airblast3: 10.5,
+                type: "theoretical"
+            },
+            { 
+                name: "Project Sundial", 
+                yield: 10000000,
+                year: 1950,
+                emoji: "☀️", 
+                description: "10 Gt theoretical bomb",
+                fireball: 150.0,
+                radiation: 400.0,
+                airblast5: 550.0,
+                airblast3: 750.0,
+                type: "theoretical"
+            },
+            { 
+                name: "Antimatter Bomb", 
+                yield: 50000000,
+                year: 0,
+                emoji: "⚛️", 
+                description: "Pure matter-antimatter annihilation",
+                fireball: 300.0,
+                radiation: 800.0,
+                airblast5: 1100.0,
+                airblast3: 1500.0,
+                type: "fictional"
+            },
+            { 
+                name: "Stellar Destabilizer", 
+                yield: 500000000,
+                year: 0,
+                emoji: "🌟", 
+                description: "Collapses nearby stars",
+                fireball: 1000.0,
+                radiation: 3000.0,
+                airblast5: 4000.0,
+                airblast3: 5500.0,
+                type: "fictional"
+            },
+            { 
+                name: "Reality Shatterer", 
+                yield: 5000000000,
+                year: 0,
+                emoji: "🌌", 
+                description: "Tears fabric of spacetime",
+                fireball: 5000.0,
+                radiation: 15000.0,
+                airblast5: 20000.0,
+                airblast3: 28000.0,
+                type: "fictional"
+            }
+        ];
+
+        // Sort by year (0 for fictional goes to end)
+        nukes.sort((a, b) => {
+            if (a.year === 0) return 1;
+            if (b.year === 0) return -1;
+            return a.year - b.year;
+        });
+
+        let selectedNuke = null;
+        let targetLocation = null;
+        let map;
+        let targetMarker = null;
+        let impacts = [];
+        let totalLaunched = 0;
+
+        function initMap() {
+            map = L.map('map').setView([40.7128, -74.0060], 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            map.on('click', function(e) {
+                setTarget(e.latlng);
+            });
+        }
+
+        function setTarget(latlng) {
+            targetLocation = latlng;
+            
+            if (targetMarker) {
+                map.removeLayer(targetMarker);
+            }
+
+            targetMarker = L.marker(latlng, {
+                icon: L.divIcon({
+                    className: 'target-marker',
+                    html: '<div style="background: #FF0000; border: 3px solid #000; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🎯</div>',
+                    iconSize: [30, 30]
+                })
+            }).addTo(map);
+
+            document.getElementById('targetCoords').innerText = `Target: ${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`;
+            document.getElementById('launchBtn').disabled = !selectedNuke;
+        }
+
+        function selectNuke(index) {
+            selectedNuke = nukes[index];
+            const yearText = selectedNuke.year === 0 ? 'Fictional' : selectedNuke.year;
+            document.getElementById('selectedNuke').innerText = `${selectedNuke.emoji} ${selectedNuke.name} (${selectedNuke.yield} kt)`;
+            document.getElementById('launchBtn').disabled = !targetLocation;
+            renderNukes();
+        }
+
+        function confirmLaunch() {
+            if (!selectedNuke || !targetLocation) return;
+
+            // Play launch sound
+            playLaunchSound();
+
+            // Shake the screen
+            document.body.classList.add('shake');
+            setTimeout(() => document.body.classList.remove('shake'), 500);
+
+            // Launch after 2 seconds
+            setTimeout(() => {
+                launchNuke(targetLocation);
+            }, 2000);
+        }
+
+        function launchNuke(latlng) {
+            totalLaunched++;
+            document.getElementById('totalLaunched').innerText = totalLaunched;
+
+            // Draw impact zones
+            const fireballCircle = L.circle(latlng, {
+                color: '#FF0000',
+                fillColor: '#FF0000',
+                fillOpacity: 0.6,
+                radius: selectedNuke.fireball * 1000,
+                weight: 3
+            }).addTo(map);
+
+            const radiationCircle = L.circle(latlng, {
+                color: '#00FF00',
+                fillColor: '#00FF00',
+                fillOpacity: 0.2,
+                radius: selectedNuke.radiation * 1000,
+                weight: 2
+            }).addTo(map);
+
+            const airblast5Circle = L.circle(latlng, {
+                color: '#FFA500',
+                fillColor: '#FFA500',
+                fillOpacity: 0.15,
+                radius: selectedNuke.airblast5 * 1000,
+                weight: 2
+            }).addTo(map);
+
+            const airblast3Circle = L.circle(latlng, {
+                color: '#FFFF00',
+                fillColor: '#FFFF00',
+                fillOpacity: 0.1,
+                radius: selectedNuke.airblast3 * 1000,
+                weight: 2
+            }).addTo(map);
+
+            // Calculate casualties
+            const casualties = calculateCasualties(selectedNuke);
+
+            // Remove target marker
+            if (targetMarker) {
+                map.removeLayer(targetMarker);
+                targetMarker = null;
+            }
+
+            impacts.push({
+                nuke: selectedNuke,
+                location: latlng,
+                circles: [fireballCircle, radiationCircle, airblast5Circle, airblast3Circle],
+                casualties: casualties,
+                timestamp: new Date()
+            });
+
+            updateDamageReport();
+            playExplosionSound();
+
+            // Reset for next launch
+            targetLocation = null;
+            document.getElementById('targetCoords').innerText = 'No target selected';
+            document.getElementById('launchBtn').disabled = true;
+        }
+
+        function calculateCasualties(nuke) {
+            // Rough population density estimate: 10,000 people per km²
+            const fireballArea = Math.PI * Math.pow(nuke.fireball, 2);
+            const radiationArea = Math.PI * Math.pow(nuke.radiation, 2);
+            const blastArea = Math.PI * Math.pow(nuke.airblast3, 2);
+
+            const deaths = Math.round(fireballArea * 10000);
+            const severeInjuries = Math.round((radiationArea - fireballArea) * 8000);
+            const injuries = Math.round((blastArea - radiationArea) * 5000);
+
+            return {
+                deaths: deaths,
+                severeInjuries: severeInjuries,
+                injuries: injuries,
+                total: deaths + severeInjuries + injuries,
+                fireballArea: fireballArea,
+                radiationArea: radiationArea,
+                blastArea: blastArea
+            };
+        }
+
+        function clearAllImpacts() {
+            impacts.forEach(impact => {
+                impact.circles.forEach(circle => map.removeLayer(circle));
+            });
+            impacts = [];
+            totalLaunched = 0;
+            document.getElementById('totalLaunched').innerText = '0';
+            updateDamageReport();
+        }
+
+        function resetMap() {
+            map.setView([40.7128, -74.0060], 10);
+        }
+
+        function playLaunchSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Siren sound
+                const siren = audioCtx.createOscillator();
+                const sirenGain = audioCtx.createGain();
+                siren.connect(sirenGain);
+                sirenGain.connect(audioCtx.destination);
+                siren.frequency.setValueAtTime(400, audioCtx.currentTime);
+                siren.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 1);
+                sirenGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                sirenGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+                siren.start(audioCtx.currentTime);
+                siren.stop(audioCtx.currentTime + 1);
+
+                // Launch whoosh
+                setTimeout(() => {
+                    const whoosh = audioCtx.createOscillator();
+                    const whooshGain = audioCtx.createGain();
+                    whoosh.connect(whooshGain);
+                    whooshGain.connect(audioCtx.destination);
+                    whoosh.frequency.setValueAtTime(100, audioCtx.currentTime);
+                    whoosh.frequency.exponentialRampToValueAtTime(2000, audioCtx.currentTime + 1);
+                    whooshGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    whooshGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+                    whoosh.start(audioCtx.currentTime);
+                    whoosh.stop(audioCtx.currentTime + 1);
+                }, 1000);
+            } catch(e) {}
+        }
+
+        function playExplosionSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.frequency.value = 30;
+                oscillator.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 2);
+                gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+                
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 2);
+            } catch(e) {}
+        }
+
+        function renderNukes() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            nukes.forEach((nuke, index) => {
+                const isSelected = selectedNuke && selectedNuke.name === nuke.name;
+                const card = document.createElement('div');
+                const typeColor = nuke.type === 'historical' ? 'bg-blue-100' : 
+                                 nuke.type === 'modern' ? 'bg-green-100' : 
+                                 nuke.type === 'theoretical' ? 'bg-purple-100' : 'bg-red-100';
+                card.className = `item-card p-6 flex flex-col items-center text-center cursor-pointer ${isSelected ? 'ring-4 ring-red-500' : ''} ${typeColor}`;
+                card.onclick = () => selectNuke(index);
+                
+                const yearText = nuke.year === 0 ? 'Fictional' : nuke.year;
+                
+                card.innerHTML = `
+                    <div class="text-7xl mb-4 select-none ${isSelected ? 'pulse' : ''}">${nuke.emoji}</div>
+                    <div class="text-lg font-black uppercase mb-1 leading-tight">${nuke.name}</div>
+                    <div class="text-xs text-gray-500 mb-2">${yearText}</div>
+                    <div class="text-red-600 font-extrabold text-2xl mb-2">${nuke.yield.toLocaleString()} kt</div>
+                    <div class="text-xs text-gray-600 mb-4">${nuke.description}</div>
+                    <div class="w-full text-left text-[10px] font-bold space-y-1">
+                        <div>🔥 Fireball: ${nuke.fireball} km</div>
+                        <div>☢️ Radiation: ${nuke.radiation} km</div>
+                        <div>💨 Blast: ${nuke.airblast3} km</div>
+                    </div>
+                    ${isSelected ? '<div class="mt-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-black">SELECTED</div>' : '<div class="mt-3 bg-gray-200 px-3 py-1 rounded-full text-xs font-black">SELECT</div>'}
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateDamageReport() {
+            const report = document.getElementById('damage-report');
+            
+            if (impacts.length === 0) {
+                report.innerHTML = `<div class="text-center opacity-30 py-10">No strikes launched yet. Select a weapon and target.</div>`;
+                return;
+            }
+
+            report.innerHTML = impacts.slice().reverse().map((impact, idx) => {
+                const lat = impact.location.lat.toFixed(4);
+                const lng = impact.location.lng.toFixed(4);
+                const cas = impact.casualties;
+                
+                return `
+                    <div class="border-4 border-black pl-6 pr-6 pt-4 pb-4 bg-red-50 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="font-black text-2xl mb-1">${impact.nuke.emoji} ${impact.nuke.name}</div>
+                                <div class="text-sm text-gray-600">Impact: ${lat}, ${lng}</div>
+                                <div class="text-sm text-gray-600">Yield: ${impact.nuke.yield.toLocaleString()} kilotons</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-500">${impact.timestamp.toLocaleTimeString()}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="bg-red-200 p-3 border-2 border-black">
+                                <div class="text-2xl font-black text-red-700">${cas.deaths.toLocaleString()}</div>
+                                <div class="text-xs font-bold">Instant Deaths</div>
+                            </div>
+                            <div class="bg-orange-200 p-3 border-2 border-black">
+                                <div class="text-2xl font-black text-orange-700">${cas.severeInjuries.toLocaleString()}</div>
+                                <div class="text-xs font-bold">Severe Injuries</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-yellow-200 p-3 border-2 border-black">
+                                <div class="text-2xl font-black text-yellow-700">${cas.injuries.toLocaleString()}</div>
+                                <div class="text-xs font-bold">Minor Injuries</div>
+                            </div>
+                            <div class="bg-black p-3 border-2 border-black">
+                                <div class="text-2xl font-black text-white">${cas.total.toLocaleString()}</div>
+                                <div class="text-xs font-bold text-white">Total Casualties</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t-2 border-black text-xs">
+                            <div class="grid grid-cols-3 gap-2 font-bold">
+                                <div>🔥 ${cas.fireballArea.toFixed(1)} km²</div>
+                                <div>☢️ ${cas.radiationArea.toFixed(1)} km²</div>
+                                <div>💨 ${cas.blastArea.toFixed(1)} km²</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        window.onload = function() {
+            initMap();
+            renderNukes();
+        };
+    </script>
+</body>
+</html>
+    </template>
+
     <script>
         function showApp(appId) {
             document.querySelectorAll(".app-iframe").forEach(f => f.classList.remove("active"));
@@ -908,6 +1573,7 @@
             document.getElementById("trolley").srcdoc = document.getElementById("code-trolley").innerHTML;
             document.getElementById("elon").srcdoc = document.getElementById("code-elon").innerHTML;
             document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
+            document.getElementById("nuke").srcdoc = document.getElementById("code-nuke").innerHTML;
         };
     </script>
 </body>
