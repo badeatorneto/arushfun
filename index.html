@@ -3,1565 +3,519 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARUSH.FUN | The Simulation</title>
+    <title>ARUSH.FUN</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;900&family=Space+Grotesk:wght@700&family=VT323&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #00ff99; --void: #050505; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f2f5; overflow-x: hidden; }
-        .neal-card { border: 4px solid #000; border-radius: 16px; transition: 0.2s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer; }
-        .neal-card:hover { transform: translateY(-8px) rotate(-1deg); box-shadow: 8px 8px 0px #000; }
-        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: 0.1s; background: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
-        .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #000; }
-        .view-container { display: none; min-height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; overflow-y: auto; background: white; z-index: 10; }
-        .view-container.active { display: block; }
-        #gameContent { min-height: calc(100vh - 80px); background: white; }
-    </style>
-</head>
-<body>
-
-<!-- HOMEPAGE -->
-<div id="homeView" class="view-container active p-8 bg-[#fdfbf7]">
-    <div class="max-w-7xl mx-auto text-center mb-16 pt-10">
-        <h1 class="text-9xl font-[900] tracking-tighter mb-4 italic uppercase relative inline-block">
-            ARUSH<span class="text-blue-600">.</span>FUN
-            <span class="absolute -top-4 -right-12 text-sm bg-black text-white px-2 py-1 rotate-12 font-mono">v2.0 GOD-TIER</span>
-        </h1>
-        <p class="text-2xl font-bold uppercase tracking-[0.4em] opacity-40">The Simulation Suite</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto pb-20">
-        <div onclick="loadGame('time')" class="neal-card bg-yellow-300 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">⏳</div>
-            <div><h3 class="text-3xl font-black uppercase">The Price of Time</h3><p class="font-bold opacity-60">Life Actuary Simulator</p></div>
-        </div>
-        <div onclick="loadGame('elon')" class="neal-card bg-green-400 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">🚀</div>
-            <div><h3 class="text-3xl font-black uppercase">Spend Elon's Money</h3><p class="font-bold opacity-60">Market Shaker Edition</p></div>
-        </div>
-        <div onclick="loadGame('butterfly')" class="neal-card bg-blue-400 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">🦋</div>
-            <div><h3 class="text-3xl font-black uppercase">Butterfly Effect</h3><p class="font-bold opacity-60">Chaos Graph Engine</p></div>
-        </div>
-        <div onclick="loadGame('ark')" class="neal-card bg-orange-400 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">🧬</div>
-            <div><h3 class="text-3xl font-black uppercase">Earth's Inventory</h3><p class="font-bold opacity-60">The Ark Algorithm</p></div>
-        </div>
-        <div onclick="loadGame('capsule')" class="neal-card bg-purple-400 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">🔒</div>
-            <div><h3 class="text-3xl font-black uppercase">Password Checker</h3><p class="font-bold opacity-60">Security Dashboard</p></div>
-        </div>
-        <div onclick="loadGame('trolley')" class="neal-card bg-red-500 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">🚋</div>
-            <div><h3 class="text-3xl font-black uppercase">Absurd Trolley</h3><p class="font-bold opacity-60">AI Ethics Trainer</p></div>
-        </div>
-        <div onclick="loadGame('debt')" class="neal-card bg-slate-300 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">📉</div>
-            <div><h3 class="text-3xl font-black uppercase">Size of the Debt</h3><p class="font-bold opacity-60">The Infinite Scroll</p></div>
-        </div>
-        <div onclick="loadGame('password')" class="neal-card bg-pink-300 p-8 flex flex-col justify-between h-64 group">
-            <div class="text-7xl group-hover:scale-110 transition">🔐</div>
-            <div><h3 class="text-3xl font-black uppercase">Password 2026</h3><p class="font-bold opacity-60">Security Theater</p></div>
-        </div>
-        <div onclick="loadGame('universe')" class="neal-card bg-black text-white p-8 flex flex-col justify-between h-64 group border-gray-600">
-            <div class="text-7xl group-hover:scale-110 transition">🌌</div>
-            <div><h3 class="text-3xl font-black uppercase text-white">Buy The Universe</h3><p class="font-bold opacity-60">Type III Clicker</p></div>
-        </div>
-    </div>
-</div>
-
-<div id="gameStage" class="view-container">
-    <nav id="gameNav" class="sticky top-0 z-50 bg-white border-b-4 border-black px-6 py-3 flex justify-between items-center shadow-lg">
-        <button onclick="goHome()" class="brutal-btn px-4 py-2 text-sm flex items-center gap-2"><span>↩</span> ARUSH.FUN</button>
-        <div id="gameHeaderInfo" class="font-black uppercase text-xl tracking-tight">GAME TITLE</div>
-        <div class="w-24"></div>
-    </nav>
-    <div id="gameContent" class="min-h-screen bg-white"></div>
-</div>
-
-<script>
-function goHome() {
-    document.getElementById('gameStage').classList.remove('active');
-    document.getElementById('homeView').classList.add('active');
-    if (window.gameInterval) clearInterval(window.gameInterval);
-    document.getElementById('gameContent').innerHTML = '';
-}
-
-function loadGame(id) {
-    document.getElementById('homeView').classList.remove('active');
-    const stage = document.getElementById('gameStage');
-    stage.classList.add('active');
-    stage.scrollTop = 0;
-
-    const content = document.getElementById('gameContent');
-    const header = document.getElementById('gameHeaderInfo');
-
-    content.innerHTML = ''; // Clear previous content completely
-
-    stage.className = "view-container active";
-    document.getElementById('gameNav').className = "sticky top-0 z-50 bg-white border-b-4 border-black px-6 py-3 flex justify-between items-center shadow-lg";
-
-    switch(id) {
-        case 'time':      initTimeGame(content, header); break;
-        case 'elon':      initElonGame(content, header); break;
-        case 'butterfly': initButterfly(content, header); break;
-        case 'ark':       initArk(content, header); break;
-        case 'capsule':   initCapsule(content, header); break;
-        case 'trolley':   initTrolley(content, header); break;
-        case 'debt':      initDebt(content, header); break;
-        case 'password':  initPassword(content, header); break;
-        case 'universe':  initUniverse(content, header); break;
-    }
-}
-
-function escapeSrcdoc(str) {
-    return str.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-}
-
-function createIframe(html) {
-    return `<div class="h-screen bg-white"><iframe srcdoc="${escapeSrcdoc(html)}" style="width:100%; height:100%; border:none; display:block;" scrolling="yes"></iframe></div>`;
-}
-
-// ==================== 3 CUSTOM GAMES (FULL FROM YOUR FILES) ====================
-
-// 1. The Price of Time - full index (13).html
-const timeGameHTML = `<!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Price of Time: Persistence</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; transition: background 0.3s; }
-        .neal-border { border: 4px solid currentColor; border-radius: 12px; }
-        .sticky-header { position: sticky; top: 0; z-index: 50; border-bottom: 4px solid currentColor; }
-        .btn-buy { transition: transform 0.1s active; }
-        .btn-buy:active { transform: scale(0.95); }
-        .card-shadow { box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
-        .dark .card-shadow { box-shadow: 6px 6px 0px 0px rgba(255,255,255,0.1); }
-        .history-scroll::-webkit-scrollbar { width: 8px; }
-        .history-scroll::-webkit-scrollbar-thumb { background: currentColor; border-radius: 10px; }
-        @keyframes paradox { 0% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(180deg); } 100% { filter: hue-rotate(360deg); } }
-        .paradox-active { animation: paradox 0.1s infinite; }
-    </style>
-</head>
-<body class="bg-slate-50 text-black dark:bg-zinc-950 dark:text-white pb-10">
-
-    <header class="sticky-header p-6 bg-white dark:bg-zinc-900">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-4xl font-black uppercase tracking-tighter">The Price of Time</h1>
-                <div class="flex gap-2">
-                    <button onclick="saveLife()" class="px-4 py-2 neal-border font-black text-xs uppercase bg-green-500 text-white">Save Life</button>
-                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase">Theme</button>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
-                <div class="lg:col-span-2">
-                    <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
-                    <select id="wageSelector" class="w-full p-3 neal-border bg-transparent font-black text-lg outline-none cursor-pointer">
-                        </select>
-                </div>
-                <div class="text-right">
-                    <p class="text-[10px] font-black uppercase opacity-50">Disposable Wealth</p>
-                    <p id="budgetDisplay" class="text-5xl font-black text-green-500 tracking-tighter leading-none">$0</p>
-                </div>
-            </div>
-
-            <div class="mt-6">
-                <div class="flex justify-between text-[10px] font-black uppercase mb-1">
-                    <span>Life Consumed</span>
-                    <span id="timeText">0 / 700,800 hrs</span>
-                </div>
-                <div class="h-6 neal-border bg-gray-200 dark:bg-zinc-800 overflow-hidden">
-                    <div id="progressFill" class="h-full bg-current transition-all duration-700" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="itemGrid"></div>
-
-        <div class="lg:col-span-1">
-            <div class="neal-border p-4 bg-white dark:bg-zinc-900 h-[600px] flex flex-col sticky top-[300px]">
-                <h2 class="font-black uppercase text-xl border-b-4 border-current mb-4 pb-2">Life Receipt</h2>
-                <div id="historyLog" class="history-scroll overflow-y-auto flex-grow text-[11px] font-bold space-y-2 uppercase">
-                    <p class="opacity-30 italic">No events yet...</p>
-                </div>
-                <div class="border-t-4 border-current pt-4 mt-4">
-                    <button onclick="resetLife()" class="w-full p-2 bg-red-600 text-white font-black rounded-lg text-xs uppercase">Reset Everything</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        const people = [
-            { name: "Student", wage: 12, budget: 250000 },
-            { name: "Barista", wage: 18, budget: 400000 },
-            { name: "Teacher", wage: 30, budget: 800000 },
-            { name: "Nurse", wage: 45, budget: 1500000 },
-            { name: "Electrician", wage: 60, budget: 2000000 },
-            { name: "Chef", wage: 40, budget: 950000 },
-            { name: "Software Eng", wage: 85, budget: 3000000 },
-            { name: "Pilot", wage: 130, budget: 5000000 },
-            { name: "Doctor", wage: 200, budget: 8000000 },
-            { name: "CEO", wage: 500, budget: 50000000 }
-        ];
-
-        const totalLifeHours = 700800;
-
-        const items = [
-            { name: "Vacation to Bali", hours: 336, emoji: "🏖️" },
-            { name: "New iPhone", hours: 2000, emoji: "📱" },
-            { name: "Luxury Car", hours: 10000, emoji: "🚗" },
-            { name: "Dream House", hours: 50000, emoji: "🏠" },
-            { name: "Private Jet", hours: 100000, emoji: "✈️" },
-            { name: "Yacht", hours: 150000, emoji: "🛥️" },
-            { name: "Space Trip", hours: 200000, emoji: "🚀" },
-            { name: "Buy an Island", hours: 300000, emoji: "🏝️" },
-            { name: "Cure Aging", hours: 500000, emoji: "🧬" },
-            { name: "Immortality", hours: 700800, emoji: "♾️" }
-        ];
-
-        let state = {
-            profIdx: 0,
-            budget: 0,
-            timeSpent: 0,
-            history: []
-        };
-
-        function init() {
-            const selector = document.getElementById('wageSelector');
-            people.forEach((p, i) => {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = `${p.name} ($${p.wage}/hr)`;
-                selector.appendChild(opt);
-            });
-
-            const saved = localStorage.getItem('timeLifeSave');
-            if (saved) {
-                if (confirm("Resume your previous life?")) {
-                    state = JSON.parse(saved);
-                    document.getElementById('wageSelector').value = state.profIdx;
-                } else {
-                    resetState(0);
-                }
-            } else {
-                resetState(0);
-            }
-            updateUI();
+        /* GLOBAL PORTAL STYLES */
+        body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8f9fa; }
+        .portal-view { min-height: 100vh; }
+        .hidden-view { display: none !important; }
+        
+        /* NEAL.FUN CARD STYLES */
+        .neal-card {
+            background: white;
+            border: 4px solid black;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
         }
-
-        function resetState(idx) {
-            state.profIdx = idx;
-            state.budget = people[idx].budget;
-            state.timeSpent = 0;
-            state.history = [];
-            updateUI();
+        .neal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 6px 6px 0px black;
         }
-
-        function updateUI() {
-            document.getElementById('budgetDisplay').innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(state.budget);
-            document.getElementById('timeText').innerText = `${Math.floor(state.timeSpent).toLocaleString()} / ${totalLifeHours.toLocaleString()} hrs`;
-            document.getElementById('progressFill').style.width = Math.min((state.timeSpent / totalLifeHours) * 100, 100) + '%';
-            
-            if (people[state.profIdx].wage >= 1000000) document.body.classList.add('paradox-active');
-            else document.body.classList.remove('paradox-active');
-
-            renderItems();
-            renderHistory();
+        .neal-icon { font-size: 48px; }
+        
+        /* BACK BUTTON */
+        .global-back-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: black;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            z-index: 99999;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 2px solid white;
         }
+        .global-back-btn:hover { transform: scale(1.05); }
 
-        function buyItem(itemIdx) {
-            const item = items[itemIdx];
-            const currentWage = people[state.profIdx].wage;
-            const cost = (item.hours * currentWage) * 0.5;
+        /* --- GAME SPECIFIC CSS --- */
 
-            if (state.budget >= cost) {
-                state.budget -= cost;
-                state.timeSpent += item.hours;
-                
-                const entry = `You spent $${cost.toLocaleString()} of your ${people[state.profIdx].name} salary to ${item.name} (${item.hours} hrs).`;
-                state.history.unshift(entry);
-                
-                updateUI();
-            } else {
-                alert("Insufficient funds!");
-            }
-        }
-
-        function renderItems() {
-            const grid = document.getElementById('itemGrid');
-            const currentWage = people[state.profIdx].wage;
-            grid.innerHTML = '';
-            items.forEach((item, i) => {
-                const cost = (item.hours * currentWage) * 0.5;
-                const card = document.createElement('div');
-                card.className = "p-4 neal-border bg-white dark:bg-zinc-800 flex flex-col items-center card-shadow";
-                card.innerHTML = `
-                    <div class="text-4xl mb-2">${item.emoji}</div>
-                    <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
-                    <p class="text-[9px] font-bold opacity-40 uppercase mb-3">${item.hours.toLocaleString()} HRS</p>
-                    <button class="btn-buy w-full bg-black text-white dark:bg-white dark:text-black font-black py-2 rounded-lg text-[10px]" onclick="buyItem(${i})">
-                        BUY $${cost >= 1e6 ? (cost/1e6).toFixed(1) + 'M' : cost.toLocaleString()}
-                    </button>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderHistory() {
-            const log = document.getElementById('historyLog');
-            if (state.history.length === 0) {
-                log.innerHTML = `<p class="opacity-30 italic">No events yet...</p>`;
-                return;
-            }
-            log.innerHTML = state.history.map(entry => `
-                <div class="border-l-4 border-current pl-2 py-1 mb-2 bg-gray-50 dark:bg-zinc-800">
-                    ${entry}
-                </div>
-            `).join('');
-        }
-
-        function saveLife() {
-            localStorage.setItem('timeLifeSave', JSON.stringify(state));
-            alert("Life progress saved to browser memory!");
-        }
-
-        function resetLife() {
-            if(confirm("Erase all progress?")) {
-                localStorage.removeItem('timeLifeSave');
-                resetState(document.getElementById('wageSelector').value);
-            }
-        }
-
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-
-        document.getElementById('wageSelector').addEventListener('change', (e) => resetState(e.target.value));
-
-        init();
-    </script>
-</body>
-</html>`;
-
-// 2. Spend Elon's Money - full pasted-text.txt
-const elonGameHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spend Elon's $800B</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+        /* 1. ELON STYLES */
+        .elon-wrapper { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; min-height: 100vh; }
         .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
         .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
         .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
         .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
         .item-card:hover { transform: rotate(-1deg); }
-        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .sticky-header { position: sticky; top: 0; z-index: 50; border-bottom: 4px solid #000; }
         .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
-    </style>
-</head>
-<body class="pb-20">
 
-    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
-        <div class="max-w-4xl mx-auto">
-            <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 rotate-2">
-                <span class="font-black text-xl uppercase tracking-tighter">Ultimate 2026 Edition</ Guth1 </span>
-            </div>
-            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Spend Elon's Money</h1>
-            <p class="text-xl font-bold opacity-70">Elon Musk's net worth is <strong>$800,000,000,000</strong>.<br>If you spent $1,000,000 every single day, it would take you 2,191 years to finish.</p>
-        </div>
-    </header>
+        /* 2. PRICE OF TIME STYLES */
+        .time-wrapper { font-family: 'Inter', sans-serif; background: #f8fafc; min-height: 100vh; }
+        .neal-border { border: 4px solid currentColor; border-radius: 12px; }
+        .time-wrapper .sticky-header { position: sticky; top: 0; z-index: 50; border-bottom: 4px solid currentColor; }
+        .btn-buy { transition: transform 0.1s active; }
+        .btn-buy:active { transform: scale(0.95); }
+        .card-shadow { box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
+        .history-scroll::-webkit-scrollbar { width: 8px; }
+        .history-scroll::-webkit-scrollbar-thumb { background: currentColor; border-radius: 10px; }
+        @keyframes paradox { 0% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(180deg); } 100% { filter: hue-rotate(360deg); } }
+        .paradox-active { animation: paradox 0.1s infinite; }
 
-    <div class="sticky-header money-gradient p-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div id="money" class="text-4xl md:text-6xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] tracking-tighter">$800,000,000,000</div>
-            <div class="hidden md:block text-right">
-                <div id="percentage" class="bg-black text-white px-3 py-1 font-bold rounded">0.000% Spent</div>
-            </div>
-        </div>
-    </div>
-
-    <main class="max-w-7xl mx-auto p-6">
-        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            </div>
-    </main>
-
-    <section class="max-w-2xl mx-auto px-6 mt-12">
-        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">The Damage</h2>
-            <div id="receipt-list" class="space-y-4 mb-8 font-bold text-lg"></div>
-            <div id="receipt-total" class="text-3xl font-black text-center pt-6 border-t-4 border-black">Total: $0</div>
-        </div>
-    </section>
-
-    <script>
-        const initialBalance = 800000000000;
-        let balance = initialBalance;
-        let inventory = {};
-
-        const rawItems = [
-            ["Taco Bell Cravings Box", 5, "🌮"], ["Starbucks Coffee", 6, "☕"], ["Netflix Subscription", 15, "🎬"], ["New Video Game", 70, "🎮"], ["AirPods Pro", 249, "🎧"], 
-            ["Latest iPhone", 1100, "📱"], ["Gaming PC", 3500, "🖥️"], ["Used Honda Civic", 12000, "🚗"], ["Luxury Watch", 15000, "⌚"], ["University Degree", 120000, "🎓"],
-            ["Designer Handbag", 4500, "👜"], ["Peloton Bike", 2500, "🚴"], ["Full Home Gym", 15000, "🏋️"], ["Diamond Ring", 10000, "💍"], ["Gold Bar", 75000, "🧈"],
-            ["Tesla Model 3", 45000, "🔋"], ["First Class Ticket", 12000, "✈️"], ["Personal Chef (Year)", 80000, "👨‍🍳"], ["Private Jet", 50000000, "✈️"], ["Yacht", 200000000, "🛥️"], 
-            ["Acquire Fortnite", 30000000000, "🔫"], ["Buy the Mona Lisa Twice", 1800000000, "🖼️"],
-            ["A Liter of Scorpion Venom", 10000000, "🦂"], ["Acquire Chanel", 20000000000, "💄"], ["Acquire Reddit", 10000000000, "🧡"], ["Space Tourism Port", 8000000000, "🌌"], ["The Concept of Time", 799000000000, "⏳"]
-        ];
-
-        const items = rawItems.map(i => ({ name: i[0], price: i[1], img: i[2] }));
-
-        function formatMoney(num) {
-            return "$" + num.toLocaleString();
+        /* 3. PASSWORD CHECKER STYLES (Scoped variables) */
+        #password-game-wrapper {
+            --bg-primary: #f0f2f5; --bg-secondary: #ffffff; --bg-card: #ffffff; --bg-input: #f8f9fa;
+            --text-primary: #1a1a2e; --text-secondary: #555; --text-muted: #888; --border-color: #e0e0e0;
+            --accent: #667eea; --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08); --success: #10ac84; --danger: #ff4757;
+            --fair: #ffa502; --good: #3498db; font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-primary); color: var(--text-primary); min-height: 100vh;
         }
-
-        function updateUI() {
-            document.getElementById('money').innerText = formatMoney(balance);
-            const spent = initialBalance - balance;
-            const perc = (spent / initialBalance * 100).toFixed(4);
-            document.getElementById('percentage').innerText = `${perc}% Spent`;
-            renderItems();
-            renderReceipt();
-        }
-
-        function buy(index) {
-            const item = items[index];
-            if (balance >= item.price) {
-                balance -= item.price;
-                inventory[item.name] = (inventory[item.name] || 0) + 1;
-                updateUI();
-            }
-        }
-
-        function sell(index) {
-            const item = items[index];
-            if (inventory[item.name] > 0) {
-                balance += item.price;
-                inventory[item.name]--;
-                updateUI();
-            }
-        }
-
-        function renderItems() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            items.forEach((item, index) => {
-                const count = inventory[item.name] || 0;
-                const card = document.createElement('div');
-                card.className = "item-card p-6 flex flex-col items-center text-center";
-                card.innerHTML = `
-                    <div class="text-7xl mb-6 select-none">${item.img}</div>
-                    <div class="text-lg font-black uppercase mb-1 leading-tight h-12 flex items-center">${item.name}</div>
-                    <div class="text-green-600 font-extrabold text-xl mb-6">${formatMoney(item.price)}</div>
-                    <div class="flex items-center gap-3 w-full">
-                        <button onclick="sell(${index})" class="neubrutal bg-red-500 text-white flex-1 py-3 font-black uppercase text-xs ${count === 0 ? 'opacity-20 grayscale pointer-events-none' : ''}">Sell</button>
-                        <div class="w-12 text-center font-black text-xl">${count}</div>
-                        <button onclick="buy(${index})" class="neubrutal bg-green-500 text-white flex-1 py-3 font-black uppercase text-xs ${balance < item.price ? 'opacity-20 grayscale pointer-events-none' : ''}">Buy</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderReceipt() {
-            const list = document.getElementById('receipt-list');
-            const totalEl = document.getElementById('receipt-total');
-            list.innerHTML = '';
-            let totalSpent = 0;
-
-            for (const [name, count] of Object.entries(inventory)) {
-                if (count > 0) {
-                    const item = items.find(i => i.name === name);
-                    const cost = item.price * count;
-                    totalSpent += cost;
-                    list.innerHTML += `<div class="flex justify-between items-end gap-4"><span class="flex-1 border-b-2 border-dotted border-black pb-1">${name} x${count}</span><span class="text-green-600">$${cost.toLocaleString()}</span></div>`;
-                }
-            }
-            if (totalSpent === 0) list.innerHTML = `<div class="text-center opacity-30 py-10">Your cart is empty. Start spending Elon's money.</div>`;
-            totalEl.innerText = "TOTAL SPENT: " + formatMoney(totalSpent);
-        }
-
-        updateUI();
-    </script>
-</body>
-</html>`;
-
-// 3. Password Checker - full index (12).html
-const passwordCheckerHTML = `<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Checker</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <style>
-        :root {
-            --bg-primary: #f0f2f5;
-            --bg-secondary: #ffffff;
-            --bg-card: #ffffff;
-            --bg-input: #f8f9fa;
-            --text-primary: #1aföra1a2e;
-            --text-secondary: #555;
-            --text-muted: #888;
-            --border-color: #e0e0e0;
-            --accent: #667eea;
-            --accent-dark: #764ba2;
-            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
-            --nav-bg: #ffffff;
-            --nav-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            --tip-bg: #e3f2fd;
-            --tip-border: #2196F3;
-            --tip-heading: #1976D2;
-            --warn-bg: #fff3cd;
-            --warn-border: #ffc107;
-            --warn-text: #856404;
-            --success: #10ac84;
-            --danger: #ff4757;
-            --fair: #ffa502;
-            --good: #3498db;
-            --criteria-bg: #f8f9fa;
-            --tab-hover: #f0f0f0;
-            --quiz-option-bg: #f8f9fa;
-            --quiz-option-hover: #e8e8e8;
-            --infographic-bg: #f8f9fa;
-            --table-header-bg: #f1f3f5;
-            --table-stripe: #f8f9fa;
-            --breach-safe-bg: #d4edda;
-            --breach-safe-text: #155724;
-            --breach-found-bg: #f8d7da;
-            --breach-found-text: #721c24;
-            --toast-bg: #333;
-            --toast-text: #fff;
-            --scrollbar-track: #f0f0f0;
-            --scrollbar-thumb: #ccc;
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #0f0f1a;
-            --bg-secondary: #1a1a2e;
-            --bg-card: #1e1e35;
-            --bg-input: #252540;
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --text-muted: #777;
-            --border-color: #333355;
-            --shadow: 0 4px 20px rgba(0,0,0,0.3);
-            --shadow-hover: 0 8px 30px rgba(0,0,0,0.4);
-            --nav-bg: #1a1a2e;
-            --nav-shadow: 0 2px 10px rgba(0,0,0,0.4);
-            --tip-bg: #1a2744;
-            --tip-border: #2196F3;
-            --tip-heading: #64b5f6;
-            --warn-bg: #3d3520;
-            --warn-border: #ffc107;
-            --warn-text: #ffd54f;
-            --criteria-bg: #252540;
-            --tab-hover: #252540;
-            --quiz-option-bg: #252540;
-            --quiz-option-hover: #333355;
-            --infographic-bg: #252540;
-            --table-header-bg: #252540;
-            --table-stripe: #1e1e35;
-            --brereach-safe-bg: #1a3a2a;
-            --breach-safe-text: #66bb6a;
-            --breach-found-bg: #3a1a1a;
-            --breach-found-text: #ef5350;
-            --toast-bg: #e0e0e0;
-            --toast-text: #1a1a2e;
-            --scrollbar-track: #1a1a2e;
-            --scrollbar-thumb: #333355;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
-        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
-
-        /* HERO LOGIN */
-#loginScreen{
-    position:fixed;
-    inset:0;
-    background:var(--bg-primary);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:99999;
-}
-
-.login-box{
-    background:var(--bg-card);
-    padding:40px;
-    border-radius:16px;
-    box-shadow:var(--shadow);
-    text-align:center;
-    width:320px;
-}
-
-.login-box input{
-    width:100%;
-    padding:12px;
-    margin-top:12px;
-    border-radius:10px;
-    border:2px solid var(--border-color);
-    background:var(--bg-input);
-}
-
-
-        /* ===== NAVIGATION ===== */
-        .navbar {
-            background: var(--nav-bg);
-            box-shadow: var(--nav-shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: background 0.3s, box-shadow 0.3s;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            height: 60px;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-
-        .nav-brand-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--accent-gradient);
-            border-radius: 8px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .nav-link:hover {
-            color: var(--accent);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .theme-toggle {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(30deg);
-        }
-
-        .logout-btn {
-            background: var(--accent-gradient);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .page-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .page-title h1 {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .page-title p {
-            font-size: 18px;
-            color: var(--text-secondary);
-        }
-
-        /* ===== PASSWORD CHECKER ===== */
-        .checker-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .password-input {
-            width: 100%;
-            padding: 16px 50px 16px 20px;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            background: var(--bg-input);
-            font-size: 18px;
-            transition: border 0.3s;
-        }
-
-        .password-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .toggle-visibility {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .strength-meter {
-            height: 12px;
-            border-radius: 6px;
-            background: var(--border-color);
-            overflow: hidden;
-            margin-top: 15px;
-        }
-
-        .strength-fill {
-            height: 100%;
-            width: 0;
-            transition: width 0.4s, background 0.4s;
-        }
-
-        .strength-text {
-            text-align: center;
-            margin-top: 10px;
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .criteria-list {
-            margin-top: 20px;
-        }
-
-        .criteria-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 16px;
-        }
-
-        .criteria-icon {
-            width: 20px;
-            text-align: center;
-        }
-
-        /* ===== TABS ===== */
-        .tabs {
-            display: flex;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 5px;
-            margin-bottom: 30px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .tab.active {
-            background: var(--accent-gradient);
-            color: white;
-        }
-
-        .tab:hover:not(.active) {
-            background: var(--tab-hover);
-        }
-
-        /* ===== TAB CONTENT ===== */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ===== BREACH CHECK ===== */
-        .breach-result {
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .breach-safe {
-            background: var(--breach-safe-bg);
-            color: var(--breach-safe-text);
-        }
-
-        .breach-found {
-            background: var(--breach-found-bg);
-            color: var(--breach-found-text);
-        }
-
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--toast-bg);
-            color: var(--toast-text);
-            padding: 15px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 10000;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .page-title h1 {
-                font-size: 36px;
-            }
-
-            .checker-card {
-                padding: 20px;
-            }
-        }
+        /* Essential Password Game Classes re-implemented for scope */
+        #password-game-wrapper .card { background: var(--bg-card); border-radius: 16px; padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow); }
+        #password-game-wrapper .input-wrapper input { width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-input); }
+        #password-game-wrapper .strength-meter { height: 8px; background: var(--border-color); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+        #password-game-wrapper .strength-meter-fill { height: 100%; width: 0%; transition: width 0.3s, background 0.3s; }
+        #password-game-wrapper .strength-meter-fill.weak { background: #ff4757; width: 25%; }
+        #password-game-wrapper .strength-meter-fill.fair { background: #ffa502; width: 50%; }
+        #password-game-wrapper .strength-meter-fill.good { background: #3498db; width: 75%; }
+        #password-game-wrapper .strength-meter-fill.strong { background: #10ac84; width: 100%; }
+        #password-game-wrapper .btn-primary { background: var(--accent-gradient); color: #fff; padding: 10px 20px; border-radius: 10px; border:none; cursor: pointer; }
+        
+        /* Auth Screen for Password Game */
+        #authScreen { position: fixed; inset: 0; background: #f0f2f5; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .hero-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
+        .hero-box input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<!-- Login Screen -->
-<div id="authScreen" class="fixed inset-0 bg-[var(--bg-primary)] flex items-center justify-center z-50">
-    <div class="bg-[var(--bg-card)] p-10 rounded-2xl shadow-2xl text-center max-w-md w-full">
-        <h2 class="text-3xl font-bold mb-8">Welcome to SecurePass</h2>
-        <div id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email" class="w-full p-4 mb-4 rounded-lg border">
-            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-4 mb-6 rounded-lg border">
-            <button onclick="login()" class="w-full bg-[var(--accent-gradient)] text-white py-4 rounded-lg font-bold">Login</button>
-            <p class="mt-4 text-sm">Don't have an account? <a href="#" onclick="showSignup()" class="text-[var(--accent)] font-bold">Sign Up</a></p>
+    <div id="home-view" class="portal-view p-8">
+        <div class="max-w-4xl mx-auto text-center mb-12 mt-10">
+            <h1 class="text-6xl font-black mb-2">ARUSH.FUN</h1>
+            <p class="text-xl opacity-60 font-bold">games and stuff by Arush</p>
         </div>
-        <div id="signupForm" style="display:none">
-            <input type="email" id="signupEmail" placeholder="Email" class="w-full p-4 mb-4 rounded-lg border">
-            <input type="password" id="signupPassword" placeholder="Password" class="w-full p-4 mb-6 rounded-lg border">
-            <button onclick="signup()" class="w-full bg-[var(--accent-gradient)] text-white py-4 rounded-lg font-bold">Sign Up</button>
-            <p class="mt-4 text-sm">Already have an account? <a href="#" onclick="showLogin()" class="text-[var(--accent)] font-bold">Login</a></p>
-        </div>
-    </div>
-</div>
 
-<!-- Navigation -->
-<nav class="navbar">
-    <div class="nav-inner">
-        <a href="#" class="nav-brand">
-            <div class="nav-brand-icon"></div>
-            SecurePass
-        </a>
-        <div class="nav-links">
-            <a href="#" class="nav-link">Home</a>
-            <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">FAQ</a>
-            <a href="#" class="nav-link">Contact</a>
-        </div>
-        <div class="nav-actions">
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-            <button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Logout</button>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Content -->
-<div class="container">
-    <div class="page-title">
-        <h1>Password Strength Checker</h1>
-        <p>Test how secure your password is and learn how to create stronger ones</p>
-    </div>
-
-    <div class="checker-card">
-        <div class="input-group">
-            <input type="password" id="passwordInput" class="password-input" placeholder="Enter your password" oninput="checkPassword()">
-            <button class="toggle-visibility" onclick="toggleVisibility()">👁️</button>
-        </div>
-        <div class="strength-meter">
-            <div id="strengthFill" class="strength-fill"></div>
-        </div>
-        <div id="strengthText" class="strength-text">Enter a password</div>
-        <div class="criteria-list" id="criteriaList"></div>
-    </div>
-
-    <div class="tabs">
-        <div class="tab active" onclick="openTab('tips')">Tips</div>
-        <div class="tab" onclick="openTab('breach')">Breach Check</div>
-        <div class="tab" onclick="openTab('quiz')">Quiz</div>
-        <div class="tab" onclick="openTab('faq')">FAQ</div>
-    </div>
-
-    <div id="tips" class="tab-content active">
-        <div class="checker-card">
-            <h2 class="text-2xl font-bold mb-6">Password Security Tips</h2>
-            <ul class="space-y-4">
-                <li class="flex items-start gap-3">
-                    <span class="text-2xl">🔑</span>
-                    <div>
-                        <strong>Use unique passwords</strong>
-                        <p class="text-[var(--text-secondary)]">Never reuse passwords across different sites</p>
-                    </div>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-2xl">🔒</span>
-                    <div>
-                        <strong>Make them long</strong>
-                        <p class="text-[var(--text-secondary)]">Use at least 12-16 characters</p>
-                    </div>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-2xl">🔀</span>
-                    <div>
-                        <strong>Mix characters</strong>
-                        <p class="text-[var(--text-secondary)]">Include uppercase, lowercase, numbers, and symbols</p>
-                    </div>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-2xl">🧠</span>
-                    <div>
-                        <strong>Use password managers</strong>
-                        <p class="text-[var(--text-secondary)]">They generate and store complex passwords securely</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="breach" class="tab-content">
-        <div class="checker-card">
-            <h2 class="text-2xl font-bold mb-6">Check if your password has been breached</h2>
-            <button onclick="checkBreach()" class="bg-[var(--accent-gradient)] text-white px-8 py-4 rounded-lg font-bold">Check for Breaches</button>
-            <div id="breachResult" class="breach-result mt-6" style="display:none;"></div>
-        </div>
-    </div>
-
-    <div id="quiz" class="tab-content">
-        <div class="checker-card">
-            <h2 class="text-2xl font-bold mb-6">Password Security Quiz</h2>
-            <div id="quizContainer"></div>
-            <button id="quizNextBtn" onclick="nextQuizQuestion()" class="bg-[var(--accent-gradient)] text-white px-8 py-4 rounded-lg font-bold mt-6">Start Quiz</button>
-        </div>
-    </div>
-
-    <div id="faq" class="tab-content">
-        <div class="checker-card">
-            <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-            <div class="space-y-4">
-                <div class="border-b pb-4">
-                    <h3 class="font-bold cursor-pointer" onclick="toggleFaq(this)">What is a strong password?</h3>
-                    <p class="mt-2 text-[var(--text-secondary)]" style="display:none;">A strong password is long, unique, and contains a mix of character types.</p>
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div onclick="openGame('elon')" class="neal-card group">
+                <div class="absolute top-0 left-0 w-full h-2 bg-green-400"></div>
+                <div class="neal-icon">🚀</div>
+                <div>
+                    <h2 class="text-xl font-black uppercase">Spend Elon's Money</h2>
+                    <p class="text-sm opacity-60 font-bold mt-1">Can you spend $800B?</p>
                 </div>
-                <div class="border-b pb-4">
-                    <h3 class="font-bold cursor-pointer" onclick="toggleFaq(this)">Should I use password managers?</h3>
-                    <p class="mt-2 text-[var(--text-secondary)]" style="display:none;">Yes! They are the safest way to manage multiple complex passwords.</p>
+            </div>
+
+            <div onclick="openGame('time')" class="neal-card group">
+                <div class="absolute top-0 left-0 w-full h-2 bg-yellow-400"></div>
+                <div class="neal-icon">⏳</div>
+                <div>
+                    <h2 class="text-xl font-black uppercase">The Price of Time</h2>
+                    <p class="text-sm opacity-60 font-bold mt-1">Life Actuary Simulator</p>
+                </div>
+            </div>
+
+            <div onclick="openGame('password')" class="neal-card group">
+                <div class="absolute top-0 left-0 w-full h-2 bg-purple-500"></div>
+                <div class="neal-icon">🔒</div>
+                <div>
+                    <h2 class="text-xl font-black uppercase">Password Check</h2>
+                    <p class="text-sm opacity-60 font-bold mt-1">How strong is it?</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <button id="backBtn" class="global-back-btn hidden-view" onclick="goHome()">← Back to Arush.fun</button>
+
+    <div id="game-elon" class="portal-view hidden-view elon-wrapper">
+        <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 rotate-2">
+                    <span class="font-black text-xl uppercase tracking-tighter">Ultimate 2026 Edition</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">Spend Elon's Money</h1>
+                <p class="text-lg font-bold opacity-70">Net Worth: <strong>$800,000,000,000</strong></p>
+            </div>
+        </header>
+
+        <div class="sticky-header money-gradient p-4">
+            <div class="max-w-6xl mx-auto flex justify-between items-center text-white">
+                <div id="elonMoney" class="text-3xl md:text-5xl font-black drop-shadow-md tracking-tighter">$800,000,000,000</div>
+                <div id="elonPercent" class="bg-black px-3 py-1 font-bold rounded text-sm md:text-base">0% Spent</div>
+            </div>
+        </div>
+
+        <main class="max-w-7xl mx-auto p-6 pb-24">
+            <div id="elonGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+            
+            <div class="receipt-container border-4 border-black p-8 shadow-[8px_8px_0px_#000] mt-12 max-w-2xl mx-auto">
+                <h2 class="text-3xl font-black uppercase text-center mb-6 border-b-4 border-black pb-4">The Receipt</h2>
+                <div id="elonReceipt" class="space-y-2 font-bold"></div>
+                <div id="elonTotal" class="text-2xl font-black text-center pt-6 border-t-4 border-black mt-4">Total: $0</div>
+            </div>
+        </main>
+    </div>
+
+    <div id="game-time" class="portal-view hidden-view time-wrapper text-black">
+        <header class="sticky-header p-6 bg-white border-b-4 border-black">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-3xl font-black uppercase tracking-tighter">The Price of Time</h1>
+                    <button onclick="saveTimeLife()" class="px-4 py-2 border-2 border-black font-black text-xs uppercase bg-green-500 text-white rounded">Save Progress</button>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
+                    <div class="lg:col-span-2">
+                        <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
+                        <select id="wageSelector" class="w-full p-3 border-4 border-black rounded-lg bg-transparent font-black text-lg outline-none cursor-pointer"></select>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] font-black uppercase opacity-50">Disposable Wealth</p>
+                        <p id="timeBudgetDisplay" class="text-4xl font-black text-green-500 tracking-tighter">$0</p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="flex justify-between text-[10px] font-black uppercase mb-1">
+                        <span>Life Consumed</span>
+                        <span id="timeTextDisplay">0 / 700,800 hrs</span>
+                    </div>
+                    <div class="h-6 border-4 border-black rounded-full bg-gray-200 overflow-hidden">
+                        <div id="timeProgressFill" class="h-full bg-black transition-all duration-700" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8 pb-24">
+            <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="timeItemGrid"></div>
+            <div class="lg:col-span-1">
+                <div class="border-4 border-black rounded-lg p-4 bg-white h-[500px] flex flex-col sticky top-[300px]">
+                    <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Life Receipt</h2>
+                    <div id="timeHistoryLog" class="history-scroll overflow-y-auto flex-grow text-[11px] font-bold space-y-2 uppercase">
+                        <p class="opacity-30 italic">No events yet...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="game-password" class="portal-view hidden-view" style="background: #f0f2f5;">
+        <div id="password-game-wrapper" class="p-4 md:p-8">
+            
+            <div id="authScreen">
+                <div class="hero-box">
+                    <h1 class="text-2xl font-bold mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; color: transparent;">SecurePass</h1>
+                    <p class="mb-6 text-gray-500 text-sm">Test strength. Generate secure passwords. Learn how hackers think.</p>
+                    <input id="fakeEmail" type="email" placeholder="Email">
+                    <input id="fakePass" type="password" placeholder="Password">
+                    <button class="btn-primary w-full mt-2" onclick="enterPasswordApp()">Enter Dashboard</button>
+                    <p class="text-xs text-gray-400 mt-4 cursor-pointer" onclick="enterPasswordApp()">Skip Login (Demo Mode)</p>
+                </div>
+            </div>
+
+            <div id="pw-app-content" style="display:none; max-width: 800px; margin: 0 auto; padding-bottom: 60px;">
+                <div class="card">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Password Strength Checker</h2>
+                    <p class="text-gray-500 mb-6">Test how strong your password is (Runs locally in browser)</p>
+
+                    <div class="input-wrapper relative mb-4">
+                        <input type="text" id="passwordInput" placeholder="Enter a password to test..." autocomplete="off">
+                    </div>
+
+                    <div class="strength-meter">
+                        <div class="strength-meter-fill" id="pwStrengthBar"></div>
+                    </div>
+                    <div class="text-center font-bold text-lg mb-4" id="pwStrengthLabel"></div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-bold mb-2 text-sm">Requirements:</h3>
+                        <div id="crit-len" class="text-sm text-gray-500">❌ 8+ Characters</div>
+                        <div id="crit-num" class="text-sm text-gray-500">❌ Contains Number</div>
+                        <div id="crit-sym" class="text-sm text-gray-500">❌ Contains Symbol</div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded text-sm">
+                        <strong>Time to crack:</strong> <span id="crackTimeDisplay">Instant</span>
+                    </div>
+                </div>
+
+                <div class="card mt-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Generator</h2>
+                    <div class="bg-gray-100 p-4 rounded font-mono text-center text-lg mb-4" id="genResult">Click Generate</div>
+                    <button class="btn-primary w-full" onclick="generateStrongPassword()">Generate Secure Password</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Toast -->
-<div id="toast" class="toast"></div>
+    <script>
+        // --- NAVIGATION ---
+        function openGame(gameId) {
+            document.getElementById('home-view').classList.add('hidden-view');
+            document.getElementById('backBtn').classList.remove('hidden-view');
+            
+            // Hide all games first
+            document.getElementById('game-elon').classList.add('hidden-view');
+            document.getElementById('game-time').classList.add('hidden-view');
+            document.getElementById('game-password').classList.add('hidden-view');
 
-<script>
-    // Theme toggle
-    function toggleTheme() {
-        document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    }
-
-    // Password visibility
-    function toggleVisibility() {
-        const input = document.getElementById('passwordInput');
-        input.type = input.type === 'password' ? 'text' : 'password';
-    }
-
-    // Password strength check
-    function checkPassword() {
-        const password = document.getElementById('passwordInput').value;
-        const strengthFill = document.getElementById('strengthFill');
-        const strengthText = document.getElementById('strengthText');
-        const criteriaList = document.getElementById('criteriaList');
-
-        let score = 0;
-        let feedback = [];
-
-        if (password.length >= 12) score += 20;
-        else feedback.push("Use at least 12 characters");
-
-        if (/[a-z]/.test(password)) score += 15;
-        else feedback.push("Include lowercase letters");
-
-        if (/[A-Z]/.test(password)) score += 15;
-        else feedback.push("Include uppercase letters");
-
-        if (/[0-9]/.test(password)) score += 15;
-        else feedback.push("Include numbers");
-
-        if (/[^a-zA-Z0-9]/.test(password)) score += 20;
-        else feedback.push("Include symbols");
-
-        if (!/(password|123|qwerty)/i.test(password)) score += 15;
-        else feedback.push("Avoid common patterns");
-
-        strengthFill.style.width = score + '%';
-
-        if (score < 40) {
-            strengthFill.style.background = '#ff4757';
-            strengthText.textContent = 'Weak';
-        } else if (score < 70) {
-            strengthFill.style.background = '#ffa502';
-            strengthText.textContent = 'Fair';
-        } else if (score < 90) {
-            strengthFill.style.background = '#3498db';
-            strengthText.textContent = 'Good';
-        } else {
-            strengthFill.style.background = '#10ac84';
-            strengthText.textContent = 'Strong';
+            // Show selected
+            document.getElementById('game-' + gameId).classList.remove('hidden-view');
+            
+            // Initialize
+            window.scrollTo(0,0);
+            if(gameId === 'elon') initElon();
+            if(gameId === 'time') initTime();
         }
 
-        criteriaList.innerHTML = feedback.map(f => `
-            <div class="criteria-item">
-                <span class="criteria-icon text-red-500">✗</span>
-                ${f}
-            </div>
-        `).join('');
-    }
-
-    // Tab system
-    function openTab(tabName) {
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        document.querySelector(`.tab[onclick="openTab('${tabName}')"]`).classList.add('active');
-        document.getElementById(tabName).classList.add('active');
-    }
-
-    // Breach check (demo)
-    function checkBreach() {
-        const result = document.getElementById('breachResult');
-        result.style.display = 'block';
-        result.className = 'breach-result breach-safe';
-        result.textContent = 'No breaches found! Your password is safe.';
-        showToast('Checked for breaches');
-    }
-
-    // Toast
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    // Quiz data
-    const quizQuestions = [
-        {
-            q: "What is the minimum recommended password length?",
-            options: ["8 characters", "12 characters", "16 characters", "20 characters"],
-            correct: 1,
-            explanation: "12+ characters is recommended for better security."
-        },
-        // Add more questions if desired
-    ];
-
-    let quizState = { current: -1, score: 0, answered: false };
-
-    function nextQuizQuestion() {
-        quizState.current++;
-        quizState.answered = false;
-
-        if (quizState.current >= quizQuestions.length) {
-            showQuizScore();
-            return;
+        function goHome() {
+            document.getElementById('home-view').classList.remove('hidden-view');
+            document.getElementById('backBtn').classList.add('hidden-view');
+            document.getElementById('game-elon').classList.add('hidden-view');
+            document.getElementById('game-time').classList.add('hidden-view');
+            document.getElementById('game-password').classList.add('hidden-view');
         }
 
-        const q = quizQuestions[quizState.current];
-        const container = document.getElementById('quizContainer');
-        const btn = document.getElementById('quizNextBtn');
-        btn.textContent = 'Next Question';
-        btn.style.display = 'none';
+        /* ================= ELON GAME LOGIC ================= */
+        const elonItemsData = [
+            ["Taco Bell", 5, "🌮"], ["Netflix", 15, "🎬"], ["AirPods", 249, "🎧"], 
+            ["iPhone 15", 1100, "📱"], ["Gaming PC", 3500, "🖥️"], ["Honda Civic", 12000, "🚗"], 
+            ["Rolex", 15000, "⌚"], ["Tesla Model 3", 45000, "🔋"], ["Ferrari", 500000, "🏎️"], 
+            ["Private Island", 45000000, "🏝️"], ["Private Jet", 75000000, "🛩️"], ["NBA Team", 3500000000, "🏀"], 
+            ["Mona Lisa", 900000000, "🖼️"], ["Twitter", 44000000000, "🐦"], ["Mars Colony", 100000000000, "🪐"]
+        ];
+        
+        let elonBalance = 800000000000;
+        let elonInventory = {};
 
-        container.innerHTML =
-            '<div class="quiz-progress">Question ' + (quizState.current + 1) + ' of ' + quizQuestions.length + '</div>' +
-            '<div class="quiz-question">' + q.q + '</div>' +
-            '<div class="quiz-options">' +
-            q.options.map((opt, i) =>
-                '<div class="quiz-option" onclick="answerQuiz(' + i + ')" data-idx="' + i + '">' + opt + '</div>'
-            ).join('') +
-            '</div>' +
-            '<div class="quiz-explanation" id="quizExplanation" style="display:none;"></div>';
-    }
+        function initElon() {
+            const grid = document.getElementById('elonGrid');
+            if(grid.innerHTML !== "") return; // Already init
+            
+            elonItemsData.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "item-card p-6 flex flex-col items-center text-center neubrutal";
+                card.innerHTML = `
+                    <div class="text-6xl mb-4">${item[2]}</div>
+                    <div class="text-lg font-black uppercase mb-1">${item[0]}</div>
+                    <div class="text-green-600 font-extrabold text-xl mb-4">$${item[1].toLocaleString()}</div>
+                    <div class="flex items-center gap-2 w-full">
+                        <button onclick="sellElon(${index})" class="bg-red-500 text-white flex-1 py-2 font-black rounded opacity-50" id="sell-${index}">Sell</button>
+                        <div class="w-8 font-black text-xl" id="count-${index}">0</div>
+                        <button onclick="buyElon(${index})" class="bg-green-500 text-white flex-1 py-2 font-black rounded">Buy</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            updateElonUI();
+        }
 
-    function answerQuiz(idx) {
-        if (quizState.answered) return;
-        quizState.answered = true;
+        function buyElon(idx) {
+            const price = elonItemsData[idx][1];
+            if (elonBalance >= price) {
+                elonBalance -= price;
+                elonInventory[idx] = (elonInventory[idx] || 0) + 1;
+                updateElonUI();
+            }
+        }
 
-        const q = quizQuestions[quizState.current];
-        const options = document.querySelectorAll('.quiz-option');
+        function sellElon(idx) {
+            if (elonInventory[idx] > 0) {
+                elonBalance += elonItemsData[idx][1];
+                elonInventory[idx]--;
+                updateElonUI();
+            }
+        }
 
-        options.forEach((opt, i) => {
-            opt.classList.add('disabled');
-            if (i === q.correct) opt.classList.add('correct');
-            if (i === idx && i !== q.correct) opt.classList.add('incorrect');
+        function updateElonUI() {
+            document.getElementById('elonMoney').innerText = "$" + elonBalance.toLocaleString();
+            const spent = 800000000000 - elonBalance;
+            document.getElementById('elonPercent').innerText = ((spent/800000000000)*100).toFixed(6) + "% Spent";
+            
+            let receiptHTML = "";
+            let total = 0;
+            elonItemsData.forEach((item, idx) => {
+                const count = elonInventory[idx] || 0;
+                document.getElementById(`count-${idx}`).innerText = count;
+                document.getElementById(`sell-${idx}`).style.opacity = count > 0 ? "1" : "0.5";
+                
+                if (count > 0) {
+                    const cost = count * item[1];
+                    total += cost;
+                    receiptHTML += `<div class="flex justify-between"><span>${item[0]} x${count}</span><span>$${cost.toLocaleString()}</span></div>`;
+                }
+            });
+            document.getElementById('elonReceipt').innerHTML = receiptHTML || "<div class='text-center opacity-50'>Nothing bought yet</div>";
+            document.getElementById('elonTotal').innerText = "Total: $" + total.toLocaleString();
+        }
+
+        /* ================= PRICE OF TIME LOGIC ================= */
+        const timePeople = [
+            { name: "Student", wage: 12, budget: 250000 },
+            { name: "Teacher", wage: 30, budget: 800000 },
+            { name: "Software Eng", wage: 85, budget: 3000000 },
+            { name: "CEO", wage: 5000, budget: 60000000 },
+            { name: "Billionaire", wage: 1200000, budget: 250000000000 }
+        ];
+        const timeItems = [
+            { name: "Pizza", hours: 0.5, emoji: "🍕" }, { name: "Movie", hours: 2, emoji: "🍿" },
+            { name: "Sleep", hours: 8, emoji: "💤" }, { name: "Netflix Binge", hours: 50, emoji: "📺" },
+            { name: "Learn Piano", hours: 10000, emoji: "🎹" }, { name: "PhD", hours: 12000, emoji: "🎓" },
+            { name: "Raise Kid", hours: 160000, emoji: "👶" }, { name: "Pyramid", hours: 175000, emoji: "📐" }
+        ];
+
+        let timeState = { profIdx: 0, budget: 0, timeSpent: 0, history: [] };
+        const totalLifeHours = 700800;
+
+        function initTime() {
+            const sel = document.getElementById('wageSelector');
+            if(sel.options.length === 0) {
+                timePeople.forEach((p, i) => {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.innerText = `${p.name} ($${p.wage}/hr)`;
+                    sel.appendChild(opt);
+                });
+                
+                // Render Items
+                const grid = document.getElementById('timeItemGrid');
+                timeItems.forEach((item, i) => {
+                    const card = document.createElement('div');
+                    card.className = "p-4 border-4 border-black bg-white flex flex-col items-center card-shadow";
+                    card.innerHTML = `
+                        <div class="text-4xl mb-2">${item.emoji}</div>
+                        <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
+                        <p class="text-[10px] font-bold opacity-40 uppercase mb-3">${item.hours.toLocaleString()} HRS</p>
+                        <button class="w-full bg-black text-white font-black py-2 rounded text-xs hover:scale-95 transition" onclick="buyTimeItem(${i})">BUY</button>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                sel.addEventListener('change', (e) => resetTimeState(e.target.value));
+                
+                // Load Save
+                const saved = localStorage.getItem('timeLifeSave');
+                if (saved) {
+                    timeState = JSON.parse(saved);
+                    sel.value = timeState.profIdx;
+                } else {
+                    resetTimeState(0);
+                }
+            }
+            updateTimeUI();
+        }
+
+        function resetTimeState(idx) {
+            timeState.profIdx = idx;
+            timeState.budget = timePeople[idx].budget;
+            timeState.timeSpent = 0;
+            timeState.history = [];
+            updateTimeUI();
+        }
+
+        function buyTimeItem(idx) {
+            const item = timeItems[idx];
+            const wage = timePeople[timeState.profIdx].wage;
+            const cost = (item.hours * wage) * 0.5; // Game discount
+            
+            if(timeState.budget >= cost) {
+                timeState.budget -= cost;
+                timeState.timeSpent += item.hours;
+                timeState.history.unshift(`Spent $${cost.toLocaleString()} as ${timePeople[timeState.profIdx].name} on ${item.name}`);
+                updateTimeUI();
+            } else {
+                alert("You're broke!");
+            }
+        }
+
+        function updateTimeUI() {
+            document.getElementById('timeBudgetDisplay').innerText = "$" + Math.floor(timeState.budget).toLocaleString();
+            document.getElementById('timeTextDisplay').innerText = `${timeState.timeSpent.toLocaleString()} / ${totalLifeHours.toLocaleString()} hrs`;
+            document.getElementById('timeProgressFill').style.width = Math.min((timeState.timeSpent / totalLifeHours) * 100, 100) + '%';
+            
+            const log = document.getElementById('timeHistoryLog');
+            if(timeState.history.length > 0) {
+                log.innerHTML = timeState.history.map(h => `<div class="border-l-2 border-black pl-2 py-1 bg-gray-50 mb-1">${h}</div>`).join('');
+            }
+        }
+
+        function saveTimeLife() {
+            localStorage.setItem('timeLifeSave', JSON.stringify(timeState));
+            alert("Progress Saved!");
+        }
+
+        /* ================= PASSWORD CHECKER LOGIC ================= */
+        function enterPasswordApp() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('pw-app-content').style.display = 'block';
+        }
+
+        document.getElementById('passwordInput').addEventListener('input', function(e) {
+            const pw = e.target.value;
+            const len = pw.length;
+            const hasNum = /\d/.test(pw);
+            const hasSym = /[!@#$%^&*]/.test(pw);
+            
+            let score = 0;
+            if(len >= 8) score++;
+            if(len >= 12) score++;
+            if(hasNum) score++;
+            if(hasSym) score++;
+
+            // Update UI Criteria
+            document.getElementById('crit-len').innerText = len >= 8 ? "✅ 8+ Characters" : "❌ 8+ Characters";
+            document.getElementById('crit-num').innerText = hasNum ? "✅ Contains Number" : "❌ Contains Number";
+            document.getElementById('crit-sym').innerText = hasSym ? "✅ Contains Symbol" : "❌ Contains Symbol";
+
+            // Bar
+            const bar = document.getElementById('pwStrengthBar');
+            const lbl = document.getElementById('pwStrengthLabel');
+            
+            if(len === 0) {
+                bar.style.width = '0%';
+                lbl.innerText = "";
+            } else if(score < 2) {
+                bar.style.width = '25%';
+                bar.className = 'strength-meter-fill weak';
+                lbl.innerText = "Weak";
+                document.getElementById('crackTimeDisplay').innerText = "Instant";
+            } else if(score < 4) {
+                bar.style.width = '50%';
+                bar.className = 'strength-meter-fill fair';
+                lbl.innerText = "Fair";
+                document.getElementById('crackTimeDisplay').innerText = "3 Days";
+            } else {
+                bar.style.width = '100%';
+                bar.className = 'strength-meter-fill strong';
+                lbl.innerText = "Strong";
+                document.getElementById('crackTimeDisplay').innerText = "34,000 Years";
+            }
         });
 
-        if (idx === q.correct) quizState.score++;
-
-        const explEl = document.getElementById('quizExplanation');
-        explEl.style.display = 'block';
-        explEl.textContent = q.explanation;
-
-        document.getElementById('quizNextBtn').style.display = 'inline-block';
-    }
-
-    function showQuizScore() {
-        const container = document.getElementById('quizContainer');
-        const pct = Math.round((quizState.score / quizQuestions.length) * 100);
-        let message = '';
-        if (pct >= 80) message = 'Excellent! You have strong password security knowledge.';
-        else if (pct >= 60) message = 'Good job! Review the topics you missed to improve.';
-        else message = 'Keep learning! Check our FAQ and About pages for more information.';
-
-        container.innerHTML =
-            '<div class="quiz-score">' +
-            '<div class="score-number">' + quizState.score + '/' + quizQuestions.length + '</div>' +
-            '<div class="score-label">' + pct + '% Correct</div>' +
-            '<p style="margin-top:16px;color:var(--text-secondary);font-size:14px;">' + message + '</p>' +
-            '</div>';
-
-        const btn = document.getElementById('quizNextBtn');
-        btn.textContent = 'Restart Quiz';
-        btn.style.display = 'inline-block';
-        btn.onclick = () => {
-            quizState = { current: -1, score: 0, answered: false };
-            btn.onclick = nextQuizQuestion;
-            btn.textContent = 'Start Quiz';
-            container.innerHTML = '<p style="font-size:14px;color:var(--text-secondary);text-align:center;padding:16px;">Click "Start Quiz" to test your knowledge about password security.</p>';
-        };
-    }
-
-    // Initialize quiz
-    document.getElementById('quizContainer').innerHTML = '<p style="font-size:14px;color:var(--text-secondary);text-align:center;padding:16px;">Click "Start Quiz" to test your knowledge about password security.</p>';
-
-    // FAQ TOGGLE
-   74 function toggleFaq(el) {
-        el.parentElement.classList.toggle('open');
-    }
-
-    // AUTH SYSTEM
-    function showSignup(){
-        document.getElementById("loginForm").style.display="none";
-        document.getElementById("signupForm").style.display="block";
-    }
-
-    function showLogin(){
-        document.getElementById("signupForm").style.display="none";
-        document.getElementById("loginForm").style.display="block";
-    }
-
-    function signup(){
-        const email = document.getElementById("signupEmail").value;
-        const password = document.getElementById("signupPassword").value;
-
-        if(!email || !password){
-            alert("Please fill all fields.");
-            return;
+        function generateStrongPassword() {
+            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let pass = "";
+            for(let i=0; i<16; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('genResult').innerText = pass;
         }
 
-        localStorage.setItem("user", JSON.stringify({email,password}));
-        localStorage.setItem("loggedIn","true");
-        checkAuth();
-    }
-
-    function login(){
-        const email = document.getElementById("loginEmail").value;
-        const password = document.getElementById("loginPassword").value;
-        const stored = JSON.parse(localStorage.getItem("user"));
-
-        if(stored && stored.email===email && stored.password===password){
-            localStorage.setItem("loggedIn","true");
-            checkAuth();
-        } else {
-            alert("Invalid credentials.");
-        }
-    }
-
-    function logout(){
-        localStorage.removeItem("loggedIn");
-        document.getElementById("authScreen").style.display="flex";
-        document.getElementById("logoutBtn").style.display="none";
-    }
-
-    function checkAuth(){
-        if(localStorage.getItem("loggedIn")==="true"){
-            document.getElementById("authScreen").style.display="none";
-            document.getElementById("logoutBtn").style.display="block";
-        }
-    }
-
-    // On page load
-    checkAuth();
-</script>
-</body>
-</html>`;
-
-// 6 built-in games with safe concatenation
-const butterflyHTML = '<!DOCTYPE html>' +
-'<html lang="en">' +
-'<head>' +
-'    <meta charset="UTF-8">' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-'    <title>Butterfly Effect</title>' +
-'    <script src="https://cdn.tailwindcss.com"></script>' +
-'    <style>' +
-'        body { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; padding: 2rem; }' +
-'        .brutal-btn { border: 3px solid #000; box-shadow: 4px 4px 0 #000; background: white; padding: 1rem 2rem; font-weight: 900; text-transform: uppercase; cursor: pointer; }' +
-'        .brutal-btn:active { transform: translate(2px,2px); box-shadow: 0 0 0; }' +
-'    </style>' +
-'</head>' +
-'<body class="max-w-4xl mx-auto">' +
-'    <h1 class="text-5xl font-black mb-8 text-center">Butterfly Effect Simulator</h1>' +
-'    <p class="text-center mb-12 text-lg">200 tiny decisions. Every choice adds chaos. Can you reach 100% and become "Definitely Fun At Parties"?</p>' +
-'    <div id="story" class="text-center mb-12">' +
-'        <h2 id="storyText" class="text-3xl font-black mb-8">Start your chain of decisions...</h2>' +
-'        <div id="options" class="flex flex-wrap justify-center gap-4"></div>' +
-'    </div>' +
-'    <div class="text-center text-3xl font-bold text-red-600" id="chaosMeter">Chaos: 0%</div>' +
-'    <script>' +
-'        let chaos = 0;' +
-'        let step = 1;' +
-'        const totalSteps = 200;' +
-'        function render() {' +
-'            document.getElementById("storyText").innerText = step <= totalSteps ? "Decision #" + step + ": A small choice appears..." : "Final outcome:";' +
-'            const opts = document.getElementById("options");' +
-'            opts.innerHTML = "";' +
-'            if (step > totalSteps) {' +
-'                const final = chaos >= 300 ? "You Are Definitely Fun At Parties." : "The timeline remained stable. Boring.";' +
-'                document.getElementById("storyText").innerHTML = \'<span class="text-red-600 text-5xl">\' + final + \'</span>\';' +
-'                opts.innerHTML = \'<button class="brutal-btn" onclick="location.reload()">Restart</button>\';' +
-'                return;' +
-'            }' +
-'            ["Lean into chaos (+3%)", "Play it safe (+1%)"].forEach((text, i) => {' +
-'                const btn = document.createElement("button");' +
-'                btn.className = "brutal-btn";' +
-'                btn.textContent = text;' +
-'                btn.onclick = () => {' +
-'                    chaos += i === 0 ? 3 : 1;' +
-'                    document.getElementById("chaosMeter").innerText = "Chaos: " + Math.min(100, Math.floor(chaos / 3)) + "%";' +
-'                    step++;' +
-'                    render();' +
-'                };' +
-'                opts.appendChild(btn);' +
-'            });' +
-'        }' +
-'        render();' +
-'    </script>' +
-'</body>' +
-'</html>';
-
-const arkHTML = '<!DOCTYPE html>' +
-'<html lang="en">' +
-'<head>' +
-'    <meta charset="UTF-8">' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-'    <title>Earth\'s Inventory</title>' +
-'    <script src="https://cdn.tailwindcss.com"></script>' +
-'    <style>' +
-'        body { background: #111; color: #0f0; font-family: monospace; padding: 2rem; }' +
-'    </style>' +
-'</head>' +
-'<body>' +
-'    <h1 class="text-4xl mb-8 text-center">Earth\'s Final Inventory</h1>' +
-'    <div class="grid grid-cols-3 text-center mb-8">' +
-'        <div>VOLUME: <span id="vol">100</span>%</div>' +
-'        <div>WEIGHT: <span id="wgt">100</span>%</div>' +
-'        <div>SUSTAIN: <span id="sus">0</span></div>' +
-'    </div>' +
-'    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="items"></div>' +
-'    <button onclick="launch()" class="fixed bottom-8 right-8 bg-black text-green-400 border-4 border-green-400 px-8 py-4 font-black">LAUNCH ARK</button>' +
-'    <script>' +
-'        const items = ["Seed Vault","AI Core","Cat Videos","Coffee Beans","Internet Archive","Pineapple Pizza Recipe","Printer Ink","Dad Jokes","Solar Panels","Bees"];' +
-'        let vol = 100, wgt = 100, sus = 0;' +
-'        items.forEach((name, i) => {' +
-'            const v = 5 + i; const w = 4 + i % 6; const s = 3 + i % 5;' +
-'            const div = document.createElement("div");' +
-'            div.className = "border border-green-400 p-4 cursor-pointer";' +
-'            div.innerHTML = "[ ] " + name + "<br><small>Vol:" + v + " Wgt:" + w + " Sus:" + s + "</small>";' +
-'            div.onclick = () => {' +
-'                if (div.classList.contains("bg-green-900")) {' +
-'                    div.classList.remove("bg-green-900");' +
-'                    div.innerHTML = div.innerHTML.replace("[X]", "[ ]");' +
-'                    vol += v; wgt += w; sus -= s;' +
-'                } else {' +
-'                    if (vol < v || wgt < w) return alert("No capacity");' +
-'                    div.classList.add("bg-green-900");' +
-'                    div.innerHTML = div.innerHTML.replace("[ ]", "[X]");' +
-'                    vol -= v; wgt -= w; sus += s;' +
-'                }' +
-'                document.getElementById("vol").innerText = vol;' +
-'                document.getElementById("wgt").innerText = wgt;' +
-'                document.getElementById("sus").innerText = sus;' +
-'            };' +
-'            document.getElementById("items").appendChild(div);' +
-'        });' +
-'        function launch() {' +
-'            alert(sus > 60 ? "Colony thrives forever." : "Colony fails in hilarious ways.");' +
-'        }' +
-'    </script>' +
-'</body>' +
-'</html>';
-
-const trolleyHTML = '<!DOCTYPE html>' +
-'<html lang="en">' +
-'<head>' +
-'    <meta charset="UTF-8">' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-'    <title>Absurd Trolley</title>' +
-'    <script src="https://cdn.tailwindcss.com"></script>' +
-'</head>' +
-'<body class="p-12 bg-red-50">' +
-'    <h1 class="text-5xl font-black text-center mb-12">Absurd Trolley Problem</h1>' +
-'    <div id="scene" class="text-center"></div>' +
-'    <script>' +
-'        let scenario = 0;' +
-'        const scenarios = ["5 people vs 1 person","5 philosophers vs 1 influencer","5 vegans vs 1 BBQ chef","The trolley is heading toward the concept of weekends","Pull lever to divert to your future self"];' +
-'        function render() {' +
-'            document.getElementById("scene").innerHTML = "<p class=\\"text-3xl font-bold mb-12\\">" + (scenarios[scenario] || "Ethics complete. Humanity confused.") + "</p>" + "<div class=\\"flex gap-8 justify-center\\">" + "<button class=\\"brutal-btn bg-red-600 text-white px-12 py-6 text-xl\\" onclick=\\"choose(true)\\">PULL</button>" + "<button class=\\"brutal-btn bg-gray-600 text-white px-12 py-6 text-xl\\" onclick=\\"choose(false)\\">DO NOTHING</button>" + "</div>";' +
-'        }' +
-'        function choose(pull) {' +
-'            alert(pull ? "You pulled. Controversial." : "You did nothing. Also controversial.");' +
-'            scenario++;' +
-'            render();' +
-'        }' +
-'        render();' +
-'    </script>' +
-'</body>' +
-'</html>';
-
-const debtHTML = '<!DOCTYPE html>' +
-'<html lang="en">' +
-'<head>' +
-'    <meta charset="UTF-8">' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-'    <title>Size of the Debt</title>' +
-'    <script src="https://cdn.tailwindcss.com"></script>' +
-'</head>' +
-'<body class="p-8">' +
-'    <div class="fixed top-8 right-8 bg-red-600 text-white p-6 text-3xl font-black border-4 border-black">$' +
-'        <span id="clock">34,000,000,000,000</span>' +
-'    </div>' +
-'    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">' +
-'        ' + Array(25).fill().map((_,i) => `<div class="bg-white border-4 border-black p-8"><div class="text-6xl mb-4">📉</div><div class="text-2xl font-black">Comparison #${i+1}: Something massive ×${i+1}</div></div>`).join('') + 
-'    </div>' +
-'    <script>' +
-'        let debt = 34000000000000;' +
-'        setInterval(() => {' +
-'            debt += 30000000;' +
-'            document.getElementById("clock").innerText = debt.toLocaleString();' +
-'        }, 1000);' +
-'    </script>' +
-'</body>' +
-'</html>';
-
-const password2026HTML = '<!DOCTYPE html>' +
-'<html lang="en">' +
-'<head>' +
-'    <meta charset="UTF-8">' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-'    <title>Password 2026</title>' +
-'    <script src="https://cdn.tailwindcss.com"></script>' +
-'</head>' +
-'<body class="p-12 bg-pink-50">' +
-'    <h1 class="text-5xl font-black text-center mb-12">Password Game 2026</h1>' +
-'    <div class="max-w-2xl mx-auto">' +
-'        <input id="pw" type="text" class="w-full p-6 text-3xl border-4 border-black font-mono" placeholder="Start typing..." oninput="check()">' +
-'        <div id="rules" class="mt-12 space-y-4"></div>' +
-'    </div>' +
-'    <script>' +
-'        const rules = Array.from({length: 50}, (_, i) => ({' +
-'            text: i < 10 ? ["8+ chars","number","uppercase","symbol","no \\'password\\'","include \\'2026\\'","emoji","digits sum 25","30+ chars","palindrome"][i] : "Rule " + (i+1) + ": Getting ridiculous...",' +
-'            check: (s) => s.length > i * 2' +
-'        }));' +
-'        let active = 1;' +
-'        function check() {' +
-'            const val = document.getElementById("pw").value;' +
-'            const list = document.getElementById("rules");' +
-'            list.innerHTML = "";' +
-'            let allGood = true;' +
-'            for (let i = 0; i < active; i++) {' +
-'                const passed = rules[i].check(val);' +
-'                list.innerHTML += "<div class=\\"" + (passed ? "text-green-600" : "text-red-600") + " font-black\\">" + (passed ? "✓" : "✗") + " " + rules[i].text + "</div>";' +
-'                if (!passed) allGood = false;' +
-'            }' +
-'            if (allGood && active < 50) { active++; check(); }' +
-'        }' +
-'    </script>' +
-'</body>' +
-'</html>';
-
-const universeHTML = '<!DOCTYPE html>' +
-'<html lang="en">' +
-'<head>' +
-'    <meta charset="UTF-8">' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-'    <title>Buy The Universe</title>' +
-'    <script src="https://cdn.tailwindcss.com"></script>' +
-'    <style>body { background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); color: #00ff99; font-family: "Space Grotesk", sans-serif; padding: 2rem; }</style>' +
-'</head>' +
-'<body class="text-center">' +
-'    <h1 class="text-6xl font-black mb-8">Buy The Universe</h1>' +
-'    <div class="text-5xl font-mono mb-12" id="energy">5000</div>' +
-'    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto" id="shop"></div>' +
-'    <script>' +
-'        let energy = 5000, income = 0;' +
-'        const names = ["Dust","Asteroid","Planet","Star","Galaxy","Black Hole","Dimension","Multiverse"];' +
-'        const shop = document.getElementById("shop");' +
-'        for (let i = 1; i <= 75; i++) {' +
-'            const cost = i * i * 50;' +
-'            const inc = i * 5;' +
-'            shop.innerHTML += "<div class=\\"border border-[#00ff99] p-8 cursor-pointer\\" onclick=\\"if(energy>=" + cost + "){energy-=" + cost + ";income+=" + inc + ";document.getElementById(\\'energy\\').innerText=energy;}\\">" + names[i%names.length] + " #" + i + "<br>" + cost + " Energy (+ " + inc + "/s)</div>";' +
-'        }' +
-'        setInterval(() => {' +
-'            energy += income;' +
-'            document.getElementById("energy").innerText = energy;' +
-'        }, 1000);' +
-'    </script>' +
-'</body>' +
-'</html>';
-
-// ==================== INIT FUNCTIONS ====================
-function initTimeGame(container, header) {
-    header.innerText = "The Price of Time";
-    container.innerHTML = createIframe(timeGameHTML);
-}
-
-function initElonGame(container, header) {
-    header.innerText = "Spend Elon's Money";
-    container.innerHTML = createIframe(elonGameHTML);
-}
-
-function initCapsule(container, header) {
-    header.innerText = "Password Checker";
-    container.innerHTML = createIframe(passwordCheckerHTML);
-}
-
-function initButterfly(container, header) {
-    header.innerText = "Butterfly Effect";
-    container.innerHTML = createIframe(butterflyHTML);
-}
-
-function initArk(container, header) {
-    header.innerText = "Earth's Inventory";
-    container.innerHTML = createIframe(arkHTML);
-}
-
-function initTrolley(container, header) {
-    header.innerText = "Absurd Trolley";
-    container.innerHTML = createIframe(trolleyHTML);
-}
-
-function initDebt(container, header) {
-    header.innerText = "Size of the Debt";
-    container.innerHTML = createIframe(debtHTML);
-}
-
-function initPassword(container, header) {
-    header.innerText = "Password 2026";
-    container.innerHTML = createIframe(password2026HTML);
-}
-
-function initUniverse(container, header) {
-    header.innerText = "Buy The Universe";
-    container.innerHTML = createIframe(universeHTML);
-}
-</script>
+    </script>
 </body>
 </html>
