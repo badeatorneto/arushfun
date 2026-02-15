@@ -76,7 +76,7 @@
         // from your 3 files and paste them into the srcdoc attributes above.
         // Below is a template of how the Password Checker looks inside.
         
-        const checkerCode = `[<!DOCTYPE html>
+        const checkerCode = `<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -2482,8 +2482,8 @@ checkAuth();
 
 </script>
 </body>
-</html>]`;
-        const elonCode = `[<!DOCTYPE html>
+</html>`;
+        const elonCode = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2651,8 +2651,8 @@ checkAuth();
         updateUI();
     </script>
 </body>
-</html>]`;
-        const timeCode = `[<!DOCTYPE html>
+</html>`;
+        const timeCode = `<!DOCTYPE html>
 <html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
@@ -2906,7 +2906,7 @@ checkAuth();
         init();
     </script>
 </body>
-</html>]`;
+</html>`;
 
         // Setting the content via JS to handle large strings safely
         document.getElementById("checker").srcdoc = checkerCode;
