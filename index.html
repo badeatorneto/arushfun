@@ -3,44 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arush.fun | Master Portal</title>
+    <title>arush.fun</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; background: #000; margin: 0; }
-        .navbar {
-            background: #111; color: white; border-bottom: 4px solid #000;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; height: 64px;
-        }
-        .nav-link { 
-            padding: 15px 20px; font-weight: 800; text-transform: uppercase; 
-            cursor: pointer; transition: all 0.2s; border-bottom: 4px solid transparent;
-        }
-        .nav-link:hover { background: rgba(255,255,255,0.1); }
-        .nav-link.active { border-bottom: 4px solid #facc15; color: #facc15; }
+        body { background-color: #f1f2f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
-        .app-iframe { width: 100%; height: calc(100vh - 64px); border: none; display: none; }
-        .app-iframe.active { display: block; }
+        /* Neal.fun style cards */
+        .game-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+        .game-card:hover { transform: scale(1.02); }
+        .game-card img { width: 100%; height: 150px; object-fit: cover; background: #eee; }
+        .game-title { padding: 15px; font-weight: bold; text-align: center; font-size: 1.1rem; }
+
+        /* Fullscreen App Overlay */
+        #app-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 1000;
+        }
+        iframe { width: 100%; height: calc(100% - 50px); border: none; }
+        .back-bar { height: 50px; background: #000; color: white; display: flex; align-items: center; padding: 0 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="flex items-center">
-            <span class="text-xl font-black tracking-tighter text-yellow-400 mr-10">ARUSH.FUN</span>
-            <div id="btn-checker" class="nav-link active" onclick="showApp('checker')">Password Checker</div>
-            <div id="btn-elon" class="nav-link" onclick="showApp('elon')">Elon's Money</div>
-            <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
+    <div id="home-view" class="max-w-5xl mx-auto py-12 px-4">
+        <h1 class="text-5xl font-bold text-center mb-12">arush.fun</h1>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div class="game-card" onclick="launchApp('checker')">
+                <div class="h-32 bg-blue-500 flex items-center justify-center text-5xl">🔐</div>
+                <div class="game-title">Password Checker</div>
+            </div>
+
+            <div class="game-card" onclick="launchApp('elon')">
+                <div class="h-32 bg-green-500 flex items-center justify-center text-5xl">🚀</div>
+                <div class="game-title">Spend Elon's Money</div>
+            </div>
+
+            <div class="game-card" onclick="launchApp('time')">
+                <div class="h-32 bg-yellow-400 flex items-center justify-center text-5xl">⏳</div>
+                <div class="game-title">The Price of Time</div>
+            </div>
         </div>
-    </nav>
+        
+        <footer class="mt-20 text-center text-gray-400 text-sm">
+            Made with love • arush.fun
+        </footer>
+    </div>
 
-    <iframe id="checker" class="app-iframe active"></iframe>
-    <iframe id="elon" class="app-iframe"></iframe>
-    <iframe id="time" class="app-iframe"></iframe>
+    <div id="app-overlay">
+        <div class="back-bar" onclick="closeApp()">← Back to arush.fun</div>
+        <iframe id="app-frame"></iframe>
+    </div>
 
-    <template id="code-checker">
-        <!DOCTYPE html>
+    <script>
+        const CODES = {
+            checker: `<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -2446,11 +2472,8 @@ checkAuth();
 
 </script>
 </body>
-</html>
-        </template>
-
-    <template id="code-elon">
-        <!DOCTYPE html>
+</html>`,
+            elon: `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2618,11 +2641,8 @@ checkAuth();
         updateUI();
     </script>
 </body>
-</html>
-        </template>
-
-    <template id="code-time">
-        <!DOCTYPE html>
+</html>`,
+            time: `<!DOCTYPE html>
 <html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
@@ -2876,23 +2896,26 @@ checkAuth();
         init();
     </script>
 </body>
-</html>
-        </template>
+</html>`
+        };
 
-    <script>
-        function showApp(appId) {
-            document.querySelectorAll(".app-iframe").forEach(f => f.classList.remove("active"));
-            document.querySelectorAll(".nav-link").forEach(b => b.classList.remove("active"));
-            document.getElementById(appId).classList.add("active");
-            document.getElementById("btn-" + appId).classList.add("active");
+        function launchApp(id) {
+            const frame = document.getElementById('app-frame');
+            const overlay = document.getElementById('app-overlay');
+            
+            // This converts your HTML into a safe URL format so it never crashes
+            const blob = new Blob([CODES[id]], { type: 'text/html' });
+            frame.src = URL.createObjectURL(blob);
+            
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
 
-        // This runs as soon as the page loads to "inject" your games into the frames
-        window.onload = () => {
-            document.getElementById("checker").srcdoc = document.getElementById("code-checker").innerHTML;
-            document.getElementById("elon").srcdoc = document.getElementById("code-elon").innerHTML;
-            document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
-        };
+        function closeApp() {
+            document.getElementById('app-overlay').style.display = 'none';
+            document.getElementById('app-frame').src = '';
+            document.body.style.overflow = 'auto';
+        }
     </script>
 </body>
 </html>
