@@ -21,14 +21,13 @@
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 20px; height: 64px;
         }
-        .nav-link { 
-            padding: 15px 20px; font-weight: 800; text-transform: uppercase; 
+        .nav-link {
+            padding: 15px 20px; font-weight: 800; text-transform: uppercase;
             cursor: pointer; transition: all 0.2s; border-bottom: 4px solid transparent;
         }
         .nav-link:hover { background: rgba(255,255,255,0.1); }
         .nav-link.active { border-bottom: 4px solid #facc15; color: #facc15; }
-        
-        .app-iframe { width: 100%; height: calc(100vh - 64px); border: none; display: none; }
+
         .app-iframe.active { display: block; }
     </style>
 </head>
@@ -36,8 +35,8 @@
 
     <nav class="navbar">
         <div class="flex items-center">
-            <span class="text-xl font-black tracking-tighter text-yellow-400 mr-10">ARUSH.FUN</span>
-            <div id="btn-trolley" class="nav-link active" onclick="showApp('trolley')">Trolley Problems</div>
+            <div id="btn-home" class="nav-link active" onclick="showApp('home')">ARUSH.FUN</div>
+            <div id="btn-trolley" class="nav-link" onclick="showApp('trolley')">Trolley Problems</div>
             <div id="btn-elon" class="nav-link" onclick="showApp('elon')">Elon's Money</div>
             <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
             <div id="btn-nuke" class="nav-link" onclick="showApp('nuke')">Nuke Launcher</div>
@@ -46,15 +45,104 @@
         </div>
     </nav>
 
-    <iframe id="trolley" class="app-iframe active"></iframe>
+    <!-- Home iframe (default view) -->
+    <iframe id="home" class="app-iframe active"></iframe>
+    <iframe id="trolley" class="app-iframe"></iframe>
     <iframe id="elon" class="app-iframe"></iframe>
     <iframe id="time" class="app-iframe"></iframe>
     <iframe id="nuke" class="app-iframe"></iframe>
     <iframe id="clicker" class="app-iframe"></iframe>
     <iframe id="bucket" class="app-iframe"></iframe>
 
-    <template id="code-trolley">
+    <!-- HOMEPAGE TEMPLATE (exact style as other games) -->
+    <template id="code-home">
         <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>ARUSH.FUN | Simulation Suite</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+            <style>
+                body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f2f5; margin: 0; padding: 2rem 1rem; }
+                .item-card { 
+                    border: 3px solid #000; 
+                    background: #fff; 
+                    transition: transform 0.2s; 
+                    cursor: pointer; 
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+                .item-card:hover { transform: rotate(-1deg) translateY(-8px); box-shadow: 8px 8px 0 #000; }
+                .emoji { font-size: 6rem; }
+            </style>
+        </head>
+        <body>
+            <div class="max-w-7xl mx-auto text-center mb-12">
+                <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-4">ARUSH.FUN</h1>
+                <p class="text-2xl md:text-3xl font-bold opacity-70">The Simulation Suite v2.0</p>
+                <p class="text-lg mt-4 text-gray-600">Choose your reality below</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div onclick="parent.showApp('trolley')" class="item-card p-8 bg-red-100">
+                    <div class="emoji text-center">🚋</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Trolley Problems</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Advanced Ethics Simulator</p>
+                    </div>
+                </div>
+
+                <div onclick="parent.showApp('elon')" class="item-card p-8 bg-green-100">
+                    <div class="emoji text-center">🚀</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Elon's Money</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Spend $800B Edition</p>
+                    </div>
+                </div>
+
+                <div onclick="parent.showApp('time')" class="item-card p-8 bg-yellow-100">
+                    <div class="emoji text-center">⏳</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Price of Time</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Life Actuary Simulator</p>
+                    </div>
+                </div>
+
+                <div onclick="parent.showApp('nuke')" class="item-card p-8 bg-orange-100">
+                    <div class="emoji text-center">💥</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Nuke Launcher</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Educational Simulation</p>
+                    </div>
+                </div>
+
+                <div onclick="parent.showApp('clicker')" class="item-card p-8 bg-purple-100">
+                    <div class="emoji text-center">🖱️</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Clicker Hero</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Idle Empire Builder</p>
+                    </div>
+                </div>
+
+                <div onclick="parent.showApp('bucket')" class="item-card p-8 bg-teal-100">
+                    <div class="emoji text-center">✅</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">The Bucket List</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">500 Life Goals Tracker</p>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+    </template>
+
+    <!-- Your existing templates (trolley, elon, time, nuke, clicker, bucket) go here unchanged -->
+    <template id="code-trolley">
+         <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -445,9 +533,8 @@
 </body>
 </html>
     </template>
-
     <template id="code-elon">
-          <!DOCTYPE html>
+             <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -617,9 +704,8 @@
 </body>
 </html>
     </template>
-
     <template id="code-time">
-          <!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
@@ -901,7 +987,6 @@
 </body>
 </html>
     </template>
-
     <template id="code-nuke">
         <!DOCTYPE html>
 <html lang="en">
@@ -1564,7 +1649,6 @@
 </body>
 </html>
     </template>
-
     <template id="code-clicker">
         <!DOCTYPE html>
 <html lang="en">
@@ -2000,10 +2084,9 @@
     </script>
 </body>
 </html>
-         </template>
-
-         <template id="code-bucket">
-             <!DOCTYPE html>
+    </template>
+    <template id="code-bucket">
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2374,7 +2457,7 @@
     </script>
 </body>
 </html>
-             </template>
+    </template>
 
     <script>
         function showApp(appId) {
@@ -2385,6 +2468,7 @@
         }
 
         window.onload = () => {
+            document.getElementById("home").srcdoc = document.getElementById("code-home").innerHTML;
             document.getElementById("trolley").srcdoc = document.getElementById("code-trolley").innerHTML;
             document.getElementById("elon").srcdoc = document.getElementById("code-elon").innerHTML;
             document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
