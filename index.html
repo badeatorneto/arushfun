@@ -41,6 +41,7 @@
             <div id="btn-elon" class="nav-link" onclick="showApp('elon')">Elon's Money</div>
             <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
             <div id="btn-nuke" class="nav-link" onclick="showApp('nuke')">Nuke Launcher</div>
+            <div id="btn-clicker" class="nav-link" onclick="showApp('clicker')">Clicker Hero</div>
         </div>
     </nav>
 
@@ -48,6 +49,7 @@
     <iframe id="elon" class="app-iframe"></iframe>
     <iframe id="time" class="app-iframe"></iframe>
     <iframe id="nuke" class="app-iframe"></iframe>
+    <iframe id="clicker" class="app-iframe"></iframe>
 
     <template id="code-trolley">
         <!DOCTYPE html>
@@ -1561,6 +1563,443 @@
 </html>
     </template>
 
+    <template id="code-clicker">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Hero</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+        .money-gradient { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+        .item-card:hover { transform: rotate(-1deg); }
+        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+        .click-button {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 6px solid #000;
+            box-shadow: 8px 8px 0px #000;
+            transition: all 0.1s;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+        .click-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
+        }
+        .float-number {
+            position: fixed;
+            font-weight: 900;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 1000;
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
+        }
+        .pulse-animation {
+            animation: pulseGlow 0.3s;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block p-2 bg-purple-500 border-4 border-black mb-4 rotate-2">
+                <span class="font-black text-xl uppercase tracking-tighter text-white">💰 IDLE CLICKER EDITION 💰</span>
+            </div>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Clicker Hero</h1>
+            <p class="text-xl font-bold opacity-70">Click to earn money. Buy auto-clickers to get rich while you sleep.<br><strong>Can you become a trillionaire?</strong></p>
+        </div>
+    </header>
+
+    <div class="sticky-header money-gradient p-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <div id="money" class="text-4xl md:text-6xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] tracking-tighter">$0</div>
+                    <div class="text-sm font-bold text-white mt-1">Per Second: $<span id="perSecond">0</span></div>
+                </div>
+                <div class="text-right">
+                    <div class="bg-black text-white px-3 py-1 font-bold rounded mb-2">Total Clicks: <span id="totalClicks">0</span></div>
+                    <div class="bg-white text-black px-3 py-1 font-bold rounded">Level <span id="level">1</span></div>
+                </div>
+            </div>
+            <div class="h-3 bg-black rounded-full overflow-hidden border-2 border-white">
+                <div id="levelProgress" class="h-full bg-yellow-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLICK BUTTON SECTION -->
+    <section class="max-w-4xl mx-auto p-6 text-center">
+        <div class="neubrutal bg-white p-8 mb-8">
+            <h2 class="text-3xl font-black uppercase mb-6">Click to Earn Money!</h2>
+            <button id="clickButton" class="click-button mx-auto flex items-center justify-center" onclick="earnMoney()">
+                <span class="text-6xl font-black text-black">$<span id="clickValue">1</span></span>
+            </button>
+            <p class="mt-6 text-sm font-bold text-gray-600">Click the button to earn $<span id="clickValueText">1</span> per click</p>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto p-6">
+        <!-- AUTO-CLICKERS GRID -->
+        <h2 class="text-3xl font-black uppercase mb-6">Buy Auto-Clickers</h2>
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        </div>
+
+        <!-- GOLDEN UPGRADES -->
+        <h2 class="text-3xl font-black uppercase mb-6 mt-12">⭐ Golden Upgrades</h2>
+        <div id="upgradesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
+    </main>
+
+    <!-- STATS SECTION -->
+    <section class="max-w-2xl mx-auto px-6 mt-12">
+        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
+            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">Your Empire</h2>
+            <div id="stats-list" class="space-y-4 mb-8 font-bold text-lg">
+                <div class="flex justify-between border-b-2 border-dotted border-black pb-2">
+                    <span>Total Money Earned</span>
+                    <span class="text-green-600">$<span id="totalEarned">0</span></span>
+                </div>
+                <div class="flex justify-between border-b-2 border-dotted border-black pb-2">
+                    <span>Total Clicks</span>
+                    <span class="text-blue-600"><span id="statsClicks">0</span></span>
+                </div>
+                <div class="flex justify-between border-b-2 border-dotted border-black pb-2">
+                    <span>Auto-Clickers Owned</span>
+                    <span class="text-purple-600"><span id="totalBuildings">0</span></span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Income Per Second</span>
+                    <span class="text-yellow-600">$<span id="statsPerSecond">0</span>/s</span>
+                </div>
+            </div>
+            <button onclick="resetGame()" class="w-full bg-red-600 text-white font-black py-3 rounded-lg text-sm uppercase neubrutal">Reset Game</button>
+        </div>
+    </section>
+
+    <script>
+        let gameState = {
+            money: 0,
+            totalEarned: 0,
+            clicks: 0,
+            clickPower: 1,
+            perSecond: 0,
+            level: 1,
+            levelProgress: 0,
+            buildings: {},
+            upgrades: {}
+        };
+
+        const buildings = [
+            { id: 'lemonade', name: "Lemonade Stand", basePrice: 10, baseCps: 0.1, emoji: "🍋", owned: 0 },
+            { id: 'newspaper', name: "Paper Route", basePrice: 100, baseCps: 0.5, emoji: "📰", owned: 0 },
+            { id: 'burger', name: "Burger Joint", basePrice: 500, baseCps: 2, emoji: "🍔", owned: 0 },
+            { id: 'carwash', name: "Car Wash", basePrice: 2000, baseCps: 8, emoji: "🚿", owned: 0 },
+            { id: 'bakery', name: "Bakery", basePrice: 10000, baseCps: 40, emoji: "🥖", owned: 0 },
+            { id: 'cafe', name: "Coffee Shop", basePrice: 50000, baseCps: 200, emoji: "☕", owned: 0 },
+            { id: 'warehouse', name: "Warehouse", basePrice: 250000, baseCps: 1000, emoji: "🏭", owned: 0 },
+            { id: 'bank', name: "Bank", basePrice: 1000000, baseCps: 5000, emoji: "🏦", owned: 0 },
+            { id: 'oilrig', name: "Oil Rig", basePrice: 5000000, baseCps: 25000, emoji: "🛢️", owned: 0 },
+            { id: 'mine', name: "Gold Mine", basePrice: 25000000, baseCps: 125000, emoji: "⛏️", owned: 0 },
+            { id: 'laboratory', name: "Lab", basePrice: 100000000, baseCps: 500000, emoji: "🔬", owned: 0 },
+            { id: 'spaceport', name: "Space Port", basePrice: 500000000, baseCps: 2500000, emoji: "🚀", owned: 0 },
+            { id: 'moonbase', name: "Moon Base", basePrice: 2000000000, baseCps: 10000000, emoji: "🌙", owned: 0 },
+            { id: 'marscolony', name: "Mars Colony", basePrice: 10000000000, baseCps: 50000000, emoji: "🪐", owned: 0 },
+            { id: 'timemachine', name: "Time Machine", basePrice: 50000000000, baseCps: 250000000, emoji: "⏰", owned: 0 },
+            { id: 'portal', name: "Portal", basePrice: 250000000000, baseCps: 1250000000, emoji: "🌀", owned: 0 }
+        ];
+
+        const upgrades = [
+            { id: 'click2x', name: "2x Click Power", price: 100, multiplier: 2, emoji: "👆", purchased: false },
+            { id: 'click5x', name: "5x Click Power", price: 1000, multiplier: 5, emoji: "✌️", purchased: false },
+            { id: 'click10x', name: "10x Click Power", price: 10000, multiplier: 10, emoji: "🖐️", purchased: false },
+            { id: 'auto2x', name: "2x Auto Income", price: 5000, multiplier: 2, emoji: "⚡", purchased: false, type: 'auto' },
+            { id: 'auto5x', name: "5x Auto Income", price: 50000, multiplier: 5, emoji: "⚡⚡", purchased: false, type: 'auto' },
+            { id: 'auto10x', name: "10x Auto Income", price: 500000, multiplier: 10, emoji: "⚡⚡⚡", purchased: false, type: 'auto' },
+            { id: 'golden', name: "Golden Touch", price: 5000000, multiplier: 100, emoji: "👑", purchased: false },
+            { id: 'mega', name: "Mega Multiplier", price: 100000000, multiplier: 1000, emoji: "💎", purchased: false },
+            { id: 'ultra', name: "Ultra Boost", price: 10000000000, multiplier: 10000, emoji: "🔥", purchased: false }
+        ];
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSfx(freq, dur) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + dur);
+            } catch(e) {}
+        }
+
+        function earnMoney() {
+            gameState.money += gameState.clickPower;
+            gameState.totalEarned += gameState.clickPower;
+            gameState.clicks++;
+            gameState.levelProgress += 1;
+
+            playSfx(600, 0.05);
+            
+            // Floating number animation
+            const btn = document.getElementById('clickButton');
+            const rect = btn.getBoundingClientRect();
+            const floatEl = document.createElement('div');
+            floatEl.className = 'float-number';
+            floatEl.innerText = `+$${formatMoney(gameState.clickPower)}`;
+            floatEl.style.left = rect.left + rect.width / 2 + 'px';
+            floatEl.style.top = rect.top + 'px';
+            floatEl.style.color = '#10b981';
+            document.body.appendChild(floatEl);
+            setTimeout(() => floatEl.remove(), 1000);
+
+            // Button pulse
+            btn.classList.add('pulse-animation');
+            setTimeout(() => btn.classList.remove('pulse-animation'), 300);
+
+            checkLevelUp();
+            updateUI();
+        }
+
+        function buyBuilding(id) {
+            const building = buildings.find(b => b.id === id);
+            const price = getBuildingPrice(building);
+
+            if (gameState.money >= price) {
+                gameState.money -= price;
+                building.owned++;
+                gameState.buildings[id] = building.owned;
+                calculatePerSecond();
+                playSfx(800, 0.1);
+                updateUI();
+            } else {
+                playSfx(150, 0.2);
+            }
+        }
+
+        function buyUpgrade(id) {
+            const upgrade = upgrades.find(u => u.id === id);
+
+            if (gameState.money >= upgrade.price && !upgrade.purchased) {
+                gameState.money -= upgrade.price;
+                upgrade.purchased = true;
+                gameState.upgrades[id] = true;
+
+                if (upgrade.type === 'auto') {
+                    calculatePerSecond();
+                } else {
+                    gameState.clickPower *= upgrade.multiplier;
+                }
+
+                playSfx(1200, 0.2);
+                updateUI();
+            } else {
+                playSfx(150, 0.2);
+            }
+        }
+
+        function getBuildingPrice(building) {
+            return Math.floor(building.basePrice * Math.pow(1.15, building.owned));
+        }
+
+        function calculatePerSecond() {
+            let total = 0;
+            buildings.forEach(building => {
+                total += building.baseCps * building.owned;
+            });
+
+            // Apply auto upgrades
+            let autoMultiplier = 1;
+            upgrades.forEach(upgrade => {
+                if (upgrade.purchased && upgrade.type === 'auto') {
+                    autoMultiplier *= upgrade.multiplier;
+                }
+            });
+            if (gameState.upgrades['golden']) autoMultiplier *= 100;
+            if (gameState.upgrades['mega']) autoMultiplier *= 1000;
+            if (gameState.upgrades['ultra']) autoMultiplier *= 10000;
+
+            gameState.perSecond = total * autoMultiplier;
+        }
+
+        function checkLevelUp() {
+            const nextLevel = gameState.level * 100;
+            if (gameState.levelProgress >= nextLevel) {
+                gameState.level++;
+                gameState.levelProgress = 0;
+                gameState.clickPower = Math.floor(gameState.clickPower * 1.5);
+                playSfx(1000, 0.3);
+                
+                // Show level up notification
+                const notification = document.createElement('div');
+                notification.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fbbf24; border: 4px solid #000; padding: 30px; font-size: 2rem; font-weight: 900; z-index: 9999; box-shadow: 8px 8px 0px #000;';
+                notification.innerText = `🎉 LEVEL ${gameState.level}! 🎉`;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 2000);
+            }
+        }
+
+        function formatMoney(num) {
+            if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+            return num.toFixed(0);
+        }
+
+        function updateUI() {
+            document.getElementById('money').innerText = '$' + formatMoney(gameState.money);
+            document.getElementById('perSecond').innerText = formatMoney(gameState.perSecond);
+            document.getElementById('totalClicks').innerText = gameState.clicks.toLocaleString();
+            document.getElementById('level').innerText = gameState.level;
+            document.getElementById('clickValue').innerText = formatMoney(gameState.clickPower);
+            document.getElementById('clickValueText').innerText = formatMoney(gameState.clickPower);
+
+            const nextLevel = gameState.level * 100;
+            const progress = (gameState.levelProgress / nextLevel) * 100;
+            document.getElementById('levelProgress').style.width = Math.min(progress, 100) + '%';
+
+            // Stats
+            document.getElementById('totalEarned').innerText = formatMoney(gameState.totalEarned);
+            document.getElementById('statsClicks').innerText = gameState.clicks.toLocaleString();
+            document.getElementById('totalBuildings').innerText = Object.values(gameState.buildings).reduce((a, b) => a + b, 0);
+            document.getElementById('statsPerSecond').innerText = formatMoney(gameState.perSecond);
+
+            renderBuildings();
+            renderUpgrades();
+        }
+
+        function renderBuildings() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            buildings.forEach(building => {
+                const price = getBuildingPrice(building);
+                const canBuy = gameState.money >= price;
+                const card = document.createElement('div');
+                card.className = "item-card p-6 flex flex-col items-center text-center";
+                card.innerHTML = `
+                    <div class="text-7xl mb-4 select-none">${building.emoji}</div>
+                    <div class="text-lg font-black uppercase mb-1 leading-tight">${building.name}</div>
+                    <div class="text-green-600 font-extrabold text-xl mb-2">$${formatMoney(price)}</div>
+                    <div class="text-xs text-gray-600 mb-4">${formatMoney(building.baseCps)}/sec each</div>
+                    <button onclick="buyBuilding('${building.id}')" class="neubrutal bg-green-500 text-white w-full py-3 font-black uppercase text-xs mb-2 ${!canBuy ? 'opacity-20 grayscale pointer-events-none' : ''}">
+                        BUY
+                    </button>
+                    <div class="text-sm font-bold">Owned: ${building.owned}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderUpgrades() {
+            const grid = document.getElementById('upgradesGrid');
+            grid.innerHTML = '';
+            upgrades.forEach(upgrade => {
+                const canBuy = gameState.money >= upgrade.price && !upgrade.purchased;
+                const card = document.createElement('div');
+                const bgColor = upgrade.purchased ? 'bg-yellow-100' : 'bg-white';
+                card.className = `item-card p-6 flex flex-col items-center text-center ${bgColor}`;
+                card.innerHTML = `
+                    <div class="text-7xl mb-4 select-none">${upgrade.emoji}</div>
+                    <div class="text-lg font-black uppercase mb-1 leading-tight">${upgrade.name}</div>
+                    <div class="text-purple-600 font-extrabold text-xl mb-2">$${formatMoney(upgrade.price)}</div>
+                    <div class="text-xs text-gray-600 mb-4">${upgrade.multiplier}x multiplier</div>
+                    ${upgrade.purchased ? 
+                        '<div class="bg-green-500 text-white w-full py-3 font-black uppercase text-xs">PURCHASED ✓</div>' :
+                        `<button onclick="buyUpgrade('${upgrade.id}')" class="neubrutal bg-yellow-500 text-black w-full py-3 font-black uppercase text-xs ${!canBuy ? 'opacity-20 grayscale pointer-events-none' : ''}">BUY UPGRADE</button>`
+                    }
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function resetGame() {
+            if (confirm('Are you sure you want to reset your game? All progress will be lost!')) {
+                gameState = {
+                    money: 0,
+                    totalEarned: 0,
+                    clicks: 0,
+                    clickPower: 1,
+                    perSecond: 0,
+                    level: 1,
+                    levelProgress: 0,
+                    buildings: {},
+                    upgrades: {}
+                };
+                buildings.forEach(b => b.owned = 0);
+                upgrades.forEach(u => u.purchased = false);
+                localStorage.removeItem('clickerHeroSave');
+                updateUI();
+            }
+        }
+
+        function saveGame() {
+            localStorage.setItem('clickerHeroSave', JSON.stringify({
+                gameState,
+                buildings: buildings.map(b => ({ id: b.id, owned: b.owned })),
+                upgrades: upgrades.map(u => ({ id: u.id, purchased: u.purchased }))
+            }));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('clickerHeroSave');
+            if (saved) {
+                const data = JSON.parse(saved);
+                gameState = data.gameState;
+                data.buildings.forEach(b => {
+                    const building = buildings.find(bld => bld.id === b.id);
+                    if (building) building.owned = b.owned;
+                });
+                data.upgrades.forEach(u => {
+                    const upgrade = upgrades.find(upg => upg.id === u.id);
+                    if (upgrade) upgrade.purchased = u.purchased;
+                });
+                calculatePerSecond();
+            }
+        }
+
+        // Auto-save every 10 seconds
+        setInterval(saveGame, 10000);
+
+        // Auto-earn from buildings
+        setInterval(() => {
+            if (gameState.perSecond > 0) {
+                gameState.money += gameState.perSecond / 10;
+                gameState.totalEarned += gameState.perSecond / 10;
+                updateUI();
+            }
+        }, 100);
+
+        // Initialize
+        loadGame();
+        updateUI();
+    </script>
+</body>
+</html>
+         </template>
+
     <script>
         function showApp(appId) {
             document.querySelectorAll(".app-iframe").forEach(f => f.classList.remove("active"));
@@ -1574,6 +2013,7 @@
             document.getElementById("elon").srcdoc = document.getElementById("code-elon").innerHTML;
             document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
             document.getElementById("nuke").srcdoc = document.getElementById("code-nuke").innerHTML;
+            document.getElementById("clicker").srcdoc = document.getElementById("code-clicker").innerHTML;
         };
     </script>
 </body>
