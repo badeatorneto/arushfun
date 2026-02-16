@@ -2499,111 +2499,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S&P 500: ELON EDITION</title>
+    <title>S&P 500: ELON TERMINAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; color: #000; }
-        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
-        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-        .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); border-bottom: 4px solid #000; }
-        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; box-shadow: 6px 6px 0px #000; }
-        .item-card:hover { transform: rotate(-1deg); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; color: #000; overflow-x: hidden; }
+        
+        /* Neubrutal Utility */
+        .neubrutal { border: 4px solid #000; box-shadow: 6px 6px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px #000; }
+        .neubrutal-card { border: 4px solid #000; box-shadow: 8px 8px 0px #000; background: #fff; transition: transform 0.2s; }
+        .neubrutal-card:hover { transform: translateY(-4px) rotate(-1deg); cursor: pointer; }
+        
+        /* Header & Gradients */
+        .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); border-bottom: 5px solid #000; }
         .sticky-header { position: sticky; top: 0; z-index: 100; }
-        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); border: 4px solid #000; box-shadow: 12px 12px 0px #000; }
-        .x-input { border: 3px solid #000; padding: 12px; font-weight: 800; outline: none; width: 100%; background: #fff; }
-        .crash-btn { background: #ff7675; border: 3px solid #000; box-shadow: 4px 4px 0px #000; }
-        .crash-btn:hover { background: #ff4757; }
-        .news-item { border-bottom: 2px solid #000; padding: 10px 0; }
+        
+        /* Receipt / Sidebar */
+        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f4f4f4 30px, #f4f4f4 31px); border: 4px solid #000; box-shadow: 12px 12px 0px #000; }
+        
+        /* Modal Style */
+        .modal-overlay { background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); }
+        .modal-content { border: 6px solid #000; box-shadow: 20px 20px 0px #000; }
+
+        input { border: 3px solid #000; padding: 12px; font-weight: 800; outline: none; background: #fff; width: 100%; }
+        .pill-up { background: #55efc4; border: 2px solid #000; padding: 2px 8px; font-weight: 800; }
+        .pill-down { background: #ff7675; border: 2px solid #000; padding: 2px 8px; font-weight: 800; }
     </style>
 </head>
 <body class="pb-20">
 
-    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+    <header class="bg-white pt-10 pb-6 border-b-4 border-black text-center px-4">
         <div class="max-w-4xl mx-auto">
-            <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 rotate-2">
-                <span class="font-black text-xl uppercase tracking-tighter">Hyper-Leverage Edition</span>
+            <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 -rotate-1">
+                <span class="font-black text-xl uppercase tracking-tighter">Institutional Grade</span>
             </div>
-            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Trade Like Elon</h1>
-            <p class="text-xl font-bold opacity-70">S&P 500 Terminal. Maximize your gains. Ignore the SEC.</p>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-2 italic">Terminal-X</h1>
+            <p class="text-xl font-bold opacity-60">Buy the dip. Short the world. Leverage everything.</p>
         </div>
     </header>
 
     <div class="sticky-header money-gradient p-6">
-        <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex flex-col">
-                <div id="money" class="text-4xl md:text-6xl font-black text-black drop-shadow-[2px_2px_0px_#fff] tracking-tighter">$100,000</div>
-                <div class="text-sm font-black uppercase opacity-80">Buying Power (Cash × <span id="levLabel">1</span>x)</div>
+                <div id="money" class="text-5xl md:text-7xl font-black text-black drop-shadow-[3px_3px_0px_#fff] tracking-tighter">$100,000</div>
+                <div class="text-sm font-black uppercase bg-black text-white px-2 py-1 inline-block mt-1">
+                    Buying Power (Cash × <span id="levLabel">1</span>x)
+                </div>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap items-center gap-4 justify-center">
                 <div class="bg-white border-4 border-black p-1 flex gap-1">
-                    <button onclick="setLeverage(1)" id="lev1" class="px-4 py-1 font-black bg-black text-white">1X</button>
-                    <button onclick="setLeverage(2)" id="lev2" class="px-4 py-1 font-black">2X</button>
-                    <button onclick="setLeverage(5)" id="lev5" class="px-4 py-1 font-black">5X</button>
+                    <button onclick="setLeverage(1)" id="lev1" class="px-5 py-2 font-black bg-black text-white transition">1X</button>
+                    <button onclick="setLeverage(2)" id="lev2" class="px-5 py-2 font-black transition">2X</button>
+                    <button onclick="setLeverage(5)" id="lev5" class="px-5 py-2 font-black transition">5X</button>
                 </div>
-                <button onclick="triggerCrash()" class="crash-btn px-6 py-2 font-black uppercase text-white neubrutal">Market Crash</button>
+                <button onclick="triggerCrash()" class="bg-red-500 text-white px-6 py-3 font-black uppercase neubrutal">Market Crash</button>
             </div>
         </div>
     </div>
 
-    <main class="max-w-[1600px] mx-auto p-6 flex flex-col lg:flex-row gap-8">
+    <main class="max-w-[1600px] mx-auto p-6 flex flex-col lg:flex-row gap-10">
         
         <div class="flex-1">
-            <div class="mb-10 max-w-xl">
-                <input type="text" id="search" oninput="renderItems()" placeholder="SEARCH 500 STOCKS (e.g. TSLA, NVDA)..." class="x-input shadow-[6px_6px_0px_#000]">
+            <div class="mb-10 flex gap-4">
+                <input type="text" id="search" oninput="renderItems()" placeholder="SEARCH 500 TICKERS (AAPL, TSLA, NVDA...)" class="shadow-[6px_6px_0px_#000]">
             </div>
 
-            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
+            <div id="grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
                 </div>
         </div>
 
-        <aside class="w-full lg:w-96 space-y-8">
+        <aside class="w-full lg:w-[400px] space-y-10">
             <div class="receipt-container p-8">
-                <h2 class="text-3xl font-black uppercase text-center mb-6 border-b-4 border-black pb-2">Your Damage</h2>
-                <div id="receipt-list" class="space-y-3 mb-6 font-bold text-sm">
-                    <p class="text-center opacity-30 italic">No positions held.</p>
+                <h2 class="text-3xl font-black uppercase text-center mb-6 border-b-4 border-black pb-2 italic">Portfolio</h2>
+                <div id="receipt-list" class="space-y-4 mb-6 font-bold text-sm">
+                    <p class="text-center opacity-30 italic py-10">No active positions.</p>
                 </div>
-                <div id="receipt-total" class="text-2xl font-black text-center pt-4 border-t-4 border-black bg-yellow-300">
+                <div id="receipt-total" class="text-3xl font-black text-center pt-6 border-t-4 border-black bg-green-400">
                     NET WORTH: $100,000
                 </div>
             </div>
 
             <div class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
-                <h3 class="font-black text-xl uppercase mb-4 border-b-2 border-black">X-Market News</h3>
-                <div class="space-y-4">
-                    <div class="news-item">
-                        <div class="text-[10px] font-black bg-blue-400 inline-block px-1 mb-1 border border-black">BULLISH</div>
-                        <p class="text-sm font-bold">SpaceX Mars mission funding causes aerospace stocks to surge 12%.</p>
-                    </div>
-                    <div class="news-item">
-                        <div class="text-[10px] font-black bg-red-400 inline-block px-1 mb-1 border border-black">BEARISH</div>
-                        <p class="text-sm font-bold">Fed signals "Higher for longer" interest rates; Tech braces for volatility.</p>
-                    </div>
-                    <div class="news-item">
-                        <div class="text-[10px] font-black bg-yellow-400 inline-block px-1 mb-1 border border-black">WHALE WATCH</div>
-                        <p class="text-sm font-bold">Mystery trader buys $2B worth of out-of-the-money calls on AI startups.</p>
-                    </div>
+                <h3 class="font-black text-xl uppercase mb-4 border-b-2 border-black flex items-center gap-2">
+                    <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span> Terminal Feed
+                </h3>
+                <div id="news-feed" class="space-y-4 text-sm font-bold">
+                    <p class="border-b-2 border-black pb-2">FED: "Inflation targets may be revised for 2026."</p>
+                    <p class="border-b-2 border-black pb-2">NVDA: Analysts upgrade price target to $250 post-earnings.</p>
+                    <p class="border-b-2 border-black pb-2">TSLA: Robotaxi fleet expansion approved in 4 more states.</p>
                 </div>
             </div>
         </aside>
     </main>
+
+    <div id="tradeModal" class="modal-overlay fixed inset-0 hidden z-[200] flex items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-xl p-10 relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 font-black text-2xl hover:text-red-500">✕</button>
+            
+            <div class="mb-8">
+                <div id="modalEmoji" class="text-6xl mb-4">📈</div>
+                <h2 id="modalSymbol" class="text-5xl font-black uppercase tracking-tighter">AAPL</h2>
+                <p id="modalName" class="text-xl font-bold opacity-50">Apple Inc.</p>
+            </div>
+
+            <div class="flex items-baseline gap-4 mb-10">
+                <span id="modalPrice" class="text-6xl font-black text-green-600">$150.00</span>
+                <span id="modalChange" class="pill-up text-lg">+2.4%</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-10 bg-gray-100 border-4 border-black p-4">
+                <div>
+                    <div class="text-xs font-black uppercase opacity-50">You Own</div>
+                    <div id="modalOwned" class="text-2xl font-black">0 Shares</div>
+                </div>
+                <div>
+                    <div class="text-xs font-black uppercase opacity-50">Current Value</div>
+                    <div id="modalValue" class="text-2xl font-black">$0</div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="executeTrade('BUY')" class="flex-1 bg-green-500 text-black py-5 font-black uppercase text-xl neubrutal">Execute Buy</button>
+                <button onclick="executeTrade('SELL')" class="flex-1 bg-red-500 text-white py-5 font-black uppercase text-xl neubrutal">Liquidate</button>
+            </div>
+            
+            <p class="mt-6 text-center text-xs font-bold opacity-40 uppercase tracking-widest">Authorized by Terminal-X Security</p>
+        </div>
+    </div>
 
     <script>
         const initialBalance = 100000;
         let cash = initialBalance;
         let inventory = {};
         let leverage = 1;
+        let selectedStock = null;
 
-        // Ticker List
-        const tickers = "AAPL,MSFT,GOOGL,AMZN,NVDA,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,PLTR,SBUX,BA,NFLX,QCOM,MDLZ,AMGN,ISRG,TJX,GILD,NOW,VRTX,LMT,SYK,BLK,ELV,ADI,REGN,T,ETN,PGR,BSX,MMC,CB,PANW,MU,SCHW,ZTS,LRCX,PLD,FI,CI,WM,ITW".split(',');
-        for(let i=tickers.length; i<500; i++) tickers.push(`CORP${i}`);
+        // Ticker List (Simulating 500)
+        const rawTickers = "AAPL,MSFT,GOOGL,AMZN,NVDA,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,PLTR,SBUX,BA,NFLX,QCOM,MDLZ,AMGN,ISRG,TJX,GILD,NOW,VRTX,LMT,SYK,BLK,ELV,ADI,REGN,T,ETN,PGR,BSX,MMC,CB,PANW,MU,SCHW,ZTS,LRCX,PLD,FI,CI,WM,ITW".split(',');
+        for(let i=rawTickers.length; i<500; i++) rawTickers.push(`CORP${i}`);
 
-        // Generate dynamic stock objects
-        const items = tickers.map(symbol => ({
-            name: symbol,
-            price: Math.floor(Math.random() * 500) + 10,
-            emoji: symbol === 'TSLA' ? "⚡" : (symbol === 'AAPL' ? "🍎" : (symbol === 'NVDA' ? "🤖" : "📈"))
+        const stocks = rawTickers.map(s => ({
+            symbol: s,
+            name: s + (s.length < 5 ? " Holdings Inc." : ""),
+            price: Math.floor(Math.random() * 800) + 15,
+            change: (Math.random() * 10) - 4,
+            emoji: s === 'TSLA' ? "⚡" : (s === 'AAPL' ? "🍎" : (s === 'NVDA' ? "🤖" : "📈"))
         }));
 
         function formatMoney(num) {
@@ -2613,37 +2655,21 @@
         function setLeverage(val) {
             leverage = val;
             document.getElementById('levLabel').innerText = val;
-            // UI Toggle
             [1, 2, 5].forEach(v => {
                 const btn = document.getElementById('lev' + v);
-                btn.className = "px-4 py-1 font-black " + (v === val ? "bg-black text-white" : "");
+                btn.className = "px-5 py-2 font-black transition " + (v === val ? "bg-black text-white" : "");
             });
             updateUI();
         }
 
         function triggerCrash() {
-            items.forEach(i => i.price = Math.floor(i.price * 0.8));
+            stocks.forEach(s => {
+                s.price = s.price * 0.8;
+                s.change -= 20;
+            });
             updateUI();
-            alert("⚠️ MARKET MELTDOWN! All stocks dropped 20%.");
-        }
-
-        function buy(idx) {
-            const item = items[idx];
-            const buyingPower = cash * leverage;
-            if (buyingPower >= item.price) {
-                cash -= item.price;
-                inventory[item.name] = (inventory[item.name] || 0) + 1;
-                updateUI();
-            }
-        }
-
-        function sell(idx) {
-            const item = items[idx];
-            if (inventory[item.name] > 0) {
-                cash += item.price;
-                inventory[item.name]--;
-                updateUI();
-            }
+            if(selectedStock) openModal(selectedStock);
+            alert("⚠️ BLACK SWAN EVENT: Markets liquidated by 20%!");
         }
 
         function renderItems() {
@@ -2651,27 +2677,74 @@
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
 
-            const filtered = query 
-                ? items.filter(i => i.name.includes(query)) 
-                : items.slice(0, 50);
+            const displayList = query 
+                ? stocks.filter(s => s.symbol.includes(query) || s.name.toUpperCase().includes(query)).slice(0, 40)
+                : stocks.slice(0, 40);
 
-            filtered.forEach((item) => {
-                const globalIdx = items.findIndex(i => i.name === item.name);
-                const count = inventory[item.name] || 0;
+            displayList.forEach(stock => {
+                const isPos = stock.change >= 0;
                 const card = document.createElement('div');
-                card.className = "item-card p-6 flex flex-col items-center text-center";
+                card.className = "neubrutal-card p-6 flex flex-col justify-between";
+                card.onclick = () => openModal(stock);
                 card.innerHTML = `
-                    <div class="text-4xl mb-4">${item.emoji}</div>
-                    <div class="text-xl font-black uppercase mb-1 truncate w-full">${item.name}</div>
-                    <div class="text-green-600 font-black text-2xl mb-4">${formatMoney(item.price)}</div>
-                    <div class="space-y-2 w-full">
-                        <button onclick="buy(${globalIdx})" class="neubrutal bg-green-400 text-black w-full py-2 font-black uppercase text-xs">Execute Buy</button>
-                        <button onclick="sell(${globalIdx})" class="neubrutal bg-red-400 text-black w-full py-2 font-black uppercase text-xs ${count === 0 ? 'opacity-20 pointer-events-none' : ''}">Liquidate</button>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-3xl">${stock.emoji}</span>
+                        <span class="${isPos ? 'pill-up' : 'pill-down'} text-xs">${isPos ? '+' : ''}${stock.change.toFixed(1)}%</span>
                     </div>
-                    <div class="mt-3 font-black text-xs uppercase opacity-50">Holding: ${count}</div>
+                    <div>
+                        <div class="text-2xl font-black uppercase tracking-tighter">${stock.symbol}</div>
+                        <div class="text-green-600 font-black text-xl">${formatMoney(stock.price)}</div>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        function openModal(stock) {
+            selectedStock = stock;
+            const modal = document.getElementById('tradeModal');
+            modal.classList.remove('hidden');
+            
+            document.getElementById('modalEmoji').innerText = stock.emoji;
+            document.getElementById('modalSymbol').innerText = stock.symbol;
+            document.getElementById('modalName').innerText = stock.name;
+            document.getElementById('modalPrice').innerText = formatMoney(stock.price);
+            
+            const ch = document.getElementById('modalChange');
+            ch.innerText = (stock.change >= 0 ? '+' : '') + stock.change.toFixed(2) + '%';
+            ch.className = stock.change >= 0 ? 'pill-up text-lg' : 'pill-down text-lg';
+
+            const owned = inventory[stock.symbol] || 0;
+            document.getElementById('modalOwned').innerText = owned + " Shares";
+            document.getElementById('modalValue').innerText = formatMoney(owned * stock.price);
+        }
+
+        function closeModal() {
+            document.getElementById('tradeModal').classList.add('hidden');
+            selectedStock = null;
+        }
+
+        function executeTrade(type) {
+            if(!selectedStock) return;
+            const price = selectedStock.price;
+            const owned = inventory[selectedStock.symbol] || 0;
+
+            if(type === 'BUY') {
+                if((cash * leverage) >= price) {
+                    cash -= price;
+                    inventory[selectedStock.symbol] = owned + 1;
+                } else {
+                    alert("MARGIN CALL: Insufficient Buying Power!");
+                }
+            } else {
+                if(owned > 0) {
+                    cash += price;
+                    inventory[selectedStock.symbol] = owned - 1;
+                    if(inventory[selectedStock.symbol] === 0) delete inventory[selectedStock.symbol];
+                }
+            }
+            openModal(selectedStock);
+            updateUI();
         }
 
         function updateUI() {
@@ -2680,24 +2753,28 @@
             list.innerHTML = '';
             let portValue = 0;
 
-            for (const [name, count] of Object.entries(inventory)) {
-                if (count > 0) {
-                    const price = items.find(i => i.name === name).price;
-                    portValue += (price * count);
-                    list.innerHTML += `
-                        <div class="flex justify-between items-end gap-4">
-                            <span class="flex-1 border-b-2 border-dotted border-black pb-1">${name} x${count}</span>
-                            <span class="text-green-600">$${(price*count).toLocaleString()}</span>
-                        </div>`;
-                }
-            }
+            Object.keys(inventory).forEach(symbol => {
+                const qty = inventory[symbol];
+                const stock = stocks.find(s => s.symbol === symbol);
+                const val = qty * stock.price;
+                portValue += val;
+
+                list.innerHTML += `
+                    <div class="flex justify-between items-end gap-4 cursor-pointer hover:bg-yellow-100" onclick='openModal(${JSON.stringify(stock)})'>
+                        <span class="flex-1 border-b-2 border-dotted border-black pb-1">${symbol} x${qty}</span>
+                        <span class="text-green-600 font-black">$${val.toLocaleString()}</span>
+                    </div>`;
+            });
+
+            if (portValue === 0) list.innerHTML = '<p class="text-center opacity-30 italic py-10">No active positions.</p>';
+            
             const netWorth = cash + portValue;
-            if (portValue === 0) list.innerHTML = `<p class="text-center opacity-30 italic">No positions held.</p>`;
             document.getElementById('receipt-total').innerText = "NET WORTH: " + formatMoney(netWorth);
             renderItems();
         }
 
-        updateUI();
+        // Init
+        renderItems();
     </script>
 </body>
 </html>
