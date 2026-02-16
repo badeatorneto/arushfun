@@ -42,6 +42,7 @@
             <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
             <div id="btn-nuke" class="nav-link" onclick="showApp('nuke')">Nuke Launcher</div>
             <div id="btn-clicker" class="nav-link" onclick="showApp('clicker')">Clicker Hero</div>
+            <div id="btn-clicker" class="nav-link" onclick="showApp('clicker')">The Bucket LIst</div>
         </div>
     </nav>
 
@@ -50,6 +51,7 @@
     <iframe id="time" class="app-iframe"></iframe>
     <iframe id="nuke" class="app-iframe"></iframe>
     <iframe id="clicker" class="app-iframe"></iframe>
+    <iframe id="bucket" class="app-iframe"></iframe>
 
     <template id="code-trolley">
         <!DOCTYPE html>
@@ -2000,6 +2002,380 @@
 </html>
          </template>
 
+         <template id="code-bucket">
+             <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Bucket List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+        .money-gradient { background: linear-gradient(135deg, #10b981, #059669); }
+        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+        .item-card:hover { transform: rotate(-1deg); }
+        .item-card.completed { background: #d1fae5; opacity: 0.7; }
+        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block p-2 bg-green-400 border-4 border-black mb-4 rotate-2">
+                <span class="font-black text-xl uppercase tracking-tighter">✓ LIFE GOALS EDITION ✓</span>
+            </div>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">The Bucket List</h1>
+            <p class="text-xl font-bold opacity-70">500 incredible things to do before you die.<br><strong>How many will you complete?</strong></p>
+        </div>
+    </header>
+
+    <div class="sticky-header money-gradient p-6">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+           <div id="progress" class="text-4xl md:text-6xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] tracking-tighter">0 / 500</div>
+            <div class="hidden md:block text-right">
+                <div id="percentage" class="bg-black text-white px-3 py-1 font-bold rounded"><span id="percent">0</span>% Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto p-6">
+        <!-- CATEGORY FILTERS -->
+        <div class="flex flex-wrap gap-3 mb-6">
+            <button onclick="filterCategory('all')" id="btn-all" class="neubrutal bg-black text-white px-6 py-3 font-black uppercase text-sm">All (500)</button>
+            <button onclick="filterCategory('travel')" id="btn-travel" class="neubrutal bg-blue-500 text-white px-6 py-3 font-black uppercase text-sm">🌍 Travel</button>
+            <button onclick="filterCategory('adventure')" id="btn-adventure" class="neubrutal bg-red-500 text-white px-6 py-3 font-black uppercase text-sm">🏔️ Adventure</button>
+            <button onclick="filterCategory('skills')" id="btn-skills" class="neubrutal bg-purple-500 text-white px-6 py-3 font-black uppercase text-sm">🎯 Skills</button>
+            <button onclick="filterCategory('food')" id="btn-food" class="neubrutal bg-orange-500 text-white px-6 py-3 font-black uppercase text-sm">🍕 Food</button>
+            <button onclick="filterCategory('creative')" id="btn-creative" class="neubrutal bg-pink-500 text-white px-6 py-3 font-black uppercase text-sm">🎨 Creative</button>
+            <button onclick="filterCategory('social')" id="btn-social" class="neubrutal bg-yellow-500 text-black px-6 py-3 font-black uppercase text-sm">👥 Social</button>
+            <button onclick="filterCategory('career')" id="btn-career" class="neubrutal bg-green-500 text-white px-6 py-3 font-black uppercase text-sm">💼 Career</button>
+            <button onclick="filterCategory('nature')" id="btn-nature" class="neubrutal bg-teal-500 text-white px-6 py-3 font-black uppercase text-sm">🌲 Nature</button>
+            <button onclick="filterCategory('epic')" id="btn-epic" class="neubrutal bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 font-black uppercase text-sm">⚡ Epic</button>
+            <button onclick="filterCategory('nature')" id="btn-nature" class="neubrutal bg-gradient-to-r from-orange-500 to-red-600 text-white px-6 py-3" font-black uppercase text-sm">🔥 Trailblazer</button>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="mb-6">
+            <input type="text" id="searchBar" onkeyup="searchItems()" placeholder="Search 500 items..." class="w-full p-4 border-4 border-black font-bold text-lg">
+        </div>
+
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        </div>
+    </main>
+
+    <section class="max-w-2xl mx-auto px-6 mt-12">
+        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
+            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">Your Progress</h2>
+            <div id="receipt-list" class="space-y-4 mb-8 font-bold text-lg"></div>
+            <div id="receipt-total" class="text-3xl font-black text-center pt-6 border-t-4 border-black">Level: Beginner</div>
+            <button onclick="resetAll()" class="w-full mt-6 bg-red-600 text-white font-black py-3 rounded-lg text-sm uppercase neubrutal">Reset All</button>
+        </div>
+    </section>
+
+    <script>
+        const items = [
+            // TRAVEL (100)
+            {id:1,text:"Visit Paris and see the Eiffel Tower",emoji:"🗼",cat:"travel"},{id:2,text:"Walk the Great Wall of China",emoji:"🏯",cat:"travel"},{id:3,text:"See the Northern Lights in Iceland",emoji:"🌌",cat:"travel"},{id:4,text:"Visit Machu Picchu in Peru",emoji:"🏔️",cat:"travel"},{id:5,text:"Explore the pyramids of Egypt",emoji:"🐪",cat:"travel"},
+            {id:6,text:"Go on a safari in Africa",emoji:"🦁",cat:"travel"},{id:7,text:"Visit all 7 continents",emoji:"🌍",cat:"travel"},{id:8,text:"See cherry blossoms in Japan",emoji:"🌸",cat:"travel"},{id:9,text:"Visit the Grand Canyon",emoji:"🏜️",cat:"travel"},{id:10,text:"Explore Angkor Wat in Cambodia",emoji:"🛕",cat:"travel"},
+            {id:11,text:"Visit New York City",emoji:"🗽",cat:"travel"},{id:12,text:"See the Colosseum in Rome",emoji:"🏛️",cat:"travel"},{id:13,text:"Visit Santorini, Greece",emoji:"🏖️",cat:"travel"},{id:14,text:"Go to Disneyland",emoji:"🏰",cat:"travel"},{id:15,text:"Visit the Taj Mahal",emoji:"🕌",cat:"travel"},
+            {id:16,text:"See Niagara Falls",emoji:"💦",cat:"travel"},{id:17,text:"Visit London and see Big Ben",emoji:"🎡",cat:"travel"},{id:18,text:"Explore Dubai",emoji:"🏙️",cat:"travel"},{id:19,text:"Visit the Amazon Rainforest",emoji:"🌳",cat:"travel"},{id:20,text:"See the Sydney Opera House",emoji:"🎭",cat:"travel"},
+            {id:21,text:"Visit Hawaii",emoji:"🌺",cat:"travel"},{id:22,text:"Explore Iceland's Blue Lagoon",emoji:"♨️",cat:"travel"},{id:23,text:"Visit Bali, Indonesia",emoji:"🏝️",cat:"travel"},{id:24,text:"See the Mona Lisa in person",emoji:"🖼️",cat:"travel"},{id:25,text:"Visit Amsterdam",emoji:"🚲",cat:"travel"},
+            {id:26,text:"Explore the Scottish Highlands",emoji:"🏴",cat:"travel"},{id:27,text:"Visit Barcelona and see Sagrada Familia",emoji:"⛪",cat:"travel"},{id:28,text:"Go to the Maldives",emoji:"🏖️",cat:"travel"},{id:29,text:"Visit Venice and ride a gondola",emoji:"🚣",cat:"travel"},{id:30,text:"See Petra in Jordan",emoji:"🏜️",cat:"travel"},
+            {id:31,text:"Visit Yellowstone National Park",emoji:"🦬",cat:"travel"},{id:32,text:"Explore Bora Bora",emoji:"🏝️",cat:"travel"},{id:33,text:"Visit Prague",emoji:"🏰",cat:"travel"},{id:34,text:"See Mount Fuji in Japan",emoji:"🗻",cat:"travel"},{id:35,text:"Visit New Orleans for Mardi Gras",emoji:"🎭",cat:"travel"},
+            {id:36,text:"Explore Patagonia",emoji:"⛰️",cat:"travel"},{id:37,text:"Visit the Dead Sea",emoji:"🌊",cat:"travel"},{id:38,text:"See the Giant's Causeway in Ireland",emoji:"🍀",cat:"travel"},{id:39,text:"Visit Bangkok, Thailand",emoji:"🛕",cat:"travel"},{id:40,text:"Explore the Swiss Alps",emoji:"🏔️",cat:"travel"},
+            {id:41,text:"Visit the Galapagos Islands",emoji:"🐢",cat:"travel"},{id:42,text:"See Stonehenge",emoji:"🪨",cat:"travel"},{id:43,text:"Visit Vietnam",emoji:"🍜",cat:"travel"},{id:44,text:"Explore the Amalfi Coast",emoji:"🍋",cat:"travel"},{id:45,text:"Visit Marrakech, Morocco",emoji:"🐪",cat:"travel"},
+            {id:46,text:"See the Cliffs of Moher",emoji:"🌊",cat:"travel"},{id:47,text:"Visit Cuba",emoji:"🎺",cat:"travel"},{id:48,text:"Explore Jordan",emoji:"🏜️",cat:"travel"},{id:49,text:"Visit Seattle and see the Space Needle",emoji:"🗼",cat:"travel"},{id:50,text:"See the Twelve Apostles in Australia",emoji:"🏖️",cat:"travel"},
+            {id:51,text:"Visit all 50 US states",emoji:"🇺🇸",cat:"travel"},{id:52,text:"Explore Yosemite National Park",emoji:"🏞️",cat:"travel"},{id:53,text:"Visit Madagascar",emoji:"🐒",cat:"travel"},{id:54,text:"See the tulip fields in Netherlands",emoji:"🌷",cat:"travel"},{id:55,text:"Visit San Francisco",emoji:"🌉",cat:"travel"},
+            {id:56,text:"Explore the Seychelles",emoji:"🏝️",cat:"travel"},{id:57,text:"Visit Croatia",emoji:"⛱️",cat:"travel"},{id:58,text:"See Mount Rushmore",emoji:"🗿",cat:"travel"},{id:59,text:"Visit Mumbai, India",emoji:"🕌",cat:"travel"},{id:60,text:"Explore Fiji",emoji:"🌺",cat:"travel"},
+            {id:61,text:"Visit South Korea",emoji:"🏯",cat:"travel"},{id:62,text:"See the Northern Territory in Australia",emoji:"🦘",cat:"travel"},{id:63,text:"Visit Copenhagen",emoji:"🚴",cat:"travel"},{id:64,text:"Explore Malta",emoji:"⛪",cat:"travel"},{id:65,text:"Visit Singapore",emoji:"🏙️",cat:"travel"},
+            {id:66,text:"See the Moai statues on Easter Island",emoji:"🗿",cat:"travel"},{id:67,text:"Visit Argentina",emoji:"🥩",cat:"travel"},{id:68,text:"Explore Sri Lanka",emoji:"🐘",cat:"travel"},{id:69,text:"Visit the Philippines",emoji:"🏝️",cat:"travel"},{id:70,text:"See the Sahara Desert",emoji:"🐪",cat:"travel"},
+            {id:71,text:"Visit Chile",emoji:"🌶️",cat:"travel"},{id:72,text:"Explore Malaysia",emoji:"🌴",cat:"travel"},{id:73,text:"Visit Finland",emoji:"🦌",cat:"travel"},{id:74,text:"See the White Cliffs of Dover",emoji:"🏴",cat:"travel"},{id:75,text:"Visit Tanzania",emoji:"🦒",cat:"travel"},
+            {id:76,text:"Explore the Black Forest in Germany",emoji:"🌲",cat:"travel"},{id:77,text:"Visit Las Vegas",emoji:"🎰",cat:"travel"},{id:78,text:"See the Sistine Chapel",emoji:"🎨",cat:"travel"},{id:79,text:"Visit Poland",emoji:"🏰",cat:"travel"},{id:80,text:"Explore Nepal",emoji:"⛰️",cat:"travel"},
+            {id:81,text:"Visit Lisbon, Portugal",emoji:"🚋",cat:"travel"},{id:82,text:"See the tulip festival in Ottawa",emoji:"🌷",cat:"travel"},{id:83,text:"Visit the Canadian Rockies",emoji:"🏔️",cat:"travel"},{id:84,text:"Explore the Faroe Islands",emoji:"🐑",cat:"travel"},{id:85,text:"Visit Budapest",emoji:"🏰",cat:"travel"},
+            {id:86,text:"See the lavender fields in Provence",emoji:"💜",cat:"travel"},{id:87,text:"Visit Albania",emoji:"🏖️",cat:"travel"},{id:88,text:"Explore Bhutan",emoji:"⛩️",cat:"travel"},{id:89,text:"Visit Uruguay",emoji:"🏖️",cat:"travel"},{id:90,text:"See Victoria Falls",emoji:"💦",cat:"travel"},
+            {id:91,text:"Visit the Arctic Circle",emoji:"❄️",cat:"travel"},{id:92,text:"Explore Greenland",emoji:"🧊",cat:"travel"},{id:93,text:"Visit Myanmar",emoji:"🛕",cat:"travel"},{id:94,text:"See Plitvice Lakes in Croatia",emoji:"💧",cat:"travel"},{id:95,text:"Visit Rwanda",emoji:"🦍",cat:"travel"},
+            {id:96,text:"Explore the Isle of Skye",emoji:"🏴",cat:"travel"},{id:97,text:"Visit the Azores",emoji:"🌋",cat:"travel"},{id:98,text:"See the Lofoten Islands",emoji:"⛵",cat:"travel"},{id:99,text:"Visit Bolivia",emoji:"🦙",cat:"travel"},{id:100,text:"Explore Antarctica",emoji:"🐧",cat:"travel"},
+
+            // ADVENTURE (80)
+            {id:101,text:"Skydive from 15,000 feet",emoji:"🪂",cat:"adventure"},{id:102,text:"Bungee jump",emoji:"🤸",cat:"adventure"},{id:103,text:"Go scuba diving",emoji:"🤿",cat:"adventure"},{id:104,text:"Climb a mountain over 14,000 feet",emoji:"⛰️",cat:"adventure"},{id:105,text:"Go paragliding",emoji:"🪂",cat:"adventure"},
+            {id:106,text:"Swim with sharks",emoji:"🦈",cat:"adventure"},{id:107,text:"Go white water rafting",emoji:"🚣",cat:"adventure"},{id:108,text:"Ride a hot air balloon",emoji:"🎈",cat:"adventure"},{id:109,text:"Go zip-lining",emoji:"🌲",cat:"adventure"},{id:110,text:"Cage dive with great white sharks",emoji:"🦈",cat:"adventure"},
+            {id:111,text:"Go rock climbing outdoors",emoji:"🧗",cat:"adventure"},{id:112,text:"Complete a triathlon",emoji:"🏊",cat:"adventure"},{id:113,text:"Go surfing",emoji:"🏄",cat:"adventure"},{id:114,text:"Run a marathon",emoji:"🏃",cat:"adventure"},{id:115,text:"Go snowboarding",emoji:"🏂",cat:"adventure"},
+            {id:116,text:"Ride a motorcycle",emoji:"🏍️",cat:"adventure"},{id:117,text:"Go camping in the wilderness",emoji:"🏕️",cat:"adventure"},{id:118,text:"Hike the Inca Trail",emoji:"🥾",cat:"adventure"},{id:119,text:"Go heli-skiing",emoji:"⛷️",cat:"adventure"},{id:120,text:"Try cave diving",emoji:"🕳️",cat:"adventure"},
+            {id:121,text:"Go sandboarding in the desert",emoji:"🏜️",cat:"adventure"},{id:122,text:"Complete an obstacle course race",emoji:"🏁",cat:"adventure"},{id:123,text:"Go kayaking in the ocean",emoji:"🛶",cat:"adventure"},{id:124,text:"Try wingsuit flying",emoji:"🦅",cat:"adventure"},{id:125,text:"Go glacier hiking",emoji:"🧊",cat:"adventure"},
+            {id:126,text:"Swim in a bioluminescent bay",emoji:"✨",cat:"adventure"},{id:127,text:"Go horseback riding on a beach",emoji:"🐴",cat:"adventure"},{id:128,text:"Try kitesurfing",emoji:"🪁",cat:"adventure"},{id:129,text:"Go volcano boarding",emoji:"🌋",cat:"adventure"},{id:130,text:"Complete a solo backpacking trip",emoji:"🎒",cat:"adventure"},
+            {id:131,text:"Go canyoneering",emoji:"🏔️",cat:"adventure"},{id:132,text:"Try freediving",emoji:"🌊",cat:"adventure"},{id:133,text:"Go storm chasing",emoji:"⛈️",cat:"adventure"},{id:134,text:"Ride a camel in the desert",emoji:"🐫",cat:"adventure"},{id:135,text:"Go ice climbing",emoji:"🧊",cat:"adventure"},
+            {id:136,text:"Try coasteering",emoji:"🌊",cat:"adventure"},{id:137,text:"Go spelunking in a cave",emoji:"🦇",cat:"adventure"},{id:138,text:"Complete a multi-day hiking trek",emoji:"🥾",cat:"adventure"},{id:139,text:"Go BASE jumping",emoji:"🪂",cat:"adventure"},{id:140,text:"Try standup paddleboarding",emoji:"🏄",cat:"adventure"},
+            {id:141,text:"Go rappelling down a waterfall",emoji:"💦",cat:"adventure"},{id:142,text:"Swim with dolphins",emoji:"🐬",cat:"adventure"},{id:143,text:"Go sandboarding",emoji:"🏜️",cat:"adventure"},{id:144,text:"Try hang gliding",emoji:"🦅",cat:"adventure"},{id:145,text:"Go cliff diving",emoji:"🌊",cat:"adventure"},
+            {id:146,text:"Complete an ultra-marathon",emoji:"🏃",cat:"adventure"},{id:147,text:"Go whale watching",emoji:"🐋",cat:"adventure"},{id:148,text:"Try bobsledding",emoji:"🛷",cat:"adventure"},{id:149,text:"Go dog sledding",emoji:"🐕",cat:"adventure"},{id:150,text:"Swim in all 5 oceans",emoji:"🌊",cat:"adventure"},
+            {id:151,text:"Go wreck diving",emoji:"🚢",cat:"adventure"},{id:152,text:"Try mountain biking on a pro trail",emoji:"🚵",cat:"adventure"},{id:153,text:"Go tornado chasing",emoji:"🌪️",cat:"adventure"},{id:154,text:"Complete a survival course",emoji:"🏕️",cat:"adventure"},{id:155,text:"Go via ferrata climbing",emoji:"⛰️",cat:"adventure"},
+            {id:156,text:"Try luge racing",emoji:"🛷",cat:"adventure"},{id:157,text:"Go shark fishing",emoji:"🎣",cat:"adventure"},{id:158,text:"Complete a polar plunge",emoji:"🥶",cat:"adventure"},{id:159,text:"Go reef snorkeling",emoji:"🐠",cat:"adventure"},{id:160,text:"Try jet skiing",emoji:"🚤",cat:"adventure"},
+            {id:161,text:"Go deep sea fishing",emoji:"🎣",cat:"adventure"},{id:162,text:"Complete a mountain biking race",emoji:"🚵",cat:"adventure"},{id:163,text:"Go night diving",emoji:"🌙",cat:"adventure"},{id:164,text:"Try wakeboarding",emoji:"🏄",cat:"adventure"},{id:165,text:"Go sledding down a massive hill",emoji:"🛷",cat:"adventure"},
+            {id:166,text:"Complete a survival challenge",emoji:"🔥",cat:"adventure"},{id:167,text:"Go caving with headlamps",emoji:"💡",cat:"adventure"},{id:168,text:"Try forest bathing",emoji:"🌲",cat:"adventure"},{id:169,text:"Go sailing for multiple days",emoji:"⛵",cat:"adventure"},{id:170,text:"Complete a century bike ride (100 miles)",emoji:"🚴",cat:"adventure"},
+            {id:171,text:"Go freediving to 50 feet",emoji:"🤿",cat:"adventure"},{id:172,text:"Try speed flying",emoji:"🪂",cat:"adventure"},{id:173,text:"Go on a wildlife expedition",emoji:"🦁",cat:"adventure"},{id:174,text:"Complete a Tough Mudder",emoji:"🏋️",cat:"adventure"},{id:175,text:"Go on a multi-day kayaking trip",emoji:"🛶",cat:"adventure"},
+            {id:176,text:"Try ice fishing",emoji:"🎣",cat:"adventure"},{id:177,text:"Go on a road trip across a country",emoji:"🚗",cat:"adventure"},{id:178,text:"Complete a 24-hour challenge",emoji:"⏰",cat:"adventure"},{id:179,text:"Go swimming in a cenote",emoji:"💧",cat:"adventure"},{id:180,text:"Try trail running",emoji:"🏃",cat:"adventure"},
+
+            // SKILLS (70)
+            {id:181,text:"Learn to speak a foreign language fluently",emoji:"🗣️",cat:"skills"},{id:182,text:"Learn to play an instrument",emoji:"🎸",cat:"skills"},{id:183,text:"Learn to code",emoji:"💻",cat:"skills"},{id:184,text:"Get a black belt in martial arts",emoji:"🥋",cat:"skills"},{id:185,text:"Learn to juggle",emoji:"🤹",cat:"skills"},
+            {id:186,text:"Master photography",emoji:"📷",cat:"skills"},{id:187,text:"Learn to solve a Rubik's cube",emoji:"🧩",cat:"skills"},{id:188,text:"Take a cooking class",emoji:"👨‍🍳",cat:"skills"},{id:189,text:"Learn calligraphy",emoji:"✒️",cat:"skills"},{id:190,text:"Master a card trick",emoji:"🎴",cat:"skills"},
+            {id:191,text:"Learn sign language",emoji:"🤟",cat:"skills"},{id:192,text:"Get a pilot's license",emoji:"✈️",cat:"skills"},{id:193,text:"Learn ballroom dancing",emoji:"💃",cat:"skills"},{id:194,text:"Master public speaking",emoji:"🎤",cat:"skills"},{id:195,text:"Learn to knit or crochet",emoji:"🧶",cat:"skills"},
+            {id:196,text:"Get scuba certified",emoji:"🤿",cat:"skills"},{id:197,text:"Learn meditation",emoji:"🧘",cat:"skills"},{id:198,text:"Master chess",emoji:"♟️",cat:"skills"},{id:199,text:"Learn carpentry",emoji:"🪵",cat:"skills"},{id:200,text:"Get a motorcycle license",emoji:"🏍️",cat:"skills"},
+            {id:201,text:"Learn to salsa dance",emoji:"💃",cat:"skills"},{id:202,text:"Master Excel/spreadsheets",emoji:"📊",cat:"skills"},{id:203,text:"Learn archery",emoji:"🏹",cat:"skills"},{id:204,text:"Get a sommelier certification",emoji:"🍷",cat:"skills"},{id:205,text:"Learn to sail",emoji:"⛵",cat:"skills"},
+            {id:206,text:"Master origami",emoji:"📄",cat:"skills"},{id:207,text:"Learn graphic design",emoji:"🎨",cat:"skills"},{id:208,text:"Get a bartending license",emoji:"🍸",cat:"skills"},{id:209,text:"Learn speed reading",emoji:"📖",cat:"skills"},{id:210,text:"Master poker",emoji:"🃏",cat:"skills"},
+            {id:211,text:"Learn video editing",emoji:"🎬",cat:"skills"},{id:212,text:"Get first aid certified",emoji:"🚑",cat:"skills"},{id:213,text:"Learn to sew",emoji:"🪡",cat:"skills"},{id:214,text:"Master Python programming",emoji:"🐍",cat:"skills"},{id:215,text:"Learn magic tricks",emoji:"🎩",cat:"skills"},
+            {id:216,text:"Get a personal trainer certification",emoji:"💪",cat:"skills"},{id:217,text:"Learn to beatbox",emoji:"🎵",cat:"skills"},{id:218,text:"Master negotiation skills",emoji:"🤝",cat:"skills"},{id:219,text:"Learn pottery",emoji:"🏺",cat:"skills"},{id:220,text:"Get a yoga instructor certification",emoji:"🧘",cat:"skills"},
+            {id:221,text:"Learn lockpicking (legally)",emoji:"🔐",cat:"skills"},{id:222,text:"Master time management",emoji:"⏰",cat:"skills"},{id:223,text:"Learn pole dancing",emoji:"💃",cat:"skills"},{id:224,text:"Get a real estate license",emoji:"🏠",cat:"skills"},{id:225,text:"Learn to DJ",emoji:"🎧",cat:"skills"},
+            {id:226,text:"Master wine tasting",emoji:"🍷",cat:"skills"},{id:227,text:"Learn parkour",emoji:"🤸",cat:"skills"},{id:228,text:"Get a teaching certificate",emoji:"👩‍🏫",cat:"skills"},{id:229,text:"Learn to whistle with fingers",emoji:"🤏",cat:"skills"},{id:230,text:"Master skateboarding",emoji:"🛹",cat:"skills"},
+            {id:231,text:"Learn beekeeping",emoji:"🐝",cat:"skills"},{id:232,text:"Get a diving instructor certification",emoji:"🤿",cat:"skills"},{id:233,text:"Learn to rap or freestyle",emoji:"🎤",cat:"skills"},{id:234,text:"Master PowerPoint presentations",emoji:"📊",cat:"skills"},{id:235,text:"Learn to drift a car",emoji:"🏎️",cat:"skills"},
+            {id:236,text:"Get a forklift certification",emoji:"🚜",cat:"skills"},{id:237,text:"Learn to moonwalk",emoji:"🕺",cat:"skills"},{id:238,text:"Master blind typing",emoji:"⌨️",cat:"skills"},{id:239,text:"Learn to throw pottery on a wheel",emoji:"🏺",cat:"skills"},{id:240,text:"Get a life coaching certification",emoji:"💼",cat:"skills"},
+            {id:241,text:"Learn to breakdance",emoji:"🕺",cat:"skills"},{id:242,text:"Master a software like Photoshop",emoji:"🖼️",cat:"skills"},{id:243,text:"Learn to weld",emoji:"🔧",cat:"skills"},{id:244,text:"Get a CPR certification",emoji:"❤️",cat:"skills"},{id:245,text:"Learn sleight of hand",emoji:"🃏",cat:"skills"},
+            {id:246,text:"Master a combat sport",emoji:"🥊",cat:"skills"},{id:247,text:"Learn to yo-yo",emoji:"🪀",cat:"skills"},{id:248,text:"Get a nutritionist certification",emoji:"🥗",cat:"skills"},{id:249,text:"Learn to ride a unicycle",emoji:"🚴",cat:"skills"},{id:250,text:"Master memory techniques",emoji:"🧠",cat:"skills"},
+
+            // FOOD (60)
+            {id:251,text:"Try authentic sushi in Japan",emoji:"🍣",cat:"food"},{id:252,text:"Eat pasta in Italy",emoji:"🍝",cat:"food"},{id:253,text:"Try street food in Thailand",emoji:"🍜",cat:"food"},{id:254,text:"Eat croissants in Paris",emoji:"🥐",cat:"food"},{id:255,text:"Try authentic tacos in Mexico",emoji:"🌮",cat:"food"},
+            {id:256,text:"Eat dim sum in Hong Kong",emoji:"🥟",cat:"food"},{id:257,text:"Try paella in Spain",emoji:"🥘",cat:"food"},{id:258,text:"Eat fish and chips in London",emoji:"🍟",cat:"food"},{id:259,text:"Try pho in Vietnam",emoji:"🍲",cat:"food"},{id:260,text:"Eat BBQ in Texas",emoji:"🍖",cat:"food"},
+            {id:261,text:"Try lobster in Maine",emoji:"🦞",cat:"food"},{id:262,text:"Eat pizza in Naples",emoji:"🍕",cat:"food"},{id:263,text:"Try pad thai in Thailand",emoji:"🍜",cat:"food"},{id:264,text:"Eat kimchi in Korea",emoji:"🥬",cat:"food"},{id:265,text:"Try baklava in Turkey",emoji:"🥮",cat:"food"},
+            {id:266,text:"Eat haggis in Scotland",emoji:"🏴",cat:"food"},{id:267,text:"Try falafel in Israel",emoji:"🧆",cat:"food"},{id:268,text:"Eat goulash in Hungary",emoji:"🍲",cat:"food"},{id:269,text:"Try schnitzel in Austria",emoji:"🍖",cat:"food"},{id:270,text:"Eat maple syrup in Canada",emoji:"🍁",cat:"food"},
+            {id:281,text:"Try ceviche in Peru",emoji:"🐟",cat:"food"},{id:282,text:"Eat moussaka in Greece",emoji:"🍆",cat:"food"},{id:283,text:"Try satay in Malaysia",emoji:"🍢",cat:"food"},{id:284,text:"Eat fondue in Switzerland",emoji:"🧀",cat:"food"},{id:285,text:"Try mole in Mexico",emoji:"🌶️",cat:"food"},
+            {id:286,text:"Eat gelato in Italy",emoji:"🍦",cat:"food"},{id:287,text:"Try ramen in Japan",emoji:"🍜",cat:"food"},{id:288,text:"Eat crepes in France",emoji:"🥞",cat:"food"},{id:289,text:"Try curry in India",emoji:"🍛",cat:"food"},{id:290,text:"Eat borscht in Russia",emoji:"🥣",cat:"food"},
+            {id:291,text:"Try injera in Ethiopia",emoji:"🍞",cat:"food"},{id:292,text:"Eat empanadas in Argentina",emoji:"🥟",cat:"food"},{id:293,text:"Try poutine in Canada",emoji:"🍟",cat:"food"},{id:294,text:"Eat tapas in Spain",emoji:"🍤",cat:"food"},{id:295,text:"Try nasi goreng in Indonesia",emoji:"🍚",cat:"food"},
+            {id:296,text:"Eat waffles in Belgium",emoji:"🧇",cat:"food"},{id:297,text:"Try bibimbap in Korea",emoji:"🍱",cat:"food"},{id:298,text:"Eat pierogi in Poland",emoji:"🥟",cat:"food"},{id:299,text:"Try tagine in Morocco",emoji:"🍲",cat:"food"},{id:300,text:"Eat pavlova in Australia",emoji:"🍰",cat:"food"},
+            {id:301,text:"Try arepas in Venezuela",emoji:"🫓",cat:"food"},{id:302,text:"Eat churros in Spain",emoji:"🍩",cat:"food"},{id:303,text:"Try bunny chow in South Africa",emoji:"🍛",cat:"food"},{id:304,text:"Eat stroopwafel in Netherlands",emoji:"🍪",cat:"food"},{id:305,text:"Try biryani in India",emoji:"🍚",cat:"food"},
+            {id:306,text:"Eat churrasco in Brazil",emoji:"🥩",cat:"food"},{id:307,text:"Try souvlaki in Greece",emoji:"🍢",cat:"food"},{id:308,text:"Eat peking duck in China",emoji:"🦆",cat:"food"},{id:309,text:"Try oysters in France",emoji:"🦪",cat:"food"},{id:310,text:"Eat a full English breakfast",emoji:"🍳",cat:"food"},
+            {id:311,text:"Try black pudding",emoji:"🩸",cat:"food"},{id:312,text:"Eat escargot",emoji:"🐌",cat:"food"},{id:313,text:"Try fugu (pufferfish)",emoji:"🐡",cat:"food"},{id:314,text:"Eat hakarl (fermented shark)",emoji:"🦈",cat:"food"},{id:315,text:"Try balut",emoji:"🥚",cat:"food"},
+            {id:316,text:"Eat insects",emoji:"🦗",cat:"food"},{id:317,text:"Try durian fruit",emoji:"🍈",cat:"food"},{id:318,text:"Eat a Michelin star meal",emoji:"⭐",cat:"food"},{id:319,text:"Try molecular gastronomy",emoji:"🧪",cat:"food"},{id:320,text:"Eat at a famous restaurant",emoji:"🍽️",cat:"food"},
+
+            // CREATIVE (30)
+            {id:321,text:"Write a novel",emoji:"📖",cat:"creative"},{id:322,text:"Paint a masterpiece",emoji:"🎨",cat:"creative"},{id:323,text:"Write and record a song",emoji:"🎵",cat:"creative"},{id:324,text:"Make a short film",emoji:"🎬",cat:"creative"},{id:325,text:"Publish a book",emoji:"📚",cat:"creative"},
+            {id:326,text:"Start a YouTube channel",emoji:"📹",cat:"creative"},{id:327,text:"Create a podcast",emoji:"🎙️",cat:"creative"},{id:328,text:"Write poetry",emoji:"✍️",cat:"creative"},{id:329,text:"Sculpt something from clay",emoji:"🗿",cat:"creative"},{id:330,text:"Build a piece of furniture",emoji:"🪑",cat:"creative"},
+            {id:331,text:"Design your own clothing line",emoji:"👗",cat:"creative"},{id:332,text:"Create an app",emoji:"📱",cat:"creative"},{id:333,text:"Compose a symphony",emoji:"🎼",cat:"creative"},{id:334,text:"Perform stand-up comedy",emoji:"🎤",cat:"creative"},{id:335,text:"Direct a play",emoji:"🎭",cat:"creative"},
+            {id:336,text:"Create a graphic novel",emoji:"📔",cat:"creative"},{id:337,text:"Design a video game",emoji:"🎮",cat:"creative"},{id:338,text:"Photograph a wedding",emoji:"📷",cat:"creative"},{id:339,text:"Write a screenplay",emoji:"📝",cat:"creative"},{id:340,text:"Make a documentary",emoji:"🎥",cat:"creative"},
+            {id:341,text:"Produce an album",emoji:"💿",cat:"creative"},{id:342,text:"Design a house",emoji:"🏠",cat:"creative"},{id:343,text:"Create a comic strip",emoji:"📰",cat:"creative"},{id:344,text:"Choreograph a dance",emoji:"💃",cat:"creative"},{id:345,text:"Make a music video",emoji:"🎬",cat:"creative"},
+            {id:346,text:"Start a blog",emoji:"💻",cat:"creative"},{id:347,text:"Create an art installation",emoji:"🖼️",cat:"creative"},{id:348,text:"Write a children's book",emoji:"📕",cat:"creative"},{id:349,text:"Compose a rap album",emoji:"🎤",cat:"creative"},{id:350,text:"Build a treehouse",emoji:"🌳",cat:"creative"},
+
+            // SOCIAL (30)
+            {id:351,text:"Make a best friend",emoji:"👯",cat:"social"},{id:352,text:"Attend a music festival",emoji:"🎪",cat:"social"},{id:353,text:"Go to a concert",emoji:"🎵",cat:"social"},{id:354,text:"Host a dinner party",emoji:"🍽️",cat:"social"},{id:355,text:"Attend a wedding abroad",emoji:"💒",cat:"social"},
+            {id:356,text:"Throw a surprise party",emoji:"🎉",cat:"social"},{id:357,text:"Reconnect with an old friend",emoji:"🤝",cat:"social"},{id:358,text:"Go on a group vacation",emoji:"✈️",cat:"social"},{id:359,text:"Volunteer for a cause",emoji:"❤️",cat:"social"},{id:360,text:"Join a club or organization",emoji:"👥",cat:"social"},
+            {id:361,text:"Attend a TED Talk",emoji:"🎤",cat:"social"},{id:362,text:"Go to a sports game",emoji:"🏈",cat:"social"},{id:363,text:"Attend a film premiere",emoji:"🎬",cat:"social"},{id:364,text:"Go to a masquerade ball",emoji:"🎭",cat:"social"},{id:365,text:"Attend Fashion Week",emoji:"👗",cat:"social"},
+            {id:366,text:"Go speed dating",emoji:"💕",cat:"social"},{id:367,text:"Attend a comic convention",emoji:"🦸",cat:"social"},{id:368,text:"Go to a murder mystery dinner",emoji:"🔪",cat:"social"},{id:369,text:"Attend a renaissance fair",emoji:"⚔️",cat:"social"},{id:370,text:"Go to a silent disco",emoji:"🎧",cat:"social"},
+            {id:371,text:"Attend an award show",emoji:"🏆",cat:"social"},{id:372,text:"Go to a karaoke bar",emoji:"🎤",cat:"social"},{id:373,text:"Attend a street food festival",emoji:"🍜",cat:"social"},{id:374,text:"Go to an escape room",emoji:"🔐",cat:"social"},{id:375,text:"Attend a wine tasting",emoji:"🍷",cat:"social"},
+            {id:376,text:"Go to a paint and sip night",emoji:"🎨",cat:"social"},{id:377,text:"Attend a comedy show",emoji:"😂",cat:"social"},{id:378,text:"Go to a rooftop party",emoji:"🏙️",cat:"social"},{id:379,text:"Attend a book signing",emoji:"📚",cat:"social"},{id:380,text:"Go to New Year's Eve in Times Square",emoji:"🎆",cat:"social"},
+
+            // CAREER (30)
+            {id:381,text:"Get promoted",emoji:"📈",cat:"career"},{id:382,text:"Start your own business",emoji:"💼",cat:"career"},{id:383,text:"Give a TED Talk",emoji:"🎤",cat:"career"},{id:384,text:"Become a millionaire",emoji:"💰",cat:"career"},{id:385,text:"Get published in a major publication",emoji:"📰",cat:"career"},
+            {id:386,text:"Win an industry award",emoji:"🏆",cat:"career"},{id:387,text:"Speak at a conference",emoji:"🎙️",cat:"career"},{id:388,text:"Build a million-dollar company",emoji:"💰",cat:"career"},{id:389,text:"Get headhunted for a dream job",emoji:"📞",cat:"career"},{id:390,text:"Patent an invention",emoji:"💡",cat:"career"},
+            {id:391,text:"Write a business plan",emoji:"📋",cat:"career"},{id:392,text:"Hire your first employee",emoji:"👔",cat:"career"},{id:393,text:"Secure venture capital funding",emoji:"💵",cat:"career"},{id:394,text:"Retire early",emoji:"🏝️",cat:"career"},{id:395,text:"Build a personal brand",emoji:"📱",cat:"career"},
+            {id:396,text:"Negotiate a huge raise",emoji:"💸",cat:"career"},{id:397,text:"Work remotely from anywhere",emoji:"🌴",cat:"career"},{id:398,text:"Launch a product",emoji:"🚀",cat:"career"},{id:399,text:"Get featured in Forbes",emoji:"📰",cat:"career"},{id:400,text:"Build a six-figure income",emoji:"💰",cat:"career"},
+            {id:401,text:"Become a thought leader",emoji:"🧠",cat:"career"},{id:402,text:"Write a business book",emoji:"📖",cat:"career"},{id:403,text:"Exit a startup successfully",emoji:"🎯",cat:"career"},{id:404,text:"Get an executive position",emoji:"👔",cat:"career"},{id:405,text:"Become a consultant",emoji:"💼",cat:"career"},
+            {id:406,text:"Build passive income streams",emoji:"💵",cat:"career"},{id:407,text:"Become financially independent",emoji:"🏦",cat:"career"},{id:408,text:"Get an MBA",emoji:"🎓",cat:"career"},{id:409,text:"Build a network of 1000+ contacts",emoji:"🤝",cat:"career"},{id:410,text:"Lead a team of 50+ people",emoji:"👥",cat:"career"},
+
+            // NATURE (30)
+            {id:411,text:"See a total solar eclipse",emoji:"🌑",cat:"nature"},{id:412,text:"Witness a meteor shower",emoji:"☄️",cat:"nature"},{id:413,text:"Plant a tree",emoji:"🌳",cat:"nature"},{id:414,text:"See wild bears",emoji:"🐻",cat:"nature"},{id:415,text:"Watch sea turtles hatch",emoji:"🐢",cat:"nature"},
+            {id:416,text:"See the Milky Way clearly",emoji:"🌌",cat:"nature"},{id:417,text:"Visit a rainforest",emoji:"🌴",cat:"nature"},{id:418,text:"See bioluminescent plankton",emoji:"✨",cat:"nature"},{id:419,text:"Touch a glacier",emoji:"🧊",cat:"nature"},{id:420,text:"See wild elephants",emoji:"🐘",cat:"nature"},
+            {id:421,text:"Watch the sunrise from a mountain",emoji:"🏔️",cat:"nature"},{id:422,text:"See a double rainbow",emoji:"🌈",cat:"nature"},{id:423,text:"Visit a volcano",emoji:"🌋",cat:"nature"},{id:424,text:"See wild penguins",emoji:"🐧",cat:"nature"},{id:425,text:"Swim in a natural hot spring",emoji:"♨️",cat:"nature"},
+            {id:426,text:"See the Grand Canyon at sunset",emoji:"🏜️",cat:"nature"},{id:427,text:"Visit a coral reef",emoji:"🪸",cat:"nature"},{id:428,text:"See wild gorillas",emoji:"🦍",cat:"nature"},{id:429,text:"Watch a lightning storm",emoji:"⚡",cat:"nature"},{id:430,text:"See a geyser erupt",emoji:"💦",cat:"nature"},
+            {id:431,text:"Visit a desert",emoji:"🏜️",cat:"nature"},{id:432,text:"See wild lions",emoji:"🦁",cat:"nature"},{id:433,text:"Watch a waterfall",emoji:"💧",cat:"nature"},{id:434,text:"Visit a cave system",emoji:"🦇",cat:"nature"},{id:435,text:"See wild wolves",emoji:"🐺",cat:"nature"},
+            {id:436,text:"Touch the ocean on every continent",emoji:"🌊",cat:"nature"},{id:437,text:"See the seasons change in Vermont",emoji:"🍂",cat:"nature"},{id:438,text:"Visit a national park",emoji:"🏞️",cat:"nature"},{id:439,text:"See wild pandas",emoji:"🐼",cat:"nature"},{id:440,text:"Stargaze in a dark sky reserve",emoji:"⭐",cat:"nature"},
+
+            // EPIC (50)
+            {id:441,text:"Summit Mount Everest",emoji:"🏔️",cat:"epic"},{id:442,text:"Go to space",emoji:"🚀",cat:"epic"},{id:443,text:"Break a world record",emoji:"🏆",cat:"epic"},{id:444,text:"Win a Nobel Prize",emoji:"🏅",cat:"epic"},{id:445,text:"Become a millionaire",emoji:"💰",cat:"epic"},
+            {id:446,text:"Save someone's life",emoji:"❤️",cat:"epic"},{id:447,text:"Discover a new species",emoji:"🦎",cat:"epic"},{id:448,text:"Write a bestselling book",emoji:"📚",cat:"epic"},{id:449,text:"Climb all Seven Summits",emoji:"⛰️",cat:"epic"},{id:450,text:"Swim across the English Channel",emoji:"🏊",cat:"epic"},
+            {id:451,text:"Run across a country",emoji:"🏃",cat:"epic"},{id:452,text:"Sail around the world",emoji:"⛵",cat:"epic"},{id:453,text:"Bike across a continent",emoji:"🚴",cat:"epic"},{id:454,text:"Visit every country in the world",emoji:"🌎",cat:"epic"},{id:455,text:"Win an Oscar",emoji:"🎬",cat:"epic"},
+            {id:456,text:"Win a Grammy",emoji:"🎵",cat:"epic"},{id:457,text:"Become famous",emoji:"⭐",cat:"epic"},{id:458,text:"Meet your hero",emoji:"🦸",cat:"epic"},{id:459,text:"Change someone's life",emoji:"💫",cat:"epic"},{id:460,text:"Solve an unsolved mystery",emoji:"🔍",cat:"epic"},
+            {id:461,text:"Invent something revolutionary",emoji:"💡",cat:"epic"},{id:462,text:"Donate a million dollars to charity",emoji:"💝",cat:"epic"},{id:463,text:"Become fluent in 5 languages",emoji:"🗣️",cat:"epic"},{id:464,text:"Live in 10 different countries",emoji:"🌍",cat:"epic"},{id:465,text:"Build a school in a developing country",emoji:"🏫",cat:"epic"},
+            {id:466,text:"Go to space (commercial flight)",emoji:"🚀",cat:"epic"},{id:467,text:"Witness a rocket launch",emoji:"🚀",cat:"epic"},{id:468,text:"Dive to the ocean floor in a submarine",emoji:"🐟",cat:"epic"},{id:469,text:"Meet the President",emoji:"🤵",cat:"epic"},{id:470,text:"Appear on TV",emoji:"📺",cat:"epic"},
+            {id:471,text:"Throw the first pitch at a MLB game",emoji:"⚾",cat:"epic"},{id:472,text:"Ring the closing bell at NYSE",emoji:"🔔",cat:"epic"},{id:473,text:"Get a standing ovation",emoji:"👏",cat:"epic"},{id:474,text:"Be in a flash mob",emoji:"💃",cat:"epic"},{id:475,text:"Survive a natural disaster",emoji:"🌪️",cat:"epic"},
+            {id:476,text:"Become an Olympic athlete",emoji:"🥇",cat:"epic"},{id:477,text:"Win a major poker tournament",emoji:"🃏",cat:"epic"},{id:478,text:"Compete in a professional sport",emoji:"🏀",cat:"epic"},{id:479,text:"Create a viral video (10M+ views)",emoji:"📹",cat:"epic"},{id:480,text:"Have your artwork in a museum",emoji:"🖼️",cat:"epic"},
+            {id:481,text:"Get your PhD",emoji:"🎓",cat:"epic"},{id:482,text:"Become a judge",emoji:"⚖️",cat:"epic"},{id:483,text:"Get elected to public office",emoji:"🗳️",cat:"epic"},{id:484,text:"Complete an Ironman triathlon",emoji:"🏊",cat:"epic"},{id:485,text:"See all 8 wonders of the world",emoji:"🌍",cat:"epic"},
+            {id:486,text:"Write a symphony that gets performed",emoji:"🎼",cat:"epic"},{id:487,text:"Have a species named after you",emoji:"🦋",cat:"epic"},{id:488,text:"Build a legacy that outlives you",emoji:"🏛️",cat:"epic"},{id:489,text:"Complete all 500 items on this list",emoji:"✅",cat:"epic"},{id:490,text:"Create your own bucket list item",emoji:"✨",cat:"epic"},
+
+            // TRAILBLAZER (30)
+            {id:491,text:"Launch a startup that reaches unicorn status",emoji:"🦄",cat:"trailblazer"},{id:492,text:"Create an open-source project used by millions",emoji:"💻",cat:"trailblazer"},{id:493,text:"Found a non-profit that changes lives globally",emoji:"🌍",cat:"trailblazer"},{id:494,text:"Pioneer a new sustainable technology",emoji:"♻️",cat:"trailblazer"},{id:495,text:"Develop an app that solves a major social problem",emoji:"📱",cat:"trailblazer"},
+            {id:496,text:"Start a viral educational movement",emoji:"📚",cat:"trailblazer"},{id:497,text:"Build the first community-owned solar farm",emoji:"☀️",cat:"trailblazer"},{id:498,text:"Create a new sport or extreme activity",emoji:"🏆",cat:"trailblazer"},{id:499,text:"Lead the first civilian expedition to a new frontier",emoji:"🚀",cat:"trailblazer"},{id:500,text:"Establish a scholarship fund for underprivileged geniuses",emoji:"🎓",cat:"trailblazer"},
+            {id:501,text:"Write the manifesto for a new cultural movement",emoji:"📜",cat:"trailblazer"},{id:502,text:"Design the first zero-waste city block",emoji:"🏙️",cat:"trailblazer"},{id:503,text:"Invent a new musical instrument",emoji:"🎸",cat:"trailblazer"},{id:504,text:"Create a new genre of art",emoji:"🎨",cat:"trailblazer"},{id:505,text:"Launch a satellite as a private citizen",emoji:"🛰️",cat:"trailblazer"},
+            {id:506,text:"Build an off-grid eco-home community",emoji:"🏡",cat:"trailblazer"},{id:507,text:"Start a global reforestation initiative",emoji:"🌲",cat:"trailblazer"},{id:508,text:"Develop a breakthrough in renewable energy storage",emoji:"🔋",cat:"trailblazer"},{id:509,text:"Create the first AI ethics framework adopted worldwide",emoji:"🤖",cat:"trailblazer"},{id:510,text:"Found a new political party with real impact",emoji:"🗳️",cat:"trailblazer"},
+            {id:511,text:"Lead a successful space tourism company",emoji:"🚀",cat:"trailblazer"},{id:512,text:"Discover and name a new astronomical object",emoji:"🔭",cat:"trailblazer"},{id:513,text:"Build the world's largest community garden",emoji:"🌻",cat:"trailblazer"},{id:514,text:"Create a new form of democratic governance",emoji:"⚖️",cat:"trailblazer"},{id:515,text:"Pioneer deep-ocean exploration technology",emoji:"🌊",cat:"trailblazer"},
+            {id:516,text:"Develop a cure for a rare disease",emoji:"💊",cat:"trailblazer"},{id:517,text:"Establish the first Mars analog research station",emoji:"🪐",cat:"trailblazer"},{id:518,text:"Create a universal basic income pilot that works",emoji:"💵",cat:"trailblazer"},{id:519,text:"Build a bridge between rival communities",emoji:"🌉",cat:"trailblazer"},{id:520,text:"Launch the first commercial fusion reactor prototype",emoji:"⚛️",cat:"trailblazer"}
+        ];
+
+        let completed = new Set(JSON.parse(localStorage.getItem('bucketCompleted') || '[]'));
+        let currentFilter = 'all';
+
+        function toggleItem(id) {
+            if (completed.has(id)) {
+                completed.delete(id);
+            } else {
+                completed.add(id);
+                if (completed.size % 10 === 0) showLevelUp();
+            }
+            saveState();
+            updateUI();
+        }
+
+        function showLevelUp() {
+            const level = getLevel();
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #10b981; border: 4px solid #000; padding: 30px; font-size: 2rem; font-weight: 900; z-index: 9999; box-shadow: 8px 8px 0px #000; color: white;';
+            notification.innerText = `🎉 ${completed.size} COMPLETED! 🎉`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        function getLevel() {
+            const count = completed.size;
+            if (count >= 400) return "Legend";
+            if (count >= 300) return "Master";
+            if (count >= 200) return "Expert";
+            if (count >= 100) return "Adventurer";
+            if (count >= 50) return "Explorer";
+            return "Beginner";
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+                btn.classList.remove('bg-black', 'text-white');
+                btn.classList.add('bg-white', 'text-black');
+            });
+            document.getElementById(`btn-${cat}`).classList.remove('bg-white', 'text-black');
+            document.getElementById(`btn-${cat}`).classList.add('bg-black', 'text-white');
+            renderItems();
+        }
+
+        function searchItems() {
+            renderItems();
+        }
+
+        function renderItems() {
+            const search = document.getElementById('searchBar').value.toLowerCase();
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            
+            const categories = {
+                travel: {name: "🌍 Travel", color: "bg-blue-100"},
+                adventure: {name: "🏔️ Adventure", color: "bg-red-100"},
+                skills: {name: "🎯 Skills", color: "bg-purple-100"},
+                food: {name: "🍕 Food", color: "bg-orange-100"},
+                creative: {name: "🎨 Creative", color: "bg-pink-100"},
+                social: {name: "👥 Social", color: "bg-yellow-100"},
+                career: {name: "💼 Career", color: "bg-green-100"},
+                nature: {name: "🌲 Nature", color: "bg-teal-100"},
+                epic: {name: "⚡ Epic", color: "bg-gradient-to-r from-purple-100 to-pink-100"},
+                trailblazer: {name: "🔥 Trailblazer", color: "bg-gradient-to-r from-red-100 to-orange-100"}
+            };
+
+            if (currentFilter === 'all') {
+                // Show all categories with section headers
+                Object.keys(categories).forEach(cat => {
+                    const catItems = items.filter(item => 
+                        item.cat === cat && item.text.toLowerCase().includes(search)
+                    );
+                    
+                    if (catItems.length > 0) {
+                        // Add section header
+                        const header = document.createElement('div');
+                        header.className = `col-span-full mt-8 mb-4 ${categories[cat].color} border-4 border-black p-4`;
+                        header.innerHTML = `<h2 class="text-3xl font-black uppercase">${categories[cat].name}</h2>`;
+                        grid.appendChild(header);
+                        
+                        // Add items for this category
+                        catItems.forEach(item => {
+                            const isCompleted = completed.has(item.id);
+                            const card = document.createElement('div');
+                            card.className = `item-card p-6 ${isCompleted ? 'completed' : ''}`;
+                            card.innerHTML = `
+                                <div class="flex items-start gap-3">
+                                    <input type="checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleItem(${item.id})" class="mt-1 w-5 h-5 cursor-pointer">
+                                    <div class="flex-1">
+                                        <div class="text-4xl mb-2">${item.emoji}</div>
+                                        <div class="text-sm font-black uppercase leading-tight ${isCompleted ? 'line-through opacity-50' : ''}">${item.text}</div>
+                                    </div>
+                                </div>
+                            `;
+                            grid.appendChild(card);
+                        });
+                    }
+                });
+            } else {
+                // Show filtered category only
+                const filtered = items.filter(item => 
+                    item.cat === currentFilter && item.text.toLowerCase().includes(search)
+                );
+
+                filtered.forEach(item => {
+                    const isCompleted = completed.has(item.id);
+                    const card = document.createElement('div');
+                    card.className = `item-card p-6 ${isCompleted ? 'completed' : ''}`;
+                    card.innerHTML = `
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleItem(${item.id})" class="mt-1 w-5 h-5 cursor-pointer">
+                            <div class="flex-1">
+                                <div class="text-4xl mb-2">${item.emoji}</div>
+                                <div class="text-sm font-black uppercase leading-tight ${isCompleted ? 'line-through opacity-50' : ''}">${item.text}</div>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function updateUI() {
+            const count = completed.size;
+            const percent = Math.round((count / 500) * 100);
+            
+            document.getElementById('progress').innerText = `${count} / 500`;
+            document.getElementById('percent').innerText = percent;
+            
+            // Update category counts
+            const categories = {travel: 100, adventure: 70, skills: 70, food: 60, creative: 30, social: 30, career: 30, nature: 30, epic: 50, trailblazer: 30};
+            const catCounts = {};
+            Object.keys(categories).forEach(cat => {
+                catCounts[cat] = items.filter(item => item.cat === cat && completed.has(item.id)).length;
+            });
+            
+            const list = document.getElementById('receipt-list');
+            list.innerHTML = Object.entries(catCounts).map(([cat, count]) => {
+                const catNames = {
+                    travel: "🌍 Travel", adventure: "🏔️ Adventure", skills: "🎯 Skills",
+                    food: "🍕 Food", creative: "🎨 Creative", social: "👥 Social",
+                    career: "💼 Career", nature: "🌲 Nature", epic: "⚡ Epic", trailblazer: "🔥 Trailblazer"
+                };
+                return `<div class="flex justify-between border-b-2 border-dotted border-black pb-2">
+                    <span>${catNames[cat]}</span>
+                    <span class="text-green-600">${count}/${categories[cat]}</span>
+                </div>`;
+            }).join('');
+            
+            document.getElementById('receipt-total').innerText = `Level: ${getLevel()}`;
+            
+            renderItems();
+        }
+
+        function saveState() {
+            localStorage.setItem('bucketCompleted', JSON.stringify(Array.from(completed)));
+        }
+
+        function resetAll() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone!')) {
+                completed.clear();
+                saveState();
+                updateUI();
+            }
+        }
+
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>
+             </template>
+
     <script>
         function showApp(appId) {
             document.querySelectorAll(".app-iframe").forEach(f => f.classList.remove("active"));
@@ -2014,6 +2390,7 @@
             document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
             document.getElementById("nuke").srcdoc = document.getElementById("code-nuke").innerHTML;
             document.getElementById("clicker").srcdoc = document.getElementById("code-clicker").innerHTML;
+            document.getElementById("bucket").srcdoc = document.getElementById("code-bucket").innerHTML;
         };
     </script>
 </body>
