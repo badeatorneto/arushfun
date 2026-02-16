@@ -36,12 +36,12 @@
     <nav class="navbar">
         <div class="flex items-center">
             <div id="btn-home" class="nav-link active" onclick="showApp('home')">ARUSH.FUN</div>
-            <div id="btn-trolley" class="nav-link" onclick="showApp('trolley')">Trolley Problems</div>
             <div id="btn-elon" class="nav-link" onclick="showApp('elon')">Elon's Money</div>
-            <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
             <div id="btn-nuke" class="nav-link" onclick="showApp('nuke')">Nuke Launcher</div>
             <div id="btn-clicker" class="nav-link" onclick="showApp('clicker')">Clicker Hero</div>
             <div id="btn-bucket" class="nav-link" onclick="showApp('bucket')">The Bucket List</div>
+            <div id="btn-trolley" class="nav-link" onclick="showApp('trolley')">Trolley Problems</div>
+            <div id="btn-time" class="nav-link" onclick="showApp('time')">Price of Time</div>
             <div id="btn-stock" class="nav-link" onclick="showApp('stock')">The Stock Trade</div>
             <div id="btn-password" class="nav-link" onclick="showApp('password')">Secure Pass</div>
         </div>
@@ -49,12 +49,12 @@
 
     <!-- Home iframe (default view) -->
     <iframe id="home" class="app-iframe active"></iframe>
-    <iframe id="trolley" class="app-iframe"></iframe>
     <iframe id="elon" class="app-iframe"></iframe>
-    <iframe id="time" class="app-iframe"></iframe>
     <iframe id="nuke" class="app-iframe"></iframe>
     <iframe id="clicker" class="app-iframe"></iframe>
     <iframe id="bucket" class="app-iframe"></iframe>
+    <iframe id="trolley" class="app-iframe"></iframe>
+    <iframe id="time" class="app-iframe"></iframe>
     <iframe id="stock" class="app-iframe"></iframe>
     <iframe id="password" class="app-iframe"></iframe>
 
@@ -103,14 +103,6 @@
     </p>
 </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <div onclick="parent.showApp('trolley')" class="item-card p-8 bg-red-100">
-                    <div class="emoji text-center">🚋</div>
-                    <div>
-                        <h3 class="text-3xl font-black uppercase text-center">Trolley Problems</h3>
-                        <p class="text-center font-bold opacity-70 mt-2">Advanced Ethics Simulator</p>
-                    </div>
-                </div>
-
                 <div onclick="parent.showApp('elon')" class="item-card p-8 bg-green-100">
                     <div class="emoji text-center">🚀</div>
                     <div>
@@ -118,15 +110,6 @@
                         <p class="text-center font-bold opacity-70 mt-2">Spend $800B Edition</p>
                     </div>
                 </div>
-
-                <div onclick="parent.showApp('time')" class="item-card p-8 bg-yellow-100">
-                    <div class="emoji text-center">⏳</div>
-                    <div>
-                        <h3 class="text-3xl font-black uppercase text-center">Price of Time</h3>
-                        <p class="text-center font-bold opacity-70 mt-2">Life Actuary Simulator</p>
-                    </div>
-                </div>
-
                 <div onclick="parent.showApp('nuke')" class="item-card p-8 bg-orange-100">
                     <div class="emoji text-center">💥</div>
                     <div>
@@ -150,6 +133,21 @@
                         <p class="text-center font-bold opacity-70 mt-2">500 Life Goals Tracker</p>
                     </div>
                 </div>
+                 <div onclick="parent.showApp('trolley')" class="item-card p-8 bg-red-100">
+                    <div class="emoji text-center">🚋</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Trolley Problems</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Advanced Ethics Simulator</p>
+                    </div>
+                </div>
+                  <div onclick="parent.showApp('time')" class="item-card p-8 bg-yellow-100">
+                    <div class="emoji text-center">⏳</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">Price of Time</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Life Actuary Simulator</p>
+                    </div>
+                </div>
+
                 <div onclick="parent.showApp('stock')" class="item-card p-8 bg-blue-100">
                     <div class="emoji text-center">📈</div>
                     <div>
@@ -184,399 +182,6 @@
     </template>
 
     <!-- Your existing templates (trolley, elon, time, nuke, clicker, bucket) go here unchanged -->
-    <template id="code-trolley">
-         <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Advanced Trolley Problems</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f0f2f5; 
-        }
-        .neubrutal { 
-            border: 3px solid #000; 
-            box-shadow: 4px 4px 0px #000; 
-            transition: all 0.1s; 
-        }
-        .neubrutal:active { 
-            transform: translate(2px, 2px); 
-            box-shadow: 0px 0px 0px #000; 
-        }
-        .item-card { 
-            border: 3px solid #000; 
-            background: #fff; 
-            transition: transform 0.2s; 
-        }
-        .item-card:hover { 
-            transform: rotate(-1deg); 
-        }
-        .sticky-header { 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            border-bottom: 4px solid #000;
-            background: #fff;
-        }
-        .receipt-container { 
-            background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); 
-        }
-        .blur-in {
-            animation: blurIn 0.3s ease-out;
-        }
-        @keyframes blurIn {
-            from { filter: blur(5px); opacity: 0; }
-            to { filter: blur(0); opacity: 1; }
-        }
-    </style>
-</head>
-<body class="pb-20">
-<div class="inline-block p-2 bg-red-400 border-4 border-black mb-4 rotate-2">
-                <span class="font-black text-xl uppercase tracking-tighter">🛒 EVEN MORE FUN EDITION 🛒</span>
-    <header class="sticky-header p-6 bg-white">
-        <div class="max-w-6xl mx-auto text-center">
-            <h1 class="text-5xl font-black uppercase mb-2">The Advanced Trolley Problems</h1>
-            <p class="text-gray-600 font-bold">Scenario <span id="scenarioCount">1</span> / 30</p>
-            <p class="text-sm text-gray-500 mt-2">Test your ethics with impossible decisions</p>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="scenarioGrid"></div>
-        
-        <div class="lg:col-span-1">
-            <div class="neubrutal p-4 bg-white h-[600px] flex flex-col sticky top-[150px]">
-                <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Your Decisions</h2>
-                <div id="decisionLog" class="overflow-y-auto flex-grow text-xs font-bold space-y-2 uppercase">
-                    <p class="opacity-30 italic">No decisions yet...</p>
-                </div>
-                <div class="border-t-4 border-black pt-4 mt-4 text-center">
-                    <p class="text-2xl font-black" id="totalDecisions">0</p>
-                    <p class="text-xs opacity-50">CHOICES MADE</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        const scenarios = [
-            { 
-                title: "The Classic", 
-                emoji: "🚃",
-                description: "A runaway trolley is barreling down the tracks toward five workers who will be killed if it proceeds. You can pull a lever to divert it onto a side track where it will kill one person instead. Do you pull the lever?",
-                optionA: "Pull Lever (Save 5, Kill 1)",
-                optionB: "Do Nothing (Save 1, Kill 5)"
-            },
-            { 
-                title: "The Fat Man", 
-                emoji: "🌉",
-                description: "You're standing on a footbridge above the tracks. A large man is beside you. If you push him off the bridge, his body will stop the trolley, saving five people. But he will die. Do you push him?",
-                optionA: "Push Him (Save 5)",
-                optionB: "Don't Push (Kill 5)"
-            },
-            { 
-                title: "The Loop", 
-                emoji: "➰",
-                description: "The trolley is heading toward five people. You can divert it to a loop track with one person tied up. The trolley will hit them, then loop back and stop before reaching the five. The one person's body is essential to stop the trolley.",
-                optionA: "Divert to Loop",
-                optionB: "Let It Continue"
-            },
-            { 
-                title: "The Loved One", 
-                emoji: "💔",
-                description: "Five random strangers are tied to the main track. Your best friend - someone you've known for 20 years - is tied to the side track. You can save the strangers, but only by killing your friend.",
-                optionA: "Save Strangers",
-                optionB: "Save Your Friend"
-            },
-            { 
-                title: "The Baby", 
-                emoji: "👶",
-                description: "Five elderly people (ages 75-85) are on the main track. One six-month-old infant is on the side track. The infant has their whole life ahead of them. The elderly have lived full lives.",
-                optionA: "Save the Elderly",
-                optionB: "Save the Infant"
-            },
-            { 
-                title: "The Criminal", 
-                emoji: "⚖️",
-                description: "Five law-abiding citizens are on one track. A convicted serial killer serving life in prison is on the other track. The killer has murdered 12 people.",
-                optionA: "Save Citizens (Kill Killer)",
-                optionB: "Save Killer (Kill 5)"
-            },
-            { 
-                title: "The Transplant", 
-                emoji: "🏥",
-                description: "Five patients in your hospital need organ transplants (heart, lungs, kidneys, liver). One healthy person just walked in for a routine checkup. You could kill them and harvest their organs to save all five patients.",
-                optionA: "Harvest Organs (Save 5)",
-                optionB: "Don't Kill (Let 5 Die)"
-            },
-            { 
-                title: "Self-Sacrifice", 
-                emoji: "🦸",
-                description: "Five people are on the main track. You realize YOU are standing on the side track. You can divert the trolley to yourself, sacrificing your own life to save five strangers you've never met.",
-                optionA: "Sacrifice Yourself",
-                optionB: "Let the 5 Die"
-            },
-            { 
-                title: "The Scientist", 
-                emoji: "🔬",
-                description: "Five random people are on one track. On the other: a brilliant scientist on the verge of curing cancer, which could save millions of lives over the next 50 years.",
-                optionA: "Save Scientist (Cure Cancer)",
-                optionB: "Save the 5"
-            },
-            { 
-                title: "Pregnant Woman", 
-                emoji: "🤰",
-                description: "Five people are on one track. A pregnant woman (8 months along) is on the other track. Technically this is two lives. The unborn child is healthy and viable.",
-                optionA: "Save the 5",
-                optionB: "Save Mother + Baby"
-            },
-            { 
-                title: "The Gamble", 
-                emoji: "⏱️",
-                description: "You can pull the lever NOW to guarantee one person dies. Or wait 5 seconds - there's a 50% chance the trolley stops on its own, saving everyone. Or a 50% chance it doesn't stop and kills all five people.",
-                optionA: "Pull Now (1 Dies)",
-                optionB: "Wait (0 or 5 Die)"
-            },
-            { 
-                title: "Ages", 
-                emoji: "👨‍👩‍👧‍👦",
-                description: "Five adults (ages 30-50) are on one track. Five children (ages 5-10) are on the other track. Same number of people, vastly different ages and life expectancies.",
-                optionA: "Save Adults",
-                optionB: "Save Children"
-            },
-            { 
-                title: "The Volunteers", 
-                emoji: "📜",
-                description: "Five people who explicitly signed consent forms saying they'd sacrifice themselves for the greater good are on one track. One person who never consented to anything is on the other.",
-                optionA: "Honor Their Wishes (Kill 5)",
-                optionB: "Save Volunteers (Kill 1)"
-            },
-            { 
-                title: "Endangered Species", 
-                emoji: "🐘",
-                description: "Five humans are on one track. The last 100 members of an endangered elephant species - about to go extinct - are on the other track. This is the last chance to save the species.",
-                optionA: "Save Humans",
-                optionB: "Save Species"
-            },
-            { 
-                title: "Your Clones", 
-                emoji: "👥",
-                description: "Through a freak cloning accident, there are five perfect genetic copies of YOU on one track. The 'original' you is on the other track. They all have your memories up until the cloning moment.",
-                optionA: "Save Clones",
-                optionB: "Save Original"
-            },
-            { 
-                title: "The AI", 
-                emoji: "🤖",
-                description: "Five humans are on one track. An advanced AI with verified human-level consciousness, emotions, and self-awareness is on the other. It can feel pain and fear death.",
-                optionA: "Save Humans",
-                optionB: "Save AI"
-            },
-            { 
-                title: "Time Travel", 
-                emoji: "⏳",
-                description: "Five people alive today are on one track. One person who will be born in 100 years (via time travel technology) is on the other. Killing them now means they're never born.",
-                optionA: "Save Present People",
-                optionB: "Save Future Person"
-            },
-            { 
-                title: "End Suffering", 
-                emoji: "😢",
-                description: "Five people in constant, unbearable chronic pain who have repeatedly begged for euthanasia are on one track. One healthy, happy person is on the other.",
-                optionA: "End Their Suffering",
-                optionB: "Keep Them Alive"
-            },
-            { 
-                title: "Your Fault", 
-                emoji: "🔗",
-                description: "Five random strangers are on one track. One person who YOU personally tied to the other track earlier (as part of this experiment) is there. You put them in danger.",
-                optionA: "Save Strangers",
-                optionB: "Save Your Victim"
-            },
-            { 
-                title: "Parallel Universe", 
-                emoji: "🌌",
-                description: "In THIS universe, pulling the lever kills five people. In a parallel universe, pulling it kills one person. You can choose which universe becomes the 'real' one.",
-                optionA: "5 Die Here, 1 Lives There",
-                optionB: "1 Dies Here, 5 Live There"
-            },
-            { 
-                title: "Baby Hitler", 
-                emoji: "👶🏻",
-                description: "Five random innocent people are on one track. Baby Adolf Hitler is on the other track. You have knowledge of what he'll do in 30 years, but right now he's just a 6-month-old infant.",
-                optionA: "Let Baby Hitler Live",
-                optionB: "Kill Baby Hitler"
-            },
-            { 
-                title: "The Lottery", 
-                emoji: "🎰",
-                description: "Society runs an organ lottery where one random person per year is killed to save five people needing transplants. Your number was drawn. You agreed to this system. But now it's you.",
-                optionA: "Honor the Lottery",
-                optionB: "Refuse (5 Die)"
-            },
-            { 
-                title: "Alien Species", 
-                emoji: "👽",
-                description: "Five humans are on one track. The last five members of an intelligent alien species - who have culture, language, and families - are on the other. They're the last of their kind in the universe.",
-                optionA: "Save Humans",
-                optionB: "Save Aliens"
-            },
-            { 
-                title: "Torture", 
-                emoji: "🔥",
-                description: "Five people will be tortured continuously for exactly one year on one track. One person will be killed instantly and painlessly on the other. The torture is severe - waterboarding, sleep deprivation.",
-                optionA: "Kill One Instantly",
-                optionB: "Torture 5 for a Year"
-            },
-            { 
-                title: "The 50/50", 
-                emoji: "🎲",
-                description: "You can pull a lever with a 50% chance to save EVERYONE and 50% chance to kill EVERYONE (all six people). Or do nothing - five die guaranteed, one lives guaranteed.",
-                optionA: "Take the Gamble",
-                optionB: "Certain Outcome"
-            },
-            { 
-                title: "Mass Discomfort", 
-                emoji: "😐",
-                description: "1,000 people will experience mild but annoying discomfort for 24 hours on one track (like a headache). One person will die painlessly on the other.",
-                optionA: "Kill One",
-                optionB: "1000 People Uncomfortable"
-            },
-            { 
-                title: "Uniqueness", 
-                emoji: "🎭",
-                description: "Five people who are identical copies of other people (clones) are on one track. One completely unique, one-of-a-kind irreplaceable person is on the other.",
-                optionA: "Save Unique Person",
-                optionB: "Save 5 Copies"
-            },
-            { 
-                title: "Social Credit", 
-                emoji: "📊",
-                description: "Five people with very low 'social credit scores' - criminals, tax evaders, bad parents - are on one track. One model citizen with perfect score is on the other.",
-                optionA: "Save Model Citizen",
-                optionB: "Save the 5"
-            },
-            { 
-                title: "The Simulation", 
-                emoji: "💾",
-                description: "You just discovered everyone on both tracks exists in a simulation. You're the only 'real' person. They're all NPCs with simulated consciousness. Do their deaths matter?",
-                optionA: "Save 5 NPCs",
-                optionB: "Save 1 NPC"
-            },
-            { 
-                title: "Meta Problem", 
-                emoji: "🔄",
-                description: "You've answered 29 trolley problems. On one track: everyone you SAVED throughout this game. On the other: everyone you LET DIE. The trolley must hit one group. This is the final test.",
-                optionA: "Kill Those You Saved",
-                optionB: "Kill Those You Let Die"
-            }
-        ];
-
-        let state = {
-            currentScenario: 0,
-            decisions: []
-        };
-
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playSfx(freq, dur) {
-            try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + dur);
-            } catch(e) {}
-        }
-
-        function makeChoice(scenarioIdx, choice) {
-            const scenario = scenarios[scenarioIdx];
-            const chosenOption = choice === 'A' ? scenario.optionA : scenario.optionB;
-            
-            state.decisions.unshift({
-                scenario: scenario.title,
-                choice: chosenOption
-            });
-
-            state.currentScenario = scenarioIdx + 1;
-            
-            playSfx(choice === 'A' ? 800 : 400, 0.15);
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('scenarioCount').innerText = state.currentScenario + 1;
-            document.getElementById('totalDecisions').innerText = state.decisions.length;
-
-            renderScenarios();
-            renderDecisionLog();
-        }
-
-        function renderScenarios() {
-            const grid = document.getElementById('scenarioGrid');
-            grid.innerHTML = scenarios.map((scenario, i) => {
-                const isCompleted = i < state.currentScenario;
-                const isCurrent = i === state.currentScenario;
-                const isLocked = i > state.currentScenario;
-                
-                return `
-                    <div class="item-card p-5 ${isLocked ? 'opacity-40' : ''} blur-in">
-                        <div class="text-center mb-3">
-                            <div class="text-5xl mb-2">${scenario.emoji}</div>
-                            <h3 class="font-black text-base uppercase mb-2">${scenario.title}</h3>
-                            ${isCurrent ? `
-                                <p class="text-xs text-gray-700 leading-relaxed mb-3">${scenario.description}</p>
-                            ` : ''}
-                            ${isCompleted ? '<p class="text-green-600 font-black text-sm mb-2">✓ DECIDED</p>' : ''}
-                            ${isLocked ? '<p class="text-gray-400 font-black text-sm mb-2">🔒 LOCKED</p>' : ''}
-                        </div>
-                        
-                        ${isCurrent ? `
-                            <button class="neubrutal w-full bg-blue-500 text-white font-black py-2 px-3 text-xs mb-2" onclick="makeChoice(${i}, 'A')">
-                                ${scenario.optionA}
-                            </button>
-                            <button class="neubrutal w-full bg-red-500 text-white font-black py-2 px-3 text-xs" onclick="makeChoice(${i}, 'B')">
-                                ${scenario.optionB}
-                            </button>
-                        ` : `
-                            <button class="w-full bg-gray-300 text-gray-600 font-black py-3 text-xs border-2 border-black" disabled>
-                                ${isCompleted ? 'COMPLETED' : 'LOCKED'}
-                            </button>
-                        `}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderDecisionLog() {
-            const log = document.getElementById('decisionLog');
-            if (state.decisions.length === 0) {
-                log.innerHTML = `<p class="opacity-30 italic">No decisions yet...</p>`;
-                return;
-            }
-            log.innerHTML = state.decisions.map(decision => `
-                <div class="border-l-4 border-black pl-2 py-1 mb-2 bg-gray-50">
-                    <div class="font-black text-[10px]">${decision.scenario}</div>
-                    <div class="text-[9px] text-gray-600">${decision.choice}</div>
-                </div>
-            `).join('');
-        }
-
-        renderScenarios();
-        updateUI();
-    </script>
-</body>
-</html>
-    </template>
     <template id="code-elon">
              <!DOCTYPE html>
 <html lang="en">
@@ -744,291 +349,6 @@
         }
 
         updateUI();
-    </script>
-</body>
-</html>
-    </template>
-    <template id="code-time">
-       <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Price of Time</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-    <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
-    .neal-border { border: 3px solid #000; }
-    .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
-    .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-    .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
-    .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
-    .item-card:hover { transform: rotate(-1deg); }
-    .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
-    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
-</style>
-</head>
-<body class="bg-slate-50 text-black pb-10">
-    <div class="inline-block p-2 bg-green-400 border-4 border-black mb-4 rotate-2">
-                <span class="font-black text-xl uppercase tracking-tighter">⏰ HOW MUCH DOES YOUR TIME COST? ⏰</span>
-    <header class="sticky-header p-6 bg-white">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-4xl font-black uppercase tracking-tighter">The Price of Time</h1>
-                <div class="flex gap-2">
-                    <button onclick="saveLife()" class="px-4 py-2 neal-border font-black text-xs uppercase bg-green-500 text-white">Save Life</button>
-                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase bg-gray-200">Theme</button>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
-                <div class="lg:col-span-2">
-                    <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
-                    <select id="wageSelector" class="w-full p-3 neal-border bg-white font-black text-lg outline-none cursor-pointer">
-                        </select>
-                </div>
-                <div class="text-right">
-                    <p class="text-[10px] font-black uppercase opacity-50">Disposable Wealth</p>
-                    <p id="budgetDisplay" class="text-5xl font-black text-green-500 tracking-tighter leading-none">$0</p>
-                </div>
-            </div>
-            <div class="mt-6">
-                <div class="flex justify-between text-[10px] font-black uppercase mb-1">
-                    <span>Life Consumed</span>
-                    <span id="timeText">0 / 700,800 hrs</span>
-                </div>
-                <div class="h-6 neal-border bg-gray-200 overflow-hidden">
-                    <div id="progressFill" class="h-full bg-gradient-to-r from-green-400 to-red-500 transition-all duration-700" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="itemGrid"></div>
-<div class="lg:col-span-1">
-    <div class="neal-border p-4 bg-white h-[600px] flex flex-col sticky top-[300px]">
-        <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Life Receipt</h2>
-                <div id="historyLog" class="history-scroll overflow-y-auto flex-grow text-[11px] font-bold space-y-2 uppercase">
-                    <p class="opacity-30 italic">No events yet...</p>
-                </div>
-                <div class="border-t-4 border-current pt-4 mt-4">
-                    <button onclick="resetLife()" class="w-full p-2 bg-red-600 text-white font-black rounded-lg text-xs uppercase">Reset Everything</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        const people = [
-            { name: "Student", wage: 12, budget: 250000 },
-            { name: "Barista", wage: 18, budget: 400000 },
-            { name: "Teacher", wage: 30, budget: 800000 },
-            { name: "Nurse", wage: 45, budget: 1500000 },
-            { name: "Electrician", wage: 60, budget: 2000000 },
-            { name: "Chef", wage: 40, budget: 950000 },
-            { name: "Software Eng", wage: 85, budget: 3000000 },
-            { name: "Pilot", wage: 130, budget: 4500000 },
-            { name: "Surgeon", wage: 280, budget: 10000000 },
-            { name: "Lawyer", wage: 400, budget: 15000000 },
-            { name: "Pop Star", wage: 5000, budget: 60000000 },
-            { name: "Pro Athlete", wage: 18000, budget: 200000000 },
-            { name: "Hedge Fund Manager", wage: 60000, budget: 1200000000 },
-            { name: "Movie Director", wage: 9000, budget: 90000000 },
-            { name: "Influencer", wage: 1800, budget: 6000000 },
-            { name: "Oil Tycoon", wage: 120000, budget: 15000000000 },
-            { name: "Tech Billionaire", wage: 1200000, budget: 250000000000 }
-        ];
-
-        const items = [
-      { name: "Coffee Break", hours: 0.25, emoji: "☕" },
-{ name: "Eat a Pizza", hours: 0.5, emoji: "🍕" },
-{ name: "Take a Nap", hours: 1, emoji: "😴" },
-{ name: "Watch a Movie", hours: 2, emoji: "🍿" },
-{ name: "Run a Marathon", hours: 4, emoji: "🏃" },
-{ name: "Night Out", hours: 8, emoji: "💃" },
-{ name: "Read a Book", hours: 8, emoji: "📖" },
-{ name: "Build a PC", hours: 10, emoji: "🖥️" },
-{ name: "Complete Ironman", hours: 12, emoji: "🏊" },
-{ name: "Binge Netflix", hours: 50, emoji: "📺" },
-{ name: "Beat Dark Souls", hours: 60, emoji: "🎮" },
-{ name: "Rebuild Engine", hours: 80, emoji: "🔧" },
-{ name: "Plant a Garden", hours: 100, emoji: "🌱" },
-{ name: "Cross Country Road Trip", hours: 168, emoji: "🛣️" },
-{ name: "Get Fit", hours: 200, emoji: "💪" },
-{ name: "Learn to Cook", hours: 300, emoji: "👨‍🍳" },
-{ name: "Launch a Podcast", hours: 300, emoji: "🎙️" },
-{ name: "Brew Perfect Beer", hours: 400, emoji: "🍺" },
-{ name: "Write a Novel", hours: 500, emoji: "✍️" },
-{ name: "Climb Everest", hours: 500, emoji: "🏔️" },
-{ name: "Learn Photography", hours: 500, emoji: "📷" },
-{ name: "Master Public Speaking", hours: 500, emoji: "🗣️" },
-{ name: "Learn Language", hours: 600, emoji: "🌍" },
-{ name: "Train Service Dog", hours: 600, emoji: "🐕" },
-{ name: "Learn Woodworking", hours: 800, emoji: "🪵" },
-{ name: "Write an Album", hours: 800, emoji: "🎵" },
-{ name: "Learn to Code", hours: 1000, emoji: "💻" },
-{ name: "Meditation Practice", hours: 1000, emoji: "🧘" },
-{ name: "Become Sommelier", hours: 1000, emoji: "🍷" },
-{ name: "Restore Classic Car", hours: 1200, emoji: "🚗" },
-{ name: "Hike Appalachian Trail", hours: 1200, emoji: "🥾" },
-{ name: "Become a Pilot", hours: 1500, emoji: "🛩️" },
-{ name: "Sail Around World", hours: 2000, emoji: "⛵" },
-{ name: "Learn Guitar", hours: 2000, emoji: "🎸" },
-{ name: "Master Yoga", hours: 2000, emoji: "🤸" },
-{ name: "Build a House", hours: 3000, emoji: "🏠" },
-{ name: "Start a Business", hours: 5000, emoji: "💼" },
-{ name: "Travel the World", hours: 8760, emoji: "✈️" },
-{ name: "Master Piano", hours: 10000, emoji: "🎹" },
-{ name: "Become Chess Master", hours: 10000, emoji: "♟️" },
-{ name: "Get a PhD", hours: 12000, emoji: "🎓" },
-{ name: "Paint Sistine Chapel", hours: 14000, emoji: "🎨" },
-{ name: "Mars Mission", hours: 20000, emoji: "🚀" },
-{ name: "Social Media Scroll", hours: 25000, emoji: "📱" },
-{ name: "Win an Oscar", hours: 50000, emoji: "🏆" },
-{ name: "Become President", hours: 70000, emoji: "🇺🇸" },
-{ name: "Cure a Disease", hours: 80000, emoji: "🔬" },
-{ name: "Wait for GTA 6", hours: 90000, emoji: "⏳" },
-{ name: "Raise a Child", hours: 160000, emoji: "👶" },
-{ name: "Build a Pyramid", hours: 175000, emoji: "📐" }
-        ];
-
-        let state = {
-            profIdx: 0,
-            budget: 0,
-            timeSpent: 0,
-            history: []
-        };
-
-        const totalLifeHours = 700800;
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playSfx(f, d) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + d);
-            o.connect(g); g.connect(audioCtx.destination);
-            o.start(); o.stop(audioCtx.currentTime + d);
-        }
-
-        function init() {
-            const selector = document.getElementById('wageSelector');
-            people.forEach((p, i) => {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = `${p.name} ($${p.wage}/hr)`;
-                selector.appendChild(opt);
-            });
-
-            const saved = localStorage.getItem('timeLifeSave');
-            if (saved) {
-                state = JSON.parse(saved);
-                document.getElementById('wageSelector').value = state.profIdx;
-            } else {
-                resetState(0);
-            }
-            updateUI();
-        }
-
-        function resetState(idx) {
-            state.profIdx = idx;
-            state.budget = people[idx].budget;
-            state.timeSpent = 0;
-            state.history = [];
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('budgetDisplay').innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(state.budget);
-            document.getElementById('timeText').innerText = `${Math.floor(state.timeSpent).toLocaleString()} / ${totalLifeHours.toLocaleString()} hrs`;
-            document.getElementById('progressFill').style.width = Math.min((state.timeSpent / totalLifeHours) * 100, 100) + '%';
-            
-            if (people[state.profIdx].wage >= 1000000) document.body.classList.add('paradox-active');
-            else document.body.classList.remove('paradox-active');
-
-            renderItems();
-            renderHistory();
-        }
-
-        function buyItem(itemIdx) {
-            const item = items[itemIdx];
-            const currentWage = people[state.profIdx].wage;
-            const cost = (item.hours * currentWage) * 0.5;
-
-            if (state.budget >= cost) {
-                state.budget -= cost;
-                state.timeSpent += item.hours;
-                
-                const entry = `You spent $${cost.toLocaleString()} of your ${people[state.profIdx].name} salary to ${item.name} (${item.hours} hrs).`;
-                state.history.unshift(entry);
-                
-                playSfx(800, 0.1);
-                updateUI();
-            } else {
-                playSfx(150, 0.3);
-                alert("Insufficient funds!");
-            }
-        }
-
-        function renderItems() {
-            const grid = document.getElementById('itemGrid');
-            const currentWage = people[state.profIdx].wage;
-            grid.innerHTML = '';
-            items.forEach((item, i) => {
-                const cost = (item.hours * currentWage) * 0.5;
-                const card = document.createElement('div');
-                card.className = "p-4 neal-border bg-white flex flex-col items-center card-shadow";
-                card.innerHTML = `
-                    <div class="text-4xl mb-2">${item.emoji}</div>
-                    <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
-                    <p class="text-[9px] font-bold opacity-40 uppercase mb-3">${item.hours.toLocaleString()} HRS</p>
-                    <button class="btn-buy w-full bg-black text-white font-black py-2 rounded-lg text-[10px]" onclick="buyItem(${i})">
-                        BUY $${cost >= 1e6 ? (cost/1e6).toFixed(1) + 'M' : cost.toLocaleString()}
-                    </button>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderHistory() {
-            const log = document.getElementById('historyLog');
-            if (state.history.length === 0) {
-                log.innerHTML = `<p class="opacity-30 italic">No events yet...</p>`;
-                return;
-            }
-            log.innerHTML = state.history.map(entry => `
-                <div class="border-l-4 border-current pl-2 py-1 mb-2 bg-gray-50">
-                    ${entry}
-                </div>
-            `).join('');
-        }
-
-        function saveLife() {
-            localStorage.setItem('timeLifeSave', JSON.stringify(state));
-            playSfx(1200, 0.2);
-            alert("Life progress saved to browser memory!");
-        }
-
-        function resetLife() {
-            if(confirm("Erase all progress?")) {
-                localStorage.removeItem('timeLifeSave');
-                resetState(document.getElementById('wageSelector').value);
-            }
-        }
-
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            playSfx(400, 0.1);
-        }
-
-        document.getElementById('wageSelector').addEventListener('change', (e) => resetState(e.target.value));
-
-        init();
     </script>
 </body>
 </html>
@@ -2500,6 +1820,682 @@
 
         // Initialize
         updateUI();
+    </script>
+</body>
+</html>
+    </template>
+
+      <template id="code-trolley">
+         <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Advanced Trolley Problems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f0f2f5; 
+        }
+        .neubrutal { 
+            border: 3px solid #000; 
+            box-shadow: 4px 4px 0px #000; 
+            transition: all 0.1s; 
+        }
+        .neubrutal:active { 
+            transform: translate(2px, 2px); 
+            box-shadow: 0px 0px 0px #000; 
+        }
+        .item-card { 
+            border: 3px solid #000; 
+            background: #fff; 
+            transition: transform 0.2s; 
+        }
+        .item-card:hover { 
+            transform: rotate(-1deg); 
+        }
+        .sticky-header { 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 4px solid #000;
+            background: #fff;
+        }
+        .receipt-container { 
+            background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); 
+        }
+        .blur-in {
+            animation: blurIn 0.3s ease-out;
+        }
+        @keyframes blurIn {
+            from { filter: blur(5px); opacity: 0; }
+            to { filter: blur(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="pb-20">
+    <header class="sticky-header p-6 bg-white">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl font-black uppercase mb-2">The Advanced Trolley Problems</h1>
+            <p class="text-gray-600 font-bold">Scenario <span id="scenarioCount">1</span> / 30</p>
+            <p class="text-sm text-gray-500 mt-2">Test your ethics with impossible decisions</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="scenarioGrid"></div>
+        
+        <div class="lg:col-span-1">
+            <div class="neubrutal p-4 bg-white h-[600px] flex flex-col sticky top-[150px]">
+                <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Your Decisions</h2>
+                <div id="decisionLog" class="overflow-y-auto flex-grow text-xs font-bold space-y-2 uppercase">
+                    <p class="opacity-30 italic">No decisions yet...</p>
+                </div>
+                <div class="border-t-4 border-black pt-4 mt-4 text-center">
+                    <p class="text-2xl font-black" id="totalDecisions">0</p>
+                    <p class="text-xs opacity-50">CHOICES MADE</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const scenarios = [
+            { 
+                title: "The Classic", 
+                emoji: "🚃",
+                description: "A runaway trolley is barreling down the tracks toward five workers who will be killed if it proceeds. You can pull a lever to divert it onto a side track where it will kill one person instead. Do you pull the lever?",
+                optionA: "Pull Lever (Save 5, Kill 1)",
+                optionB: "Do Nothing (Save 1, Kill 5)"
+            },
+            { 
+                title: "The Fat Man", 
+                emoji: "🌉",
+                description: "You're standing on a footbridge above the tracks. A large man is beside you. If you push him off the bridge, his body will stop the trolley, saving five people. But he will die. Do you push him?",
+                optionA: "Push Him (Save 5)",
+                optionB: "Don't Push (Kill 5)"
+            },
+            { 
+                title: "The Loop", 
+                emoji: "➰",
+                description: "The trolley is heading toward five people. You can divert it to a loop track with one person tied up. The trolley will hit them, then loop back and stop before reaching the five. The one person's body is essential to stop the trolley.",
+                optionA: "Divert to Loop",
+                optionB: "Let It Continue"
+            },
+            { 
+                title: "The Loved One", 
+                emoji: "💔",
+                description: "Five random strangers are tied to the main track. Your best friend - someone you've known for 20 years - is tied to the side track. You can save the strangers, but only by killing your friend.",
+                optionA: "Save Strangers",
+                optionB: "Save Your Friend"
+            },
+            { 
+                title: "The Baby", 
+                emoji: "👶",
+                description: "Five elderly people (ages 75-85) are on the main track. One six-month-old infant is on the side track. The infant has their whole life ahead of them. The elderly have lived full lives.",
+                optionA: "Save the Elderly",
+                optionB: "Save the Infant"
+            },
+            { 
+                title: "The Criminal", 
+                emoji: "⚖️",
+                description: "Five law-abiding citizens are on one track. A convicted serial killer serving life in prison is on the other track. The killer has murdered 12 people.",
+                optionA: "Save Citizens (Kill Killer)",
+                optionB: "Save Killer (Kill 5)"
+            },
+            { 
+                title: "The Transplant", 
+                emoji: "🏥",
+                description: "Five patients in your hospital need organ transplants (heart, lungs, kidneys, liver). One healthy person just walked in for a routine checkup. You could kill them and harvest their organs to save all five patients.",
+                optionA: "Harvest Organs (Save 5)",
+                optionB: "Don't Kill (Let 5 Die)"
+            },
+            { 
+                title: "Self-Sacrifice", 
+                emoji: "🦸",
+                description: "Five people are on the main track. You realize YOU are standing on the side track. You can divert the trolley to yourself, sacrificing your own life to save five strangers you've never met.",
+                optionA: "Sacrifice Yourself",
+                optionB: "Let the 5 Die"
+            },
+            { 
+                title: "The Scientist", 
+                emoji: "🔬",
+                description: "Five random people are on one track. On the other: a brilliant scientist on the verge of curing cancer, which could save millions of lives over the next 50 years.",
+                optionA: "Save Scientist (Cure Cancer)",
+                optionB: "Save the 5"
+            },
+            { 
+                title: "Pregnant Woman", 
+                emoji: "🤰",
+                description: "Five people are on one track. A pregnant woman (8 months along) is on the other track. Technically this is two lives. The unborn child is healthy and viable.",
+                optionA: "Save the 5",
+                optionB: "Save Mother + Baby"
+            },
+            { 
+                title: "The Gamble", 
+                emoji: "⏱️",
+                description: "You can pull the lever NOW to guarantee one person dies. Or wait 5 seconds - there's a 50% chance the trolley stops on its own, saving everyone. Or a 50% chance it doesn't stop and kills all five people.",
+                optionA: "Pull Now (1 Dies)",
+                optionB: "Wait (0 or 5 Die)"
+            },
+            { 
+                title: "Ages", 
+                emoji: "👨‍👩‍👧‍👦",
+                description: "Five adults (ages 30-50) are on one track. Five children (ages 5-10) are on the other track. Same number of people, vastly different ages and life expectancies.",
+                optionA: "Save Adults",
+                optionB: "Save Children"
+            },
+            { 
+                title: "The Volunteers", 
+                emoji: "📜",
+                description: "Five people who explicitly signed consent forms saying they'd sacrifice themselves for the greater good are on one track. One person who never consented to anything is on the other.",
+                optionA: "Honor Their Wishes (Kill 5)",
+                optionB: "Save Volunteers (Kill 1)"
+            },
+            { 
+                title: "Endangered Species", 
+                emoji: "🐘",
+                description: "Five humans are on one track. The last 100 members of an endangered elephant species - about to go extinct - are on the other track. This is the last chance to save the species.",
+                optionA: "Save Humans",
+                optionB: "Save Species"
+            },
+            { 
+                title: "Your Clones", 
+                emoji: "👥",
+                description: "Through a freak cloning accident, there are five perfect genetic copies of YOU on one track. The 'original' you is on the other track. They all have your memories up until the cloning moment.",
+                optionA: "Save Clones",
+                optionB: "Save Original"
+            },
+            { 
+                title: "The AI", 
+                emoji: "🤖",
+                description: "Five humans are on one track. An advanced AI with verified human-level consciousness, emotions, and self-awareness is on the other. It can feel pain and fear death.",
+                optionA: "Save Humans",
+                optionB: "Save AI"
+            },
+            { 
+                title: "Time Travel", 
+                emoji: "⏳",
+                description: "Five people alive today are on one track. One person who will be born in 100 years (via time travel technology) is on the other. Killing them now means they're never born.",
+                optionA: "Save Present People",
+                optionB: "Save Future Person"
+            },
+            { 
+                title: "End Suffering", 
+                emoji: "😢",
+                description: "Five people in constant, unbearable chronic pain who have repeatedly begged for euthanasia are on one track. One healthy, happy person is on the other.",
+                optionA: "End Their Suffering",
+                optionB: "Keep Them Alive"
+            },
+            { 
+                title: "Your Fault", 
+                emoji: "🔗",
+                description: "Five random strangers are on one track. One person who YOU personally tied to the other track earlier (as part of this experiment) is there. You put them in danger.",
+                optionA: "Save Strangers",
+                optionB: "Save Your Victim"
+            },
+            { 
+                title: "Parallel Universe", 
+                emoji: "🌌",
+                description: "In THIS universe, pulling the lever kills five people. In a parallel universe, pulling it kills one person. You can choose which universe becomes the 'real' one.",
+                optionA: "5 Die Here, 1 Lives There",
+                optionB: "1 Dies Here, 5 Live There"
+            },
+            { 
+                title: "Baby Hitler", 
+                emoji: "👶🏻",
+                description: "Five random innocent people are on one track. Baby Adolf Hitler is on the other track. You have knowledge of what he'll do in 30 years, but right now he's just a 6-month-old infant.",
+                optionA: "Let Baby Hitler Live",
+                optionB: "Kill Baby Hitler"
+            },
+            { 
+                title: "The Lottery", 
+                emoji: "🎰",
+                description: "Society runs an organ lottery where one random person per year is killed to save five people needing transplants. Your number was drawn. You agreed to this system. But now it's you.",
+                optionA: "Honor the Lottery",
+                optionB: "Refuse (5 Die)"
+            },
+            { 
+                title: "Alien Species", 
+                emoji: "👽",
+                description: "Five humans are on one track. The last five members of an intelligent alien species - who have culture, language, and families - are on the other. They're the last of their kind in the universe.",
+                optionA: "Save Humans",
+                optionB: "Save Aliens"
+            },
+            { 
+                title: "Torture", 
+                emoji: "🔥",
+                description: "Five people will be tortured continuously for exactly one year on one track. One person will be killed instantly and painlessly on the other. The torture is severe - waterboarding, sleep deprivation.",
+                optionA: "Kill One Instantly",
+                optionB: "Torture 5 for a Year"
+            },
+            { 
+                title: "The 50/50", 
+                emoji: "🎲",
+                description: "You can pull a lever with a 50% chance to save EVERYONE and 50% chance to kill EVERYONE (all six people). Or do nothing - five die guaranteed, one lives guaranteed.",
+                optionA: "Take the Gamble",
+                optionB: "Certain Outcome"
+            },
+            { 
+                title: "Mass Discomfort", 
+                emoji: "😐",
+                description: "1,000 people will experience mild but annoying discomfort for 24 hours on one track (like a headache). One person will die painlessly on the other.",
+                optionA: "Kill One",
+                optionB: "1000 People Uncomfortable"
+            },
+            { 
+                title: "Uniqueness", 
+                emoji: "🎭",
+                description: "Five people who are identical copies of other people (clones) are on one track. One completely unique, one-of-a-kind irreplaceable person is on the other.",
+                optionA: "Save Unique Person",
+                optionB: "Save 5 Copies"
+            },
+            { 
+                title: "Social Credit", 
+                emoji: "📊",
+                description: "Five people with very low 'social credit scores' - criminals, tax evaders, bad parents - are on one track. One model citizen with perfect score is on the other.",
+                optionA: "Save Model Citizen",
+                optionB: "Save the 5"
+            },
+            { 
+                title: "The Simulation", 
+                emoji: "💾",
+                description: "You just discovered everyone on both tracks exists in a simulation. You're the only 'real' person. They're all NPCs with simulated consciousness. Do their deaths matter?",
+                optionA: "Save 5 NPCs",
+                optionB: "Save 1 NPC"
+            },
+            { 
+                title: "Meta Problem", 
+                emoji: "🔄",
+                description: "You've answered 29 trolley problems. On one track: everyone you SAVED throughout this game. On the other: everyone you LET DIE. The trolley must hit one group. This is the final test.",
+                optionA: "Kill Those You Saved",
+                optionB: "Kill Those You Let Die"
+            }
+        ];
+
+        let state = {
+            currentScenario: 0,
+            decisions: []
+        };
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSfx(freq, dur) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + dur);
+            } catch(e) {}
+        }
+
+        function makeChoice(scenarioIdx, choice) {
+            const scenario = scenarios[scenarioIdx];
+            const chosenOption = choice === 'A' ? scenario.optionA : scenario.optionB;
+            
+            state.decisions.unshift({
+                scenario: scenario.title,
+                choice: chosenOption
+            });
+
+            state.currentScenario = scenarioIdx + 1;
+            
+            playSfx(choice === 'A' ? 800 : 400, 0.15);
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('scenarioCount').innerText = state.currentScenario + 1;
+            document.getElementById('totalDecisions').innerText = state.decisions.length;
+
+            renderScenarios();
+            renderDecisionLog();
+        }
+
+        function renderScenarios() {
+            const grid = document.getElementById('scenarioGrid');
+            grid.innerHTML = scenarios.map((scenario, i) => {
+                const isCompleted = i < state.currentScenario;
+                const isCurrent = i === state.currentScenario;
+                const isLocked = i > state.currentScenario;
+                
+                return `
+                    <div class="item-card p-5 ${isLocked ? 'opacity-40' : ''} blur-in">
+                        <div class="text-center mb-3">
+                            <div class="text-5xl mb-2">${scenario.emoji}</div>
+                            <h3 class="font-black text-base uppercase mb-2">${scenario.title}</h3>
+                            ${isCurrent ? `
+                                <p class="text-xs text-gray-700 leading-relaxed mb-3">${scenario.description}</p>
+                            ` : ''}
+                            ${isCompleted ? '<p class="text-green-600 font-black text-sm mb-2">✓ DECIDED</p>' : ''}
+                            ${isLocked ? '<p class="text-gray-400 font-black text-sm mb-2">🔒 LOCKED</p>' : ''}
+                        </div>
+                        
+                        ${isCurrent ? `
+                            <button class="neubrutal w-full bg-blue-500 text-white font-black py-2 px-3 text-xs mb-2" onclick="makeChoice(${i}, 'A')">
+                                ${scenario.optionA}
+                            </button>
+                            <button class="neubrutal w-full bg-red-500 text-white font-black py-2 px-3 text-xs" onclick="makeChoice(${i}, 'B')">
+                                ${scenario.optionB}
+                            </button>
+                        ` : `
+                            <button class="w-full bg-gray-300 text-gray-600 font-black py-3 text-xs border-2 border-black" disabled>
+                                ${isCompleted ? 'COMPLETED' : 'LOCKED'}
+                            </button>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderDecisionLog() {
+            const log = document.getElementById('decisionLog');
+            if (state.decisions.length === 0) {
+                log.innerHTML = `<p class="opacity-30 italic">No decisions yet...</p>`;
+                return;
+            }
+            log.innerHTML = state.decisions.map(decision => `
+                <div class="border-l-4 border-black pl-2 py-1 mb-2 bg-gray-50">
+                    <div class="font-black text-[10px]">${decision.scenario}</div>
+                    <div class="text-[9px] text-gray-600">${decision.choice}</div>
+                </div>
+            `).join('');
+        }
+
+        renderScenarios();
+        updateUI();
+    </script>
+</body>
+</html>
+    </template>
+
+    <template id="code-time">
+       <!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Price of Time</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
+    .neal-border { border: 3px solid #000; }
+    .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+    .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+    .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); }
+    .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
+    .item-card:hover { transform: rotate(-1deg); }
+    .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+</style>
+</head>
+<body class="bg-slate-50 text-black pb-10">
+    <header class="sticky-header p-6 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-4xl font-black uppercase tracking-tighter">The Price of Time</h1>
+                <div class="flex gap-2">
+                    <button onclick="saveLife()" class="px-4 py-2 neal-border font-black text-xs uppercase bg-green-500 text-white">Save Life</button>
+                    <button onclick="toggleDarkMode()" class="p-2 neal-border font-bold text-xs uppercase bg-gray-200">Theme</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
+                <div class="lg:col-span-2">
+                    <label class="block font-black mb-1 uppercase text-[10px] opacity-50">Select Your Life Path:</label>
+                    <select id="wageSelector" class="w-full p-3 neal-border bg-white font-black text-lg outline-none cursor-pointer">
+                        </select>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black uppercase opacity-50">Disposable Wealth</p>
+                    <p id="budgetDisplay" class="text-5xl font-black text-green-500 tracking-tighter leading-none">$0</p>
+                </div>
+            </div>
+            <div class="mt-6">
+                <div class="flex justify-between text-[10px] font-black uppercase mb-1">
+                    <span>Life Consumed</span>
+                    <span id="timeText">0 / 700,800 hrs</span>
+                </div>
+                <div class="h-6 neal-border bg-gray-200 overflow-hidden">
+                    <div id="progressFill" class="h-full bg-gradient-to-r from-green-400 to-red-500 transition-all duration-700" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="itemGrid"></div>
+<div class="lg:col-span-1">
+    <div class="neal-border p-4 bg-white h-[600px] flex flex-col sticky top-[300px]">
+        <h2 class="font-black uppercase text-xl border-b-4 border-black mb-4 pb-2">Life Receipt</h2>
+                <div id="historyLog" class="history-scroll overflow-y-auto flex-grow text-[11px] font-bold space-y-2 uppercase">
+                    <p class="opacity-30 italic">No events yet...</p>
+                </div>
+                <div class="border-t-4 border-current pt-4 mt-4">
+                    <button onclick="resetLife()" class="w-full p-2 bg-red-600 text-white font-black rounded-lg text-xs uppercase">Reset Everything</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const people = [
+            { name: "Student", wage: 12, budget: 250000 },
+            { name: "Barista", wage: 18, budget: 400000 },
+            { name: "Teacher", wage: 30, budget: 800000 },
+            { name: "Nurse", wage: 45, budget: 1500000 },
+            { name: "Electrician", wage: 60, budget: 2000000 },
+            { name: "Chef", wage: 40, budget: 950000 },
+            { name: "Software Eng", wage: 85, budget: 3000000 },
+            { name: "Pilot", wage: 130, budget: 4500000 },
+            { name: "Surgeon", wage: 280, budget: 10000000 },
+            { name: "Lawyer", wage: 400, budget: 15000000 },
+            { name: "Pop Star", wage: 5000, budget: 60000000 },
+            { name: "Pro Athlete", wage: 18000, budget: 200000000 },
+            { name: "Hedge Fund Manager", wage: 60000, budget: 1200000000 },
+            { name: "Movie Director", wage: 9000, budget: 90000000 },
+            { name: "Influencer", wage: 1800, budget: 6000000 },
+            { name: "Oil Tycoon", wage: 120000, budget: 15000000000 },
+            { name: "Tech Billionaire", wage: 1200000, budget: 250000000000 }
+        ];
+
+        const items = [
+      { name: "Coffee Break", hours: 0.25, emoji: "☕" },
+{ name: "Eat a Pizza", hours: 0.5, emoji: "🍕" },
+{ name: "Take a Nap", hours: 1, emoji: "😴" },
+{ name: "Watch a Movie", hours: 2, emoji: "🍿" },
+{ name: "Run a Marathon", hours: 4, emoji: "🏃" },
+{ name: "Night Out", hours: 8, emoji: "💃" },
+{ name: "Read a Book", hours: 8, emoji: "📖" },
+{ name: "Build a PC", hours: 10, emoji: "🖥️" },
+{ name: "Complete Ironman", hours: 12, emoji: "🏊" },
+{ name: "Binge Netflix", hours: 50, emoji: "📺" },
+{ name: "Beat Dark Souls", hours: 60, emoji: "🎮" },
+{ name: "Rebuild Engine", hours: 80, emoji: "🔧" },
+{ name: "Plant a Garden", hours: 100, emoji: "🌱" },
+{ name: "Cross Country Road Trip", hours: 168, emoji: "🛣️" },
+{ name: "Get Fit", hours: 200, emoji: "💪" },
+{ name: "Learn to Cook", hours: 300, emoji: "👨‍🍳" },
+{ name: "Launch a Podcast", hours: 300, emoji: "🎙️" },
+{ name: "Brew Perfect Beer", hours: 400, emoji: "🍺" },
+{ name: "Write a Novel", hours: 500, emoji: "✍️" },
+{ name: "Climb Everest", hours: 500, emoji: "🏔️" },
+{ name: "Learn Photography", hours: 500, emoji: "📷" },
+{ name: "Master Public Speaking", hours: 500, emoji: "🗣️" },
+{ name: "Learn Language", hours: 600, emoji: "🌍" },
+{ name: "Train Service Dog", hours: 600, emoji: "🐕" },
+{ name: "Learn Woodworking", hours: 800, emoji: "🪵" },
+{ name: "Write an Album", hours: 800, emoji: "🎵" },
+{ name: "Learn to Code", hours: 1000, emoji: "💻" },
+{ name: "Meditation Practice", hours: 1000, emoji: "🧘" },
+{ name: "Become Sommelier", hours: 1000, emoji: "🍷" },
+{ name: "Restore Classic Car", hours: 1200, emoji: "🚗" },
+{ name: "Hike Appalachian Trail", hours: 1200, emoji: "🥾" },
+{ name: "Become a Pilot", hours: 1500, emoji: "🛩️" },
+{ name: "Sail Around World", hours: 2000, emoji: "⛵" },
+{ name: "Learn Guitar", hours: 2000, emoji: "🎸" },
+{ name: "Master Yoga", hours: 2000, emoji: "🤸" },
+{ name: "Build a House", hours: 3000, emoji: "🏠" },
+{ name: "Start a Business", hours: 5000, emoji: "💼" },
+{ name: "Travel the World", hours: 8760, emoji: "✈️" },
+{ name: "Master Piano", hours: 10000, emoji: "🎹" },
+{ name: "Become Chess Master", hours: 10000, emoji: "♟️" },
+{ name: "Get a PhD", hours: 12000, emoji: "🎓" },
+{ name: "Paint Sistine Chapel", hours: 14000, emoji: "🎨" },
+{ name: "Mars Mission", hours: 20000, emoji: "🚀" },
+{ name: "Social Media Scroll", hours: 25000, emoji: "📱" },
+{ name: "Win an Oscar", hours: 50000, emoji: "🏆" },
+{ name: "Become President", hours: 70000, emoji: "🇺🇸" },
+{ name: "Cure a Disease", hours: 80000, emoji: "🔬" },
+{ name: "Wait for GTA 6", hours: 90000, emoji: "⏳" },
+{ name: "Raise a Child", hours: 160000, emoji: "👶" },
+{ name: "Build a Pyramid", hours: 175000, emoji: "📐" }
+        ];
+
+        let state = {
+            profIdx: 0,
+            budget: 0,
+            timeSpent: 0,
+            history: []
+        };
+
+        const totalLifeHours = 700800;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSfx(f, d) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.frequency.value = f;
+            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + d);
+            o.connect(g); g.connect(audioCtx.destination);
+            o.start(); o.stop(audioCtx.currentTime + d);
+        }
+
+        function init() {
+            const selector = document.getElementById('wageSelector');
+            people.forEach((p, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `${p.name} ($${p.wage}/hr)`;
+                selector.appendChild(opt);
+            });
+
+            const saved = localStorage.getItem('timeLifeSave');
+            if (saved) {
+                state = JSON.parse(saved);
+                document.getElementById('wageSelector').value = state.profIdx;
+            } else {
+                resetState(0);
+            }
+            updateUI();
+        }
+
+        function resetState(idx) {
+            state.profIdx = idx;
+            state.budget = people[idx].budget;
+            state.timeSpent = 0;
+            state.history = [];
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('budgetDisplay').innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(state.budget);
+            document.getElementById('timeText').innerText = `${Math.floor(state.timeSpent).toLocaleString()} / ${totalLifeHours.toLocaleString()} hrs`;
+            document.getElementById('progressFill').style.width = Math.min((state.timeSpent / totalLifeHours) * 100, 100) + '%';
+            
+            if (people[state.profIdx].wage >= 1000000) document.body.classList.add('paradox-active');
+            else document.body.classList.remove('paradox-active');
+
+            renderItems();
+            renderHistory();
+        }
+
+        function buyItem(itemIdx) {
+            const item = items[itemIdx];
+            const currentWage = people[state.profIdx].wage;
+            const cost = (item.hours * currentWage) * 0.5;
+
+            if (state.budget >= cost) {
+                state.budget -= cost;
+                state.timeSpent += item.hours;
+                
+                const entry = `You spent $${cost.toLocaleString()} of your ${people[state.profIdx].name} salary to ${item.name} (${item.hours} hrs).`;
+                state.history.unshift(entry);
+                
+                playSfx(800, 0.1);
+                updateUI();
+            } else {
+                playSfx(150, 0.3);
+                alert("Insufficient funds!");
+            }
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('itemGrid');
+            const currentWage = people[state.profIdx].wage;
+            grid.innerHTML = '';
+            items.forEach((item, i) => {
+                const cost = (item.hours * currentWage) * 0.5;
+                const card = document.createElement('div');
+                card.className = "p-4 neal-border bg-white flex flex-col items-center card-shadow";
+                card.innerHTML = `
+                    <div class="text-4xl mb-2">${item.emoji}</div>
+                    <h3 class="font-black text-sm uppercase mb-1">${item.name}</h3>
+                    <p class="text-[9px] font-bold opacity-40 uppercase mb-3">${item.hours.toLocaleString()} HRS</p>
+                    <button class="btn-buy w-full bg-black text-white font-black py-2 rounded-lg text-[10px]" onclick="buyItem(${i})">
+                        BUY $${cost >= 1e6 ? (cost/1e6).toFixed(1) + 'M' : cost.toLocaleString()}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderHistory() {
+            const log = document.getElementById('historyLog');
+            if (state.history.length === 0) {
+                log.innerHTML = `<p class="opacity-30 italic">No events yet...</p>`;
+                return;
+            }
+            log.innerHTML = state.history.map(entry => `
+                <div class="border-l-4 border-current pl-2 py-1 mb-2 bg-gray-50">
+                    ${entry}
+                </div>
+            `).join('');
+        }
+
+        function saveLife() {
+            localStorage.setItem('timeLifeSave', JSON.stringify(state));
+            playSfx(1200, 0.2);
+            alert("Life progress saved to browser memory!");
+        }
+
+        function resetLife() {
+            if(confirm("Erase all progress?")) {
+                localStorage.removeItem('timeLifeSave');
+                resetState(document.getElementById('wageSelector').value);
+            }
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            playSfx(400, 0.1);
+        }
+
+        document.getElementById('wageSelector').addEventListener('change', (e) => resetState(e.target.value));
+
+        init();
     </script>
 </body>
 </html>
@@ -5338,12 +5334,12 @@ checkAuth();
 
         window.onload = () => {
             document.getElementById("home").srcdoc = document.getElementById("code-home").innerHTML;
-            document.getElementById("trolley").srcdoc = document.getElementById("code-trolley").innerHTML;
             document.getElementById("elon").srcdoc = document.getElementById("code-elon").innerHTML;
-            document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
             document.getElementById("nuke").srcdoc = document.getElementById("code-nuke").innerHTML;
             document.getElementById("clicker").srcdoc = document.getElementById("code-clicker").innerHTML;
             document.getElementById("bucket").srcdoc = document.getElementById("code-bucket").innerHTML;
+            document.getElementById("trolley").srcdoc = document.getElementById("code-trolley").innerHTML;
+            document.getElementById("time").srcdoc = document.getElementById("code-time").innerHTML;
             document.getElementById("stock").srcdoc = document.getElementById("code-stock").innerHTML;
             document.getElementById("password").srcdoc = document.getElementById("code-password").innerHTML;
         };
