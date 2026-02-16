@@ -2494,237 +2494,231 @@
     </template>
 
     <template id="code-stock">
-   <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trader Pro | S&P 500</title>
+    <title>Stock Trader Pro | Market Overview</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f2f5; }
-        .neubrutal { border: 3px solid #000; box-shadow: 6px 6px 0px #000; transition: all 0.1s; }
-        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #000; }
-        .item-card { background: white; border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
-        .item-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000; }
-        .gradient-header { background: linear-gradient(135deg, #1e293b, #334155); }
-        .profit-positive, .change-positive { color: #10b981; }
-        .profit-negative, .change-negative { color: #ef4444; }
-        .receipt { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
-        .time-btn { border: 2px solid black; font-weight: 800; padding: 4px 12px; transition: all 0.2s; }
-        .time-btn.active { background: black; color: white; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ffffff; color: #202124; }
+        .neubrutal { border: 2px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(1px, 1px); box-shadow: 0px 0px 0px #000; }
+        
+        /* Google Finance Style Transitions */
+        .stock-row { border-bottom: 1px solid #dadce0; transition: background 0.2s; cursor: pointer; }
+        .stock-row:hover { background: #f8f9fa; }
+        
+        .time-btn { border-radius: 16px; padding: 6px 16px; font-weight: 700; font-size: 13px; border: 1px solid #dadce0; color: #5f6368; }
+        .time-btn.active { background: #e8f0fe; color: #1967d2; border-color: #1967d2; }
+        
+        .chip { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 12px; }
+        .chip-up { background: #e6f4ea; color: #137333; }
+        .chip-down { background: #fce8e6; color: #c5221f; }
+        
+        .search-container { position: relative; max-width: 720px; margin: 0 auto; }
+        .search-input { border-radius: 24px; border: 1px solid #dadce0; padding: 12px 24px 12px 48px; width: 100%; font-size: 16px; transition: box-shadow 0.2s; }
+        .search-input:focus { box-shadow: 0 1px 6px rgba(32,33,36,0.28); outline: none; border-color: transparent; }
     </style>
 </head>
-<body class="pb-20">
+<body class="bg-gray-50">
 
-<header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
-    <div class="max-w-4xl mx-auto">
-        <div class="inline-block p-2 bg-indigo-600 border-4 border-black mb-4 rotate-1">
-            <span class="font-black text-xl uppercase tracking-tighter text-white">S&P 500 Live Tracker</span>
+<header class="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-8">
+            <h1 class="text-2xl font-extrabold tracking-tighter uppercase"><span class="text-blue-600">Stock</span>Trader</h1>
+            <div class="search-container flex-1 min-w-[300px] hidden md:block">
+                <input type="text" id="search" placeholder="Search for stocks, symbols or companies" class="search-input">
+            </div>
         </div>
-        <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Stock Trader Pro</h1>
+        <div class="flex gap-6 text-sm font-bold">
+            <div class="text-right">
+                <div class="text-gray-500 uppercase text-[10px]">Net Worth</div>
+                <div class="text-lg">$<span id="netWorth">100,000.00</span></div>
+            </div>
+            <div class="text-right border-l pl-6">
+                <div class="text-gray-500 uppercase text-[10px]">Cash Available</div>
+                <div class="text-lg text-green-600">$<span id="cash">100,000.00</span></div>
+            </div>
+        </div>
     </div>
 </header>
 
-<div class="sticky top-0 z-50 gradient-header p-4 text-white border-b-4 border-black">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-        <div class="flex gap-8">
-            <div>
-                <div class="text-xl md:text-2xl font-black">$<span id="cash">100,000.00</span></div>
-                <div class="text-xs uppercase opacity-70 font-bold">Cash</div>
-            </div>
-            <div>
-                <div class="text-xl md:text-2xl font-black">$<span id="portfolio">0.00</span></div>
-                <div class="text-xs uppercase opacity-70 font-bold">Portfolio</div>
-            </div>
-        </div>
-        <div class="text-right">
-            <div class="text-xl md:text-2xl font-black">$<span id="netWorth">100,000.00</span></div>
-            <div id="marketStatus" class="text-xs font-bold px-2 py-1 bg-white text-black inline-block mt-1 uppercase">Checking Market...</div>
-        </div>
-    </div>
-</div>
-
 <main class="max-w-7xl mx-auto p-6">
-    <div id="searchContainer" class="mb-8 flex gap-4">
-        <input type="text" id="search" placeholder="Search 500+ stocks (e.g. AAPL, NVDA)..." class="w-full p-4 text-lg border-4 border-black font-bold rounded-none focus:outline-none">
-    </div>
-
-    <div id="detailView" class="hidden animate-in fade-in duration-300">
-        <button onclick="goBack()" class="neubrutal bg-white px-6 py-2 font-bold mb-6 flex items-center gap-2 uppercase tracking-tight">
-            ← Back to Market
+    
+    <div id="detailView" class="hidden animate-in slide-in-from-bottom-4 duration-500">
+        <button onclick="goBack()" class="mb-6 text-blue-600 font-bold flex items-center gap-1 hover:underline">
+            ← Market Overview
         </button>
-
-        <div class="neubrutal bg-white p-8 mb-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        
+        <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm mb-8">
+            <div class="flex justify-between items-end mb-4">
                 <div>
-                    <h2 class="text-5xl font-black uppercase leading-none"><span id="detailSymbol">-</span></h2>
-                    <p id="detailName" class="text-xl font-bold opacity-60">-</p>
+                    <h2 id="detailSymbol" class="text-sm font-bold text-gray-500 uppercase tracking-widest">AAPL</h2>
+                    <h3 id="detailName" class="text-4xl font-bold mb-2 text-gray-900">Apple Inc.</h3>
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-5xl font-medium tracking-tight">$<span id="detailPrice">150.00</span></span>
+                        <span id="detailChange" class="text-xl font-bold">0.00%</span>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <div class="text-5xl font-black">$<span id="detailPrice">-</span></div>
-                    <div id="detailChange" class="text-2xl font-bold">-</div>
-                </div>
-            </div>
-
-            <div class="flex flex-wrap gap-2 mb-4">
-                <button class="time-btn active" onclick="updateTimeframe('1D', this)">1D</button>
-                <button class="time-btn" onclick="updateTimeframe('1W', this)">1W</button>
-                <button class="time-btn" onclick="updateTimeframe('1M', this)">1M</button>
-                <button class="time-btn" onclick="updateTimeframe('1Y', this)">1Y</button>
-                <button class="time-btn" onclick="updateTimeframe('5Y', this)">5Y</button>
-                <button class="time-btn" onclick="updateTimeframe('10Y', this)">10Y</button>
-            </div>
-
-            <div class="mb-8 bg-gray-50 border-2 border-black p-4">
-                <canvas id="priceChart" style="width: 100%; height: 350px;"></canvas>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="neubrutal bg-yellow-300 p-6">
-                    <div class="text-sm font-black uppercase opacity-60">Owned Shares</div>
-                    <div class="text-3xl font-black" id="ownedShares">0</div>
-                </div>
-                <div class="neubrutal bg-blue-300 p-6">
-                    <div class="text-sm font-black uppercase opacity-60">Market Value</div>
-                    <div class="text-3xl font-black" id="marketVal">$0.00</div>
-                </div>
-                <div class="neubrutal bg-white p-6">
-                    <div class="text-sm font-black uppercase opacity-60">Profit / Loss</div>
-                    <div class="text-3xl font-black" id="plValue">$0.00</div>
+                <div class="flex flex-col gap-2">
+                    <div class="text-xs font-bold text-gray-400 text-right uppercase">Your Position</div>
+                    <div class="flex gap-4">
+                        <div class="text-right">
+                            <div class="text-xl font-black" id="ownedShares">0</div>
+                            <div class="text-[10px] uppercase font-bold text-gray-400">Shares</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xl font-black" id="plValue">$0.00</div>
+                            <div class="text-[10px] uppercase font-bold text-gray-400">Total Return</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex-1 flex gap-2">
-                    <input type="number" id="quantity" value="1" min="1" class="w-24 p-4 text-xl border-4 border-black font-black text-center">
-                    <button onclick="buySelected()" class="neubrutal bg-green-500 hover:bg-green-600 text-white flex-1 py-4 font-black uppercase text-2xl">BUY</button>
+            <div class="flex gap-2 mb-6 border-b border-gray-100 pb-4">
+                <button class="time-btn active" onclick="updateRange('1D', this)">1D</button>
+                <button class="time-btn" onclick="updateRange('1W', this)">1W</button>
+                <button class="time-btn" onclick="updateRange('1M', this)">1M</button>
+                <button class="time-btn" onclick="updateRange('1Y', this)">1Y</button>
+                <button class="time-btn" onclick="updateRange('5Y', this)">5Y</button>
+                <button class="time-btn" onclick="updateRange('MAX', this)">10Y</button>
+            </div>
+
+            <div class="h-[400px] w-full mb-8">
+                <canvas id="priceChart"></canvas>
+            </div>
+
+            <div class="flex gap-4 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <div class="flex-1">
+                    <label class="block text-[10px] font-black uppercase text-gray-500 mb-1">Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" class="w-full p-3 text-xl font-bold border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none">
                 </div>
-                <button onclick="sellSelected()" class="neubrutal bg-pink-500 hover:bg-pink-600 text-white flex-1 py-4 font-black uppercase text-2xl">SELL</button>
+                <button onclick="buySelected()" class="neubrutal bg-blue-600 text-white px-10 font-black uppercase tracking-wide">Buy Stock</button>
+                <button onclick="sellSelected()" class="neubrutal bg-white text-red-600 border-red-600 px-10 font-black uppercase tracking-wide">Sell Stock</button>
             </div>
         </div>
     </div>
 
-    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-</main>
-
-<section class="max-w-4xl mx-auto px-6 mt-12">
-    <div class="receipt border-4 border-black p-8 shadow-[12px_12px_0px_#000]">
-        <h2 class="text-3xl font-black uppercase text-center mb-6 border-b-4 border-black pb-4">Portfolio Holdings</h2>
-        <div id="holdings" class="space-y-4 mb-8"></div>
+    <div id="marketHome">
+        <h2 id="gridTitle" class="text-xl font-bold mb-6 text-gray-800">S&P 500 Market Leaders</h2>
+        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            </div>
     </div>
-</section>
+
+    <section class="mt-12 bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
+        <h2 class="text-2xl font-black mb-6">Your Holdings</h2>
+        <div id="holdingsList" class="space-y-0">
+            </div>
+    </section>
+</main>
 
 <script>
     const proxy = 'https://corsproxy.io/?';
-    // Full S&P 500 Ticker List (Simplified for brevity, but expands to full list)
-    const tickers = "AAPL,MSFT,AMZN,NVDA,GOOGL,GOOG,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,AVGO,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,ORCL,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,GE,PLTR,SBUX,BA,NFLX,QCOM,CAT,MDLZ".split(',');
+    // Logic for 500 stocks (Sample of tickers included, expandable to full list)
+    const tickers = "AAPL,MSFT,GOOGL,AMZN,NVDA,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,GE,PLTR,SBUX,BA,NFLX,QCOM,MDLZ,AMGN,ISRG,TJX,GILD,CAT,NOW,VRTX,LMT,SYK,BLK,ELV,ADI,REGN,T,ETN,PGR,BSX,MMC,CB,PANW,MU,SCHW,ZTS,LRCX,BSX,PLD,FI,CI,GILD,BDX,C,WM,ITW".split(',');
 
     let cash = parseFloat(localStorage.getItem('stockCash') || '100000');
     let portfolio = JSON.parse(localStorage.getItem('stockPortfolio') || '{}');
     let stocksData = {};
     let selectedSymbol = null;
     let chart = null;
-    let currentRange = '1D';
 
-    async function fetchPrices() {
+    async function fetchMarket() {
+        const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${tickers.join(',')}`;
         try {
-            const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${tickers.join(',')}`;
-            const response = await fetch(proxy + encodeURIComponent(yahooUrl));
-            const data = await response.json();
-            const quotes = data.quoteResponse.result;
-            
-            quotes.forEach(q => {
+            const resp = await fetch(proxy + encodeURIComponent(url));
+            const data = await resp.json();
+            data.quoteResponse.result.forEach(q => {
                 stocksData[q.symbol] = {
-                    name: q.longName || q.shortName || q.symbol,
-                    price: q.regularMarketPrice || q.previousClose,
-                    changePercent: q.regularMarketChangePercent || 0,
-                    marketState: q.marketState
+                    name: q.longName || q.shortName,
+                    price: q.regularMarketPrice,
+                    change: q.regularMarketChangePercent
                 };
             });
-            document.getElementById('marketStatus').innerText = "MARKET LIVE";
-            updateUI();
             renderGrid();
-        } catch (e) {
-            console.error("Fetch error", e);
-            document.getElementById('marketStatus').innerText = "OFFLINE MODE";
-            tickers.forEach(s => {
-                if(!stocksData[s]) stocksData[s] = { name: s + " Corp", price: Math.random() * 500, changePercent: (Math.random() - 0.5) * 5 };
-            });
-            updateUI();
+            updatePortfolioUI();
+        } catch(e) { 
+            console.log("Mocking data for local environment");
+            tickers.forEach(t => stocksData[t] = { name: t + " Corp", price: 100 + Math.random()*200, change: (Math.random()-0.5)*5 });
             renderGrid();
         }
     }
 
     function renderGrid() {
-        const search = document.getElementById('search').value.toLowerCase();
+        const query = document.getElementById('search').value.toUpperCase();
         const grid = document.getElementById('grid');
+        const title = document.getElementById('gridTitle');
         grid.innerHTML = '';
-        
-        Object.keys(stocksData).filter(s => s.toLowerCase().includes(search) || stocksData[s].name.toLowerCase().includes(search)).forEach(symbol => {
-            const stock = stocksData[symbol];
+
+        const keys = Object.keys(stocksData);
+        let filtered = [];
+
+        if (query.length > 0) {
+            title.innerText = `Search Results for "${query}"`;
+            filtered = keys.filter(k => k.includes(query) || stocksData[k].name.toUpperCase().includes(query));
+        } else {
+            title.innerText = "S&P 500 Market Leaders";
+            // Show first 50
+            filtered = keys.slice(0, 50);
+        }
+
+        filtered.forEach(symbol => {
+            const s = stocksData[symbol];
             const div = document.createElement('div');
-            div.className = "item-card p-6 cursor-pointer";
-            div.onclick = () => selectStock(symbol);
+            div.className = "bg-white border border-gray-200 p-4 rounded-lg cursor-pointer hover:shadow-md transition-shadow";
+            div.onclick = () => showDetail(symbol);
             div.innerHTML = `
-                <div class="flex justify-between items-start">
-                    <span class="text-2xl font-black">${symbol}</span>
-                    <span class="${stock.changePercent >= 0 ? 'change-positive' : 'change-negative'} font-bold">
-                        ${stock.changePercent >= 0 ? '▲' : '▼'} ${Math.abs(stock.changePercent).toFixed(2)}%
-                    </span>
+                <div class="flex justify-between items-start mb-1">
+                    <span class="font-bold text-gray-900">${symbol}</span>
+                    <span class="chip ${s.change >= 0 ? 'chip-up' : 'chip-down'}">${s.change >= 0 ? '+' : ''}${s.change.toFixed(2)}%</span>
                 </div>
-                <div class="text-sm font-bold opacity-50 truncate mb-4">${stock.name}</div>
-                <div class="text-3xl font-black">$${formatMoney(stock.price)}</div>
+                <div class="text-[11px] text-gray-400 font-bold truncate mb-3">${s.name}</div>
+                <div class="text-xl font-medium">$${s.price.toFixed(2)}</div>
             `;
             grid.appendChild(div);
         });
     }
 
-    function selectStock(symbol) {
+    function showDetail(symbol) {
         selectedSymbol = symbol;
-        const stock = stocksData[symbol];
+        const s = stocksData[symbol];
+        document.getElementById('marketHome').classList.add('hidden');
         document.getElementById('detailView').classList.remove('hidden');
-        document.getElementById('grid').classList.add('hidden');
-        document.getElementById('searchContainer').classList.add('hidden');
         
         document.getElementById('detailSymbol').innerText = symbol;
-        document.getElementById('detailName').innerText = stock.name;
-        document.getElementById('detailPrice').innerText = formatMoney(stock.price);
+        document.getElementById('detailName').innerText = s.name;
+        document.getElementById('detailPrice').innerText = s.price.toFixed(2);
         
         const changeEl = document.getElementById('detailChange');
-        changeEl.innerText = (stock.changePercent >= 0 ? '+' : '') + stock.changePercent.toFixed(2) + '%';
-        changeEl.className = stock.changePercent >= 0 ? 'text-2xl font-bold change-positive' : 'text-2xl font-bold change-negative';
-
-        updateTimeframe('1D', document.querySelector('.time-btn'));
-        updatePortfolioStats();
+        changeEl.innerText = `${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change).toFixed(2)}%`;
+        changeEl.className = s.change >= 0 ? 'text-xl font-bold text-green-600' : 'text-xl font-bold text-red-600';
+        
+        updatePositionStats();
+        updateRange('1D', document.querySelector('.time-btn'));
     }
 
-    function updateTimeframe(range, btn) {
-        currentRange = range;
+    function goBack() {
+        document.getElementById('marketHome').classList.remove('hidden');
+        document.getElementById('detailView').classList.add('hidden');
+        selectedSymbol = null;
+    }
+
+    function updateRange(range, btn) {
         document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
-        const stock = stocksData[selectedSymbol];
-        const dataPoints = range === '1D' ? 24 : range === '1W' ? 7 : range === '1M' ? 30 : range === '1Y' ? 12 : 60;
-        
-        // Simulating historical data based on current price
-        let mockHistory = [];
-        let curr = stock.price;
-        for(let i=0; i<dataPoints; i++) {
-            mockHistory.unshift(curr);
-            curr = curr * (1 + (Math.random() - 0.5) * 0.05);
-        }
-
-        renderChart(mockHistory);
-    }
-
-    function renderChart(data) {
+        // Google Finance Chart simulation
         const ctx = document.getElementById('priceChart').getContext('2d');
         if (chart) chart.destroy();
         
-        const isPositive = data[data.length-1] >= data[0];
+        const points = range === '1D' ? 40 : range === '1W' ? 7 : 30;
+        const base = stocksData[selectedSymbol].price;
+        const data = Array.from({length: points}, () => base * (1 + (Math.random() - 0.5) * 0.1));
+        data.push(base);
 
         chart = new Chart(ctx, {
             type: 'line',
@@ -2732,113 +2726,94 @@
                 labels: data.map((_, i) => i),
                 datasets: [{
                     data: data,
-                    borderColor: isPositive ? '#10b981' : '#ef4444',
-                    borderWidth: 4,
-                    fill: true,
-                    backgroundColor: isPositive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                    tension: 0.3,
-                    pointRadius: 0
+                    borderColor: stocksData[selectedSymbol].change >= 0 ? '#137333' : '#c5221f',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0.2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { 
-                    x: { display: false },
-                    y: { grid: { color: '#ddd' }, ticks: { font: { weight: 'bold' } } }
-                }
+                scales: { x: { display: false }, y: { position: 'right', grid: { color: '#f1f3f4' } } }
             }
         });
     }
 
-    function goBack() {
-        selectedSymbol = null;
-        document.getElementById('detailView').classList.add('hidden');
-        document.getElementById('grid').classList.remove('hidden');
-        document.getElementById('searchContainer').classList.remove('hidden');
+    function updatePositionStats() {
+        const p = portfolio[selectedSymbol] || {shares: 0, avg: 0};
+        const currentVal = p.shares * stocksData[selectedSymbol].price;
+        const pl = currentVal - (p.shares * p.avg);
+        document.getElementById('ownedShares').innerText = p.shares;
+        document.getElementById('plValue').innerText = "$" + pl.toFixed(2);
+        document.getElementById('plValue').style.color = pl >= 0 ? '#137333' : '#c5221f';
+    }
+
+    function updatePortfolioUI() {
+        const list = document.getElementById('holdingsList');
+        let portfolioValue = 0;
+        list.innerHTML = '';
+
+        Object.keys(portfolio).forEach(symbol => {
+            const p = portfolio[symbol];
+            const s = stocksData[symbol];
+            if (!s) return;
+            const val = p.shares * s.price;
+            portfolioValue += val;
+
+            list.innerHTML += `
+                <div class="stock-row py-4 flex justify-between items-center" onclick="showDetail('${symbol}')">
+                    <div>
+                        <div class="font-bold">${symbol}</div>
+                        <div class="text-xs text-gray-500">${p.shares} Shares @ $${p.avg.toFixed(2)}</div>
+                    </div>
+                    <div class="text-right font-bold text-lg">$${val.toFixed(2)}</div>
+                </div>
+            `;
+        });
+
+        document.getElementById('cash').innerText = cash.toLocaleString();
+        document.getElementById('netWorth').innerText = (cash + portfolioValue).toLocaleString();
     }
 
     function buySelected() {
         const qty = parseInt(document.getElementById('quantity').value);
-        const price = stocksData[selectedSymbol].price;
-        if (cash >= price * qty) {
-            cash -= price * qty;
+        const cost = qty * stocksData[selectedSymbol].price;
+        if (cash >= cost) {
+            cash -= cost;
             if(!portfolio[selectedSymbol]) portfolio[selectedSymbol] = {shares: 0, avg: 0};
             const p = portfolio[selectedSymbol];
-            p.avg = ((p.avg * p.shares) + (price * qty)) / (p.shares + qty);
+            p.avg = ((p.avg * p.shares) + cost) / (p.shares + qty);
             p.shares += qty;
             save();
-            updateUI();
-            updatePortfolioStats();
-        } else {
-            alert("Not enough cash!");
+            updatePositionStats();
+            updatePortfolioUI();
         }
     }
 
     function sellSelected() {
         const qty = parseInt(document.getElementById('quantity').value);
         if(portfolio[selectedSymbol] && portfolio[selectedSymbol].shares >= qty) {
-            cash += stocksData[selectedSymbol].price * qty;
+            cash += qty * stocksData[selectedSymbol].price;
             portfolio[selectedSymbol].shares -= qty;
             if(portfolio[selectedSymbol].shares === 0) delete portfolio[selectedSymbol];
             save();
-            updateUI();
-            updatePortfolioStats();
+            updatePositionStats();
+            updatePortfolioUI();
         }
     }
 
-    function updatePortfolioStats() {
-        if(!selectedSymbol) return;
-        const p = portfolio[selectedSymbol] || {shares: 0, avg: 0};
-        const stock = stocksData[selectedSymbol];
-        const marketVal = p.shares * stock.price;
-        const pl = marketVal - (p.shares * p.avg);
-        
-        document.getElementById('ownedShares').innerText = p.shares;
-        document.getElementById('marketVal').innerText = "$" + formatMoney(marketVal);
-        document.getElementById('plValue').innerText = (pl >= 0 ? '+$' : '-$') + formatMoney(Math.abs(pl));
-        document.getElementById('plValue').className = pl >= 0 ? 'text-3xl font-black profit-positive' : 'text-3xl font-black profit-negative';
+    function save() { 
+        localStorage.setItem('stockCash', cash); 
+        localStorage.setItem('stockPortfolio', JSON.stringify(portfolio)); 
     }
 
-    function updateUI() {
-        let pVal = 0;
-        const list = document.getElementById('holdings');
-        list.innerHTML = '';
-        
-        Object.keys(portfolio).forEach(s => {
-            const stock = stocksData[s];
-            if(!stock) return;
-            const val = portfolio[s].shares * stock.price;
-            pVal += val;
-            
-            list.innerHTML += `
-                <div class="flex justify-between items-center border-b-2 border-black border-dotted pb-2">
-                    <div>
-                        <div class="font-black text-lg">${s} <span class="text-sm opacity-50">×${portfolio[s].shares}</span></div>
-                        <div class="text-xs font-bold uppercase opacity-60">${stock.name}</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="font-black">$${formatMoney(val)}</div>
-                    </div>
-                </div>
-            `;
-        });
-
-        document.getElementById('cash').innerText = formatMoney(cash);
-        document.getElementById('portfolio').innerText = formatMoney(pVal);
-        document.getElementById('netWorth').innerText = formatMoney(cash + pVal);
-    }
-
-    function formatMoney(n) { return n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
-    function save() { localStorage.setItem('stockCash', cash); localStorage.setItem('stockPortfolio', JSON.stringify(portfolio)); }
-
-    document.getElementById('search').oninput = renderGrid;
-    
-    fetchPrices();
-    setInterval(fetchPrices, 30000);
+    document.getElementById('search').addEventListener('input', renderGrid);
+    fetchMarket();
+    setInterval(fetchMarket, 60000);
 </script>
-
 </body>
 </html>
         </template>
