@@ -42,6 +42,7 @@
             <div id="btn-nuke" class="nav-link" onclick="showApp('nuke')">Nuke Launcher</div>
             <div id="btn-clicker" class="nav-link" onclick="showApp('clicker')">Clicker Hero</div>
             <div id="btn-bucket" class="nav-link" onclick="showApp('bucket')">The Bucket List</div>
+            <div id="btn-stock" class="nav-link" onclick="showApp('stock')">The Stock Trade</div>
         </div>
     </nav>
 
@@ -53,6 +54,8 @@
     <iframe id="nuke" class="app-iframe"></iframe>
     <iframe id="clicker" class="app-iframe"></iframe>
     <iframe id="bucket" class="app-iframe"></iframe>
+    <iframe id="stock" class="app-iframe"></iframe>
+
 
     <!-- HOMEPAGE TEMPLATE (exact style as other games) -->
     <template id="code-home">
@@ -85,7 +88,7 @@
     <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-4">ARUSH.FUN</h1>
     
     <!-- Yellow badge - now properly closed -->
-    <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-6 rotate-2">
+    <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-6">
         <span class="font-black text-xl uppercase tracking-tighter">My Personal Internet Diary - New Game Every Week!</span>
     </div>
 
@@ -145,9 +148,16 @@
                         <p class="text-center font-bold opacity-70 mt-2">500 Life Goals Tracker</p>
                     </div>
                 </div>
+                <div onclick="parent.showApp('stock')" class="item-card p-8 bg-maroon-100">
+                    <div class="emoji text-center">📈</div>
+                    <div>
+                        <h3 class="text-3xl font-black uppercase text-center">The Stock Trade</h3>
+                        <p class="text-center font-bold opacity-70 mt-2">Buy and Sell The Top 500 Stocks</p>
+                    </div>
+                </div>
             </div>
             <div class="text-center mt-16 pb-8 border-t-4 border-black pt-8">
-    <p class="text-sm text-gray-500 mb-6">Connect with me:</p>
+    <p class="text-sm text-gray-500 mb-6">My Socials:</p>
     <div class="flex justify-center gap-10">
         <a href="https://www.instagram.com/badeatorneto/" target="_blank" rel="noopener">
             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" width="40" height="40" alt="Instagram" class="transition-transform hover:scale-110">
@@ -2483,6 +2493,277 @@
 </html>
     </template>
 
+    <template id="code-stocks">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trader Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f2f5; }
+        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #000; }
+        .gradient-header { background: linear-gradient(135deg, #1e293b, #334155); }
+        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; cursor: default; }
+        .item-card:hover { transform: translateY(-4px); }
+        .profit-positive { color: #10b981; }
+        .profit-negative { color: #ef4444; }
+        .change-positive { color: #10b981; }
+        .change-negative { color: #ef4444; }
+        .receipt { BACKGROUND: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+        .sector-tech { background: #dbeafe; }
+        .sector-health { background: #d1fae5; }
+        .sector-finance { background: #fef3c7; }
+        .sector-consumer { background: #fee2e2; }
+        .sector-comm { background: #e9d5ff; }
+        .sector-industrial { background: #e5e7eb; }
+        .sector-defensive { background: #ecfccb; }
+        .sector-energy { background: #fed7aa; }
+        .sector-util { background: #bfdbfe; }
+        .sector-realestate { background: #ddd6fe; }
+        .sector-materials { background: #f3f4f6; }
+    </style>
+</head>
+<body class="pb-20">
+
+<header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="inline-block p-2 bg-green-600 border-4 border-black mb-4 rotate-2">
+            <span class="font-black text-xl uppercase tracking-tighter text-white">S&P 500 Real-Time Edition</span>
+        </div>
+        <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Stock Trader Pro</h1>
+        <p class="text-xl font-bold opacity-70">Trade all 500 S&P stocks with real US market prices.<br><strong>Market updates live when open — start with $100,000.</strong></p>
+    </div>
+</header>
+
+<div class="sticky-header gradient-header p-6 text-white">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <div class="text-3xl md:text-5xl font-black">$<span id="cash">100,000.00</span></div>
+                <div class="text-sm opacity-90">Cash</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl md:text-5xl font-black">$<span id="portfolio">0.00</span></div>
+                <div class="text-sm opacity-90">Portfolio Value</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl md:text-5xl font-black"><span id="profitLoss">+0.00</span></div>
+                <div class="text-sm opacity-90">Profit/Loss</div>
+            </div>
+            <div class="text-right">
+                <div class="text-2xl md:text-4xl font-black">$<span id="netWorth">100,000.00</span></div>
+                <div class="text-sm opacity-90">Net Worth</div>
+            </div>
+        </div>
+        <div class="mt-4 text-center text-sm opacity-80">
+            Market Status: <span id="marketStatus">Loading...</span>
+        </div>
+    </div>
+</ </div>
+
+<main class="max-w-7xl mx-auto p-6">
+    <div class="mb-6">
+        <input type="text" id="search" placeholder="Search 503 S&P 500 stocks by name or symbol..." class="w-full p-4 text-lg border-4 border-black font-bold">
+    </div>
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+</main>
+
+<section class="max-w-2xl mx-auto px-6 mt-12">
+    <div class="receipt border-4 border-black p-8 shadow-[12px_12px_0px_#000]">
+        <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">Your Holdings</h2>
+        <div id="holdings" class="space-y-4 mb-8 font-bold text-lg"></div>
+        <div class="text-3xl font-black text-center pt-6 border-t-4 border-black">Net Worth: $<span id="netWorthBottom">100,000.00</span></div>
+    </div>
+</section>
+
+<script>
+    const tickers = "MMM,AOS,ABT,ABBV,ACN,ADBE,AMD,AES,AFL,A,APD,ABNB,AKAM,ALB,ARE,ALGN,ALLE,LNT,ALL,GOOGL,GOOG,MO,AMZN,AMCR,AEE,AEP,AXP,AIG,AMT,AWK,AMP,AME,AMGN,APH,ADI,AON,APA,APO,AAPL,AMAT,APTV,ACGL,ADM,ANET,AJG,AIZ,T,ATO,ADSK,ADP,AZO,AVB,AVY,AXON,BKR,BALL,BAC,BAX,BDX,BRK.B,BBY,TECH,BIIB,BLK,BX,XYZ,BK,BA,BKNG,BSX,BMY,AVGO,BR,BRO,BF.B,BLDR,BG,BXP,CHRW,CDNS,CZR,CPT,CPB,COF,CAH,KMX,CCL,CARR,CAT,CBOE,CBRE,CDW,COR,CNC,CNP,CF,CRL,SCHW,CHTR,CVX,CMG,CB,CHD,CI,CINF,CTAS,CSCO,C,CFG,CLX,CME,CMS,KO,CTSH,COIN,CL,CMCSA,CAG,COP,ED,STZ,CEG,COO,CPRT,GLW,CPAY,CTVA,CSGP,COST,CTRA,CRWD,CCI,CSX,CMI,CVS,DHR,DRI,DDOG,DVA,DAY,DECK,DE,DELL,DAL,DVN,DXCM,FANG,DLR,DG,DLTR,D,DPZ,DASH,DOV,DOW,DHI,DTE,DUK,DD,EMN,ETN,EBAY,ECL,EIX,EW,EA,ELV,EMR,ENPH,ETR,EOG,EPAM,EQT,EFX,EQIX,EQR,ERIE,ESS,EL,EG,EVRG,ES,EXC,EXE,EXPE,EXPD,EXR,XOM,FFIV,FDS,FICO,FAST,FRT,FDX,FIS,FITB,FSLR,FE,FI,F,FTNT,FTV,FOXA,FOX,BEN,FCX,GRMN,IT,GE,GEHC,GEV,GEN,GNRC,GD,GIS,GM,GPC,GILD,GPN,GL,GDDY,GS,HAL,HIG,HAS,HCA,DOC,HSIC,HSY,HPE,HLT,HOLX,HD,HON,HRL,HST,HWM,HPQ,HUBB,HUM,HBAN,HII,IBM,IEX,IDXX,ITW,INCY,IR,PODD,INTC,ICE,IFF,IP,IPG,INTU,ISRG,IVZ,INVH,IQV,IRM,JBHT,JBL,JKHY,J,JNJ,JCI,JPM,K,KVUE,KDP,KEY,KEYS,KMB,KIM,KMI,KKR,KLAC,KHC,KR,LHX,LH,LRCX,LW,LVS,LDOS,LEN,LII,LLY,LIN,LYV,LKQ,LMT,L,LOW,LULU,LYB,MTB,MPC,MKTX,MAR,MMC,MLM,MAS,MA,MTCH,MKC,MCD,MCK,MDT,MRK,META,MET,MTD,MGM,MCHP,MU,MSFT,MAA,MRNA,MHK,MOH,TAP,MDLZ,MPWR,MNST,MCO,MS,MOS,MSI,MSCI,NDAQ,NTAP,NFLX,NEM,NWSA,NWS,NEE,NKE,NI,NDSN,NSC,NTRS,NOC,NCLH,NRG,NUE,NVDA,NVR,NXPI,ORLY,OXY,ODFL,OMC,ON,OKE,ORCL,OTIS,PCAR,PKG,PLTR,PANW,PSKY,PH,PAYX,PAYC,PYPL,PNR,PEP,PFE,PCG,PM,PSX,PNW,PNC,POOL,PPG,PPL,PFG,PG,PGR,PLD,PRU,PEG,PTC,PSA,PHM,PWR,QCOM,DGX,RL,RJF,RTX,O,REG,REGN,RF,RSG,RMD,RVTY,ROK,ROL,ROP,ROST,RCL,SPGI,CRM,SBAC,SLB,STX,SRE,NOW,SHW,SPG,SWKS,SJM,SW,SNA,SOLV,SO,LUV,SWK,SBUX,STT,STLD,STE,SYK,SMCI,SYF,SNPS,SYY,TMUS,TROW,TTWO,TPR,TRGP,TGT,TEL,TDY,TER,TSLA,TXN,TPL,TXT,TMO,TJX,TKO,TTD,TSCO,TT,TDG,TRV,TRMB,TFC,TYL,TSN,USB,UBER,UDR,ULTA,UNP,UAL,UHS,VLO,VTR,VLTO,VRSN,VRSK,VZ,VRTX,VTRS,VICI,V,VST,VMC,WRB,GWW,WAB,WBA,WMT,DIS,WBD,WM,WAT,WEC,WFC,WELL,WST,WDC,WY,WSM,WMB,WTW,WDAY,WYNN,XEL,XYL,YUM,ZBRA,ZBH,ZTS".split(',');
+
+    let cash = parseFloat(localStorage.getItem('stockCash') || '100000');
+    let portfolio = JSON.parse(localStorage.getItem('stockPortfolio') || '{}'); // symbol: {shares, avgBuy}
+    let stocksData = {}; // symbol: {name, price, changePercent, sector}
+
+    const sectorMap = {
+        "Technology": "sector-tech",
+        "Healthcare": "sector-health",
+        "Financials": "sector-finance",
+        "Consumer Cyclical": "sector-consumer",
+        "Communication Services": "sector-comm",
+        "Industrials": "sector-industrial",
+        "Consumer Defensive": "sector-defensive",
+        "Energy": "sector-energy",
+        "Utilities": "sector-util",
+        "Real Estate": "sector-realestate",
+        "Basic Materials": "sector-materials"
+    };
+
+    async function fetchPrices() {
+        try {
+            const response = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${tickers.join(',')}`);
+            const data = await response.json();
+            const quotes = data.quoteResponse.result;
+            let marketOpen = false;
+            quotes.forEach(q => {
+                if (q.regularMarketPrice) {
+                    stocksData[q.symbol] = {
+                        name: q.longName || q.shortName || q.symbol,
+                        price: q.regularMarketPrice,
+                        changePercent: q.regularMarketChangePercent || 0,
+                        sector: q.sector || "Unknown",
+                        marketState: q.marketState
+                    };
+                    if (q.marketState === "REGULAR") marketOpen = true;
+                }
+            });
+            document.getElementById('marketStatus').innerText = marketOpen ? "OPEN (Live)" : "CLOSED (Last Close)";
+            updateUI();
+        } catch (e) {
+            console.error("Fetch error", e);
+            document.getElementById('marketStatus').innerText = "Error loading prices";
+        }
+    }
+
+    function buy(symbol) {
+        const stock = stocksData[symbol];
+        if (cash >= stock.price) {
+            cash -= stock.price;
+            if (!portfolio[symbol]) portfolio[symbol] = {shares: 0, avgBuy: 0};
+            const p = portfolio[symbol];
+            p.avgBuy = ((p.avgBuy * p.shares) + stock.price) / (p.shares + 1);
+            p.shares++;
+            save();
+            updateUI();
+        }
+    }
+
+    function sell(symbol) {
+        const p = portfolio[symbol];
+        if (p && p.shares > 0) {
+            const stock = stocksData[symbol];
+            cash += stock.price;
+            p.shares--;
+            if (p.shares === 0) delete portfolio[symbol];
+            save();
+            updateUI();
+        }
+    }
+
+    function save() {
+        localStorage.setItem('stockCash', cash.toFixed(2));
+        localStorage.setItem('stockPortfolio', JSON.stringify(portfolio));
+    }
+
+    function calculateValues() {
+        let portfolioValue = 0;
+        let invested = 0;
+        Object.keys(portfolio).forEach(symbol => {
+            const p = portfolio[symbol];
+            const current = stocksData[symbol]?.price || 0;
+            portfolioValue += current * p.shares;
+            invested += p.avgBuy * p.shares;
+        });
+        const profitLoss = portfolioValue - invested;
+        const netWorth = cash + portfolioValue;
+
+        document.getElementById('cash').innerText = formatMoney(cash);
+        document.getElementById('portfolio').innerText = formatMoney(portfolioValue);
+        const plEl = document.getElementById('profitLoss');
+        plEl.innerText = (profitLoss >= 0 ? '+' : '') + formatMoney(profitLoss);
+        plEl.className = profitLoss >= 0 ? 'profit-positive' : 'profit-negative';
+        document.getElementById('netWorth').innerText = formatMoney(netWorth);
+        document.getElementById('netWorthBottom').innerText = formatMoney(netWorth);
+    }
+
+    function formatMoney(num) {
+        return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderGrid() {
+        const search = document.getElementById('search').value.toLowerCase();
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        Object.keys(stocksData).filter(symbol => {
+            const stock = stocksData[symbol];
+            return stock.name.toLowerCase().includes(search) || symbol.toLowerCase().includes(search);
+        }).sort((a, b) => stocksData[b].price - stocksData[a].price).forEach(symbol => {
+            const stock = stocksData[symbol];
+            const holding = portfolio[symbol] || {shares: 0};
+            const sectorClass = sectorMap[stock.sector] || '';
+            const card = document.createElement('div');
+            card.className = `item-card p-6 flex flex-col ${sectorClass}`;
+            card.innerHTML = `
+                <div class="text-center mb-4">
+                    <div class="text-4xl font-black uppercase">${symbol}</div>
+                    <div class="text-sm truncate">${stock.name}</div>
+                </div>
+                <div class="text-3xl font-black text-center mb-2">$${formatMoney(stock.price)}</div>
+                <div class="text-center text-sm mb-4 ${stock.changePercent >= 0 ? 'change-positive' : 'change-negative'}">
+                    ${stock.changePercent >= 0 ? '+' : ''}${stock.changePercent.toFixed(2)}%
+                </div>
+                <div class="text-center font-bold mb-4">Owned: ${holding.shares}</div>
+                <div class="flex gap-2">
+                    <button onclick="sell('${symbol}')" class="neubrutal bg-red-500 text-white flex-1 py-3 font-black uppercase text-xs ${holding.shares === 0 ? 'opacity-30 pointer-events-none' : ''}">SELL 1</button>
+                    <button onclick="buy('${symbol}')" class="neubrutal bg-green-500 text-white flex-1 py-3 font-black uppercase text-xs ${cash < stock.price ? 'opacity-30 pointer-events-none' : ''}">BUY 1</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function renderHoldings() {
+        const list = document.getElementById('holdings');
+        list.innerHTML = '';
+        let hasHoldings = false;
+        Object.keys(portfolio).forEach(symbol => {
+            if (portfolio[symbol].shares > 0) {
+                hasHoldings = true;
+                const stock = stocksData[symbol];
+                const value = stock.price * portfolio[symbol].shares;
+                const pl = value - (portfolio[symbol].avgBuy * portfolio[symbol].shares);
+                list.innerHTML += `
+                    <div class="flex justify-between items-center border-b-2 border-dotted border-black pb-2">
+                        <div>
+                            <span class="font-black">${symbol}</span> ×${portfolio[symbol].shares}
+                            <div class="text-xs opacity-70">${stock.name}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-black">$${formatMoney(value)}</div>
+                            <div class="${pl >= 0 ? 'text-green-600' : 'text-red-600'} text-sm">
+                                ${pl >= 0 ? '+' : ''}$${formatMoney(pl)} P/L
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        if (!hasHoldings) {
+            list.innerHTML = '<div class="text-center opacity-30 py-10">No stocks owned yet. Search and buy!</div>';
+        }
+    }
+
+    function updateUI() {
+        calculateValues();
+        renderGrid();
+        renderHoldings();
+    }
+
+    document.getElementById('search').addEventListener('input', updateUI);
+
+    // Fetch prices on load and every 60 seconds
+    fetchPrices();
+    setInterval(fetchPrices, 60000);
+
+    // Initial render
+    updateUI();
+</script>
+</body>
+</html>
+        </template>
+    
     <script>
         function showApp(appId) {
             document.querySelectorAll(".app-iframe").forEach(f => f.classList.remove("active"));
@@ -2499,6 +2780,7 @@
             document.getElementById("nuke").srcdoc = document.getElementById("code-nuke").innerHTML;
             document.getElementById("clicker").srcdoc = document.getElementById("code-clicker").innerHTML;
             document.getElementById("bucket").srcdoc = document.getElementById("code-bucket").innerHTML;
+            document.getElementById("stock").srcdoc = document.getElementById("code-stock").innerHTML;
         };
     </script>
 </body>
