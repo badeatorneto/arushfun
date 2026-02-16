@@ -2497,7 +2497,7 @@
    <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF."UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Trader Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -2515,9 +2515,6 @@
         .receipt { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
         .search-input { background: white !important; color: black !important; }
         .search-input::placeholder { color: #666; }
-        .detail-bg { background: #0f172a; color: white; }
-        .period-btn { padding: 0.75rem 1.5rem; font-weight: bold; cursor: pointer; transition: all 0.2s; border-bottom: 4px solid transparent; }
-        .period-btn.active { border-bottom: 4px solid #3b82f6; color: #3b82f6; }
     </style>
 </head>
 <body class="pb-20">
@@ -2563,77 +2560,24 @@
         <input type="text" id="search" placeholder="Search S&P 500 by symbol or company name..." class="search-input w-full p-4 text-lg border-4 border-black font-bold rounded-lg">
     </div>
 
-    <!-- Detailed Stock View - matches the photo exactly -->
-    <div id="detailView" class="hidden neubrutal detail-bg p-8 mb-8 rounded-lg">
-        <div class="flex justify-between items-start mb-6">
-            <button onclick="backToGrid()" class="neubrutal bg-gray-700 text-white py-3 px-6 font-black uppercase rounded-lg">← Back</button>
-            <button class="neubrutal bg-blue-500 text-white py-3 px-6 font-black uppercase rounded-lg">+ Follow</button>
-        </div>
-
+    <!-- Detailed Stock View -->
+    <div id="detailView" class="hidden neubrutal bg-white p-8 mb-8">
         <div class="text-center mb-6">
-            <h2 class="text-5xl font-black uppercase mb-2"><span id="detailSymbol">-</span></h2>
-            <h3 class="text-2xl opacity-80 mb-4"><span id="detailName">-</span></h3>
-            <div class="text-7xl font-black mb-2">$<span id="detailPrice">-</span> USD</div>
-            <div id="detailChange" class="text-4xl font-bold mb-4">-</div>
-            <div class="text-sm opacity-70" id="afterHours"></div>
+            <h2 class="text-4xl font-black uppercase mb-2"><span id="detailSymbol">-</span> <span id="detailName">-</span></h2>
+            <div class="text-6xl font-black mb-2">$<span id="detailPrice">-</span></div>
+            <div id="detailChange" class="text-3xl font-bold mb-4">-</div>
         </div>
 
-        <div class="flex justify-center gap-6 mb-6 flex-wrap text-gray-400">
-            <div class="period-btn active" data-period="1d">1D</div>
-            <div class="period-btn" data-period="5d">5D</div>
-            <div class="period-btn" data-period="1mo">1M</div>
-            <div class="period-btn" data-period="6mo">6M</div>
-            <div class="period-btn" data-period="ytd">YTD</div>
-            <div class="period-btn" data-period="1y">1Y</div>
-            <div class="period-btn" data-period="5y">5Y</div>
-            <div class="period-btn" data-period="max">Max</div>
-        </div>
-
-        <div class="mb-8 bg-black rounded-lg overflow-hidden p-4">
-            <canvas id="priceChart" height="250"></canvas>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 text-gray-300">
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">Open</div>
-                <div class="text-xl font-black" id="statOpen">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">High</div>
-                <div class="text-xl font-black" id="statHigh">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">Low</div>
-                <div class="text-xl font-black" id="statLow">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">Mkt cap</div>
-                <div class="text-xl font-black" id="statMktCap">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">P/E ratio</div>
-                <div class="text-xl font-black" id="statPE">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">Dividend</div>
-                <div class="text-xl font-black" id="statDividend">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">52-wk high</div>
-                <div class="text-xl font-black" id="stat52High">-</div>
-            </div>
-            <div class="neubrutal bg-gray-800 p-4 text-center">
-                <div class="text-sm opacity-70">52-wk low</div>
-                <div class="text-xl font-black" id="stat52Low">-</div>
-            </div>
+        <div class="mb-8 bg-gray-900 rounded-lg overflow-hidden">
+            <canvas id="priceChart" height="200"></canvas>
         </div>
 
         <div class="grid grid-cols-2 gap-6 mb-8">
-            <div class="neubrutal bg-gray-100 p-6 text-center text-black">
+            <div class="neubrutal bg-gray-100 p-6 text-center">
                 <div class="text-2xl font-black" id="ownedShares">0</div>
                 <div class="text-sm opacity-70">Shares Owned</div>
             </div>
-            <div class="neubrutal bg-gray-100 p-6 text-center text-black">
+            <div class="neubrutal bg-gray-100 p-6 text-center">
                 <div class="text-2xl font-black" id="plValue">$0.00</div>
                 <div class="text-sm opacity-70">Profit/Loss</div>
             </div>
@@ -2666,18 +2610,6 @@
     let stocksData = {};
     let selectedSymbol = null;
     let chart = null;
-    let currentPeriod = '1d';
-
-    const periods = {
-        '1d': { range: '1d', interval: '5m' },
-        '5d': { range: '5d', interval: '15m' },
-        '1mo': { range: '1mo', interval: '1d' },
-        '6mo': { range: '6mo', interval: '1wk' },
-        'ytd': { range: 'ytd', interval: '1wk' },
-        '1y': { range: '1y', interval: '1wk' },
-        '5y': { range: '5y', interval: '1mo' },
-        'max': { range: 'max', interval: '3mo' }
-    };
 
     async function fetchPrices() {
         try {
@@ -2688,25 +2620,17 @@
             const quotes = data.quoteResponse.result;
             let marketOpen = false;
             quotes.forEach(q => {
-                const price = q.regularMarketPrice || q.postMarketPrice || q.preMarketPrice || q.previousClose || 0;
-                const changePercent = q.regularMarketChangePercent || q.postMarketChangePercent || q.preMarketChangePercent || 0;
-                stocksData[q.symbol] = {
-                    name: q.longName || q.shortName || q.symbol,
-                    price: price,
-                    changePercent: changePercent,
-                    marketState: q.marketState,
-                    open: q.regularMarketOpen,
-                    high: q.regularMarketDayHigh,
-                    low: q.regularMarketDayLow,
-                    marketCap: q.marketCap,
-                    pe: q.trailingPE,
-                    dividend: q.dividendRate,
-                    fiftyTwoWeekHigh: q.fiftyTwoWeekHigh,
-                    fiftyTwoWeekLow: q.fiftyTwoWeekLow,
-                    afterHoursPrice: q.postMarketPrice,
-                    afterHoursChange: q.postMarketChangePercent
-                };
-                if (q.marketState === "REGULAR") marketOpen = true;
+                if (q.regularMarketPrice || q.postMarketPrice || q.preMarketPrice || q.previousClose) {
+                    const price = q.regularMarketPrice || q.postMarketPrice || q.preMarketPrice || q.previousClose || 0;
+                    const changePercent = q.regularMarketChangePercent || q.postMarketChangePercent || q.preMarketChangePercent || 0;
+                    stocksData[q.symbol] = {
+                        name: q.longName || q.shortName || q.symbol,
+                        price: price,
+                        changePercent: changePercent,
+                        marketState: q.marketState
+                    };
+                    if (q.marketState === "REGULAR") marketOpen = true;
+                }
             });
             document.getElementById('marketStatus').innerText = marketOpen ? "OPEN (Live Trading)" : "CLOSED (Using Last Close)";
             updateUI();
@@ -2714,7 +2638,8 @@
         } catch (e) {
             console.error("Fetch failed", e);
             document.getElementById('marketStatus').innerText = "Offline Mode (Mock Data)";
-            tickers.slice(0, 50).forEach(symbol => {
+            // Fallback mock data for 50 stocks
+            tickers.slice(0, 50).forEach((symbol, i) => {
                 stocksData[symbol] = {
                     name: symbol + " Corp",
                     price: 50 + Math.random() * 450,
@@ -2727,66 +2652,174 @@
         }
     }
 
-    async function fetchChart(symbol) {
-        const p = periods[currentPeriod];
-        try {
-            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=${p.range}&interval=${p.interval}`;
-            const response = await fetch(proxy + encodeURIComponent(url));
-            const data = await response.json();
-            const result = data.chart.result[0];
-            const timestamps = result.timestamp;
-            const closes = result.indicators.quote[0].close;
+    function selectStock(symbol) {
+        selectedSymbol = symbol;
+        const stock = stocksData[symbol];
+        document.getElementById('detailSymbol').innerText = symbol;
+        document.getElementById('detailName').innerText = stock.name;
+        document.getElementById('detailPrice').innerText = formatMoney(stock.price);
+        const changeEl = document.getElementById('detailChange');
+        changeEl.innerText = (stock.changePercent >= 0 ? '+' : '') + stock.changePercent.toFixed(2) + '%';
+        changeEl.className = stock.changePercent >= 0 ? 'change-positive' : 'change-negative';
 
-            const labels = timestamps.map(ts => {
-                const date = new Date(ts * 1000);
-                if (currentPeriod === '1d' || currentPeriod === '5d') {
-                    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                } else {
-                    return date.toLocaleDateString([], {month: 'short', day: 'numeric', year: currentPeriod === 'max' ? '2-digit' : undefined});
-                }
-            });
+        const holding = portfolio[symbol] || {shares: 0, avgBuy: 0};
+        document.getElementById('ownedShares').innerText = holding.shares;
+        const pl = (stock.price * holding.shares) - (holding.avgBuy * holding.shares);
+        document.getElementById('plValue').innerText = (pl >= 0 ? '+' : '') + formatMoney(pl);
+        document.getElementById('plValue').className = pl >= 0 ? 'profit-positive' : 'profit-negative';
 
-            const color = stocksData[symbol].changePercent >= 0 ? '#10b981' : '#ef4444';
-            const bgColor = color + '20';
+        document.getElementById('detailView').classList.remove('hidden');
+        document.getElementById('grid').classList.add('hidden');
 
-            if (chart) chart.destroy();
-            chart = new Chart(document.getElementById('priceChart'), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: closes,
-                        borderColor: color,
-                        backgroundColor: bgColor,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 0,
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
-                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
-                    }
-                }
-            });
-        } catch (e) {
-            console.error("Chart fetch failed", e);
+        // Fake 30-day chart data
+        const labels = Array.from({length: 30}, (_, i) => '');
+        const base = stock.price * 0.85;
+        const data = labels.map(() => base + Math.random() * stock.price * 0.3);
+        data.push(stock.price);
+
+        if (chart) chart.destroy();
+        chart = new Chart(document.getElementById('priceChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    borderColor: stock.changePercent >= 0 ? '#10b981' : '#ef4444',
+                    backgroundColor: stock.changePercent >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { x: { display: false }, y: { display: false } }
+            }
+        });
+    }
+
+    function buySelected() {
+        if (!selectedSymbol) return;
+        const qty = parseInt(document.getElementById('quantity').value) || 1;
+        const stock = stocksData[selectedSymbol];
+        const cost = stock.price * qty;
+        if (cash >= cost) {
+            cash -= cost;
+            if (!portfolio[selectedSymbol]) portfolio[selectedSymbol] = {shares: 0, avgBuy: 0};
+            const p = portfolio[selectedSymbol];
+            p.avgBuy = ((p.avgBuy * p.shares) + (stock.price * qty)) / (p.shares + qty);
+            p.shares += qty;
+            save();
+            selectStock(selectedSymbol);
+            updateUI();
         }
     }
 
-    // All other functions (selectStock, backToGrid, buySelected, sellSelected, renderGrid, renderHoldings, calculateValues, updateUI, save, formatMoney, formatLargeNumber) remain exactly as in the previous working version.
+    function sellSelected() {
+        if (!selectedSymbol) return;
+        const qty = parseInt(document.getElementById('quantity').value) || 1;
+        const p = portfolio[selectedSymbol];
+        if (p && p.shares >= qty) {
+            const stock = stocksData[selectedSymbol];
+            cash += stock.price * qty;
+            p.shares -= qty;
+            if (p.shares === 0) delete portfolio[selectedSymbol];
+            save();
+            selectStock(selectedSymbol);
+            updateUI();
+        }
+    }
 
-    document.querySelectorAll('.period-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentPeriod = btn.dataset.period;
-            if (selectedSymbol) fetchChart(selectedSymbol);
+    function renderGrid() {
+        const search = document.getElementById('search').value.toLowerCase();
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        Object.keys(stocksData).filter(symbol => {
+            const stock = stocksData[symbol];
+            return stock.name.toLowerCase().includes(search) || symbol.toLowerCase().includes(search);
+        }).sort((a, b) => stocksData[b].price - stocksData[a].price).forEach(symbol => {
+            const stock = stocksData[symbol];
+            const card = document.createElement('div');
+            card.className = "item-card p-6 text-center cursor-pointer";
+            card.onclick = () => selectStock(symbol);
+            card.innerHTML = `
+                <div class="text-3xl font-black">${symbol}</div>
+                <div class="text-sm truncate max-w-full">${stock.name}</div>
+                <div class="text-2xl font-black mt-2">$${formatMoney(stock.price)}</div>
+                <div class="${stock.changePercent >= 0 ? 'change-positive' : 'change-negative'} text-lg">
+                    ${stock.changePercent >= 0 ? '+' : ''}${stock.changePercent.toFixed(2)}%
+                </div>
+            `;
+            grid.appendChild(card);
         });
-    });
+    }
+
+    function renderHoldings() {
+        const list = document.getElementById('holdings');
+        list.innerHTML = '';
+        let hasHoldings = false;
+        Object.keys(portfolio).forEach(symbol => {
+            if (portfolio[symbol].shares > 0) {
+                hasHoldings = true;
+                const stock = stocksData[symbol];
+                const value = stock.price * portfolio[symbol].shares;
+                const pl = value - (portfolio[symbol].avgBuy * portfolio[symbol].shares);
+                list.innerHTML += `
+                    <div class="flex justify-between items-center border-b-2 border-dotted border-black pb-2">
+                        <div>
+                            <span class="font-black">${symbol}</span> ×${portfolio[symbol].shares}
+                            <div class="text-xs opacity-70">${stock.name}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-black">$${formatMoney(value)}</div>
+                            <div class="${pl >= 0 ? 'text-green-600' : 'text-red-600'} text-sm">
+                                ${pl >= 0 ? '+' : ''}$${formatMoney(pl)} P/L
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        if (!hasHoldings) {
+            list.innerHTML = '<div class="text-center opacity-30 py-10">No holdings. Search and select a stock to trade!</div>';
+        }
+    }
+
+    function calculateValues() {
+        let portfolioValue = 0;
+        let invested = 0;
+        Object.keys(portfolio).forEach(symbol => {
+            const p = portfolio[symbol];
+            const current = stocksData[symbol]?.price || 0;
+            portfolioValue += current * p.shares;
+            invested += p.avgBuy * p.shares;
+        });
+        const profitLoss = portfolioValue - invested;
+        const netWorth = cash + portfolioValue;
+
+        document.getElementById('cash').innerText = formatMoney(cash);
+        document.getElementById('portfolio').innerText = formatMoney(portfolioValue);
+        const plEl = document.getElementById('profitLoss');
+        plEl.innerText = (profitLoss >= 0 ? '+' : '') + formatMoney(profitLoss);
+        plEl.className = profitLoss >= 0 ? 'profit-positive' : 'profit-negative';
+        document.getElementById('netWorth').innerText = formatMoney(netWorth);
+        document.getElementById('netWorthBottom').innerText = formatMoney(netWorth);
+    }
+
+    function updateUI() {
+        calculateValues();
+        renderHoldings();
+        if (selectedSymbol) selectStock(selectedSymbol);
+    }
+
+    function save() {
+        localStorage.setItem('stockCash', cash.toFixed(2));
+        localStorage.setItem('stockPortfolio', JSON.stringify(portfolio));
+    }
+
+    function formatMoney(num) {
+        return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
     document.getElementById('search').addEventListener('input', () => {
         document.getElementById('detailView').classList.add('hidden');
@@ -2794,6 +2827,7 @@
         renderGrid();
     });
 
+    // Load and refresh
     fetchPrices();
     setInterval(fetchPrices, 60000);
     updateUI();
