@@ -2494,414 +2494,211 @@
     </template>
 
     <template id="code-stock">
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Finance Clone | Market Simulator</title>
+    <title>S&P 500: ELON EDITION</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; color: #202124; }
-        h1, h2, h3, .brand { font-family: 'Google Sans', sans-serif; }
-        
-        /* Google Card Style */
-        .g-card { 
-            background: white; 
-            border: 1px solid #dadce0; 
-            border-radius: 8px; 
-            transition: box-shadow 0.2s, transform 0.1s; 
-        }
-        .g-card:hover { 
-            box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15); 
-            z-index: 10;
-        }
-
-        /* Buttons */
-        .btn-google { background-color: #1a73e8; color: white; border-radius: 4px; font-weight: 500; padding: 8px 24px; transition: 0.2s; }
-        .btn-google:hover { background-color: #1557b0; box-shadow: 0 1px 2px rgba(60,64,67,0.3); }
-        .btn-outline { border: 1px solid #dadce0; color: #1a73e8; border-radius: 4px; font-weight: 500; padding: 8px 24px; }
-        .btn-outline:hover { background-color: #f6fafe; }
-        
-        /* Pills */
-        .change-pill { padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; display: inline-flex; items-center: center; }
-        .pill-up { background: #e6f4ea; color: #137333; }
-        .pill-down { background: #fce8e6; color: #c5221f; }
-
-        /* Search */
-        .search-bar { 
-            background: #f1f3f4; 
-            border: 1px solid transparent; 
-            border-radius: 24px; 
-            transition: 0.2s; 
-        }
-        .search-bar:focus-within { 
-            background: white; 
-            box-shadow: 0 1px 6px rgba(32,33,36,0.28); 
-            border-color: rgba(223,225,229,0); 
-        }
-
-        /* Layout Utilities */
-        .sidebar-scroll { height: calc(100vh - 200px); overflow-y: auto; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 4px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; color: #000; }
+        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
+        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
+        .money-gradient { background: linear-gradient(135deg, #00b894, #00cec9); border-bottom: 4px solid #000; }
+        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; box-shadow: 6px 6px 0px #000; }
+        .item-card:hover { transform: rotate(-1deg); }
+        .sticky-header { position: sticky; top: 0; z-index: 100; }
+        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); border: 4px solid #000; box-shadow: 12px 12px 0px #000; }
+        .x-input { border: 3px solid #000; padding: 12px; font-weight: 800; outline: none; width: 100%; background: #fff; }
+        .crash-btn { background: #ff7675; border: 3px solid #000; box-shadow: 4px 4px 0px #000; }
+        .crash-btn:hover { background: #ff4757; }
+        .news-item { border-bottom: 2px solid #000; padding: 10px 0; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="pb-20">
 
-<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between gap-8">
+    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block p-2 bg-yellow-400 border-4 border-black mb-4 rotate-2">
+                <span class="font-black text-xl uppercase tracking-tighter">Hyper-Leverage Edition</span>
+            </div>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Trade Like Elon</h1>
+            <p class="text-xl font-bold opacity-70">S&P 500 Terminal. Maximize your gains. Ignore the SEC.</p>
+        </div>
+    </header>
+
+    <div class="sticky-header money-gradient p-6">
+        <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex flex-col">
+                <div id="money" class="text-4xl md:text-6xl font-black text-black drop-shadow-[2px_2px_0px_#fff] tracking-tighter">$100,000</div>
+                <div class="text-sm font-black uppercase opacity-80">Buying Power (Cash × <span id="levLabel">1</span>x)</div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="bg-white border-4 border-black p-1 flex gap-1">
+                    <button onclick="setLeverage(1)" id="lev1" class="px-4 py-1 font-black bg-black text-white">1X</button>
+                    <button onclick="setLeverage(2)" id="lev2" class="px-4 py-1 font-black">2X</button>
+                    <button onclick="setLeverage(5)" id="lev5" class="px-4 py-1 font-black">5X</button>
+                </div>
+                <button onclick="triggerCrash()" class="crash-btn px-6 py-2 font-black uppercase text-white neubrutal">Market Crash</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-[1600px] mx-auto p-6 flex flex-col lg:flex-row gap-8">
         
-        <div class="flex items-center gap-2 min-w-[150px]">
-            <span class="text-xl text-gray-500 font-medium brand">Google</span>
-            <span class="text-xl text-gray-600 font-medium brand">Finance</span>
-        </div>
-
-        <div class="flex-1 max-w-2xl">
-            <div class="search-bar flex items-center px-4 h-12">
-                <svg class="w-5 h-5 text-gray-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" id="search" oninput="renderGrid()" placeholder="Search for stocks, ETFs & more" class="bg-transparent border-none outline-none w-full text-gray-700 placeholder-gray-500">
-            </div>
-        </div>
-
-        <div class="flex items-center gap-6">
-            <div class="flex flex-col items-end">
-                <div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Buying Power</div>
-                <div class="text-lg font-google text-[#1a73e8]">$<span id="buyingPower">100,000</span></div>
-            </div>
-            
-            <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
-                <button onclick="setLeverage(1)" class="lev-btn px-3 py-1 rounded text-sm font-bold bg-white shadow-sm text-gray-800" id="lev1">1x</button>
-                <button onclick="setLeverage(2)" class="lev-btn px-3 py-1 rounded text-sm font-bold text-gray-500 hover:text-gray-800" id="lev2">2x</button>
-                <button onclick="setLeverage(5)" class="lev-btn px-3 py-1 rounded text-sm font-bold text-gray-500 hover:text-gray-800" id="lev5">5x</button>
-            </div>
-        </div>
-    </div>
-</header>
-
-<main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-    
-    <div class="lg:col-span-3">
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <div class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Market Trends</div>
-                <h2 class="text-2xl font-normal text-gray-800">Most active</h2>
-            </div>
-            <div class="flex gap-2">
-                 <button onclick="triggerCrash()" class="bg-red-50 text-red-700 border border-red-200 px-4 py-2 rounded-md text-sm font-bold hover:bg-red-100 transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
-                    Trigger Market Crash (-20%)
-                </button>
-            </div>
-        </div>
-
-        <div id="grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-            </div>
-    </div>
-
-    <aside class="space-y-8">
-        
-        <div class="g-card p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-normal text-gray-800">Your Portfolio</h3>
-                <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">LIVE</span>
-            </div>
-            
-            <div class="mb-6">
-                <div class="text-sm text-gray-500 mb-1">Total Equity</div>
-                <div class="text-3xl font-normal text-gray-900">$<span id="netWorth">100,000.00</span></div>
-                <div id="plDisplay" class="text-sm font-medium text-[#137333] mt-1">+$0.00 (0.00%)</div>
+        <div class="flex-1">
+            <div class="mb-10 max-w-xl">
+                <input type="text" id="search" oninput="renderItems()" placeholder="SEARCH 500 STOCKS (e.g. TSLA, NVDA)..." class="x-input shadow-[6px_6px_0px_#000]">
             </div>
 
-            <div id="portfolioList" class="space-y-0 divide-y divide-gray-100 mb-6 max-h-60 overflow-y-auto">
-                <div class="text-sm text-gray-500 py-4 text-center italic">Your portfolio is empty.</div>
-            </div>
-        </div>
-
-        <div>
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-normal text-gray-800">Market News</h3>
-                <a href="#" class="text-sm text-[#1a73e8] font-medium hover:underline">More news</a>
-            </div>
-            <div class="space-y-4">
-                <div class="flex gap-4 group cursor-pointer">
-                    <div class="flex-1">
-                        <div class="text-xs text-gray-500 mb-1 flex items-center gap-2">
-                            <span class="font-bold text-gray-700">Bloomberg</span> • 25 min ago
-                        </div>
-                        <h4 class="text-sm font-medium text-[#1a0dab] group-hover:underline leading-snug">
-                            Stocks slide as inflation fears grip Wall Street; Tech sector takes a hit
-                        </h4>
-                    </div>
-                    <div class="w-16 h-16 bg-gray-200 rounded-lg shrink-0"></div>
+            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
                 </div>
-                <div class="flex gap-4 group cursor-pointer">
-                    <div class="flex-1">
-                        <div class="text-xs text-gray-500 mb-1 flex items-center gap-2">
-                            <span class="font-bold text-gray-700">CNBC</span> • 1 hour ago
-                        </div>
-                        <h4 class="text-sm font-medium text-[#1a0dab] group-hover:underline leading-snug">
-                            Fed Chair hints at holding interest rates steady through Q3
-                        </h4>
-                    </div>
-                    <div class="w-16 h-16 bg-gray-200 rounded-lg shrink-0"></div>
+        </div>
+
+        <aside class="w-full lg:w-96 space-y-8">
+            <div class="receipt-container p-8">
+                <h2 class="text-3xl font-black uppercase text-center mb-6 border-b-4 border-black pb-2">Your Damage</h2>
+                <div id="receipt-list" class="space-y-3 mb-6 font-bold text-sm">
+                    <p class="text-center opacity-30 italic">No positions held.</p>
                 </div>
-                <div class="flex gap-4 group cursor-pointer">
-                    <div class="flex-1">
-                        <div class="text-xs text-gray-500 mb-1 flex items-center gap-2">
-                            <span class="font-bold text-gray-700">Reuters</span> • 2 hours ago
-                        </div>
-                        <h4 class="text-sm font-medium text-[#1a0dab] group-hover:underline leading-snug">
-                            Oil prices stabilize after volatile week of trading
-                        </h4>
-                    </div>
-                    <div class="w-16 h-16 bg-gray-200 rounded-lg shrink-0"></div>
+                <div id="receipt-total" class="text-2xl font-black text-center pt-4 border-t-4 border-black bg-yellow-300">
+                    NET WORTH: $100,000
                 </div>
             </div>
-        </div>
 
-    </aside>
-</main>
-
-<div id="tradeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all scale-100">
-        <div class="flex justify-between items-start mb-6">
-            <div>
-                <h2 id="modalSymbol" class="text-2xl font-normal text-gray-900">AAPL</h2>
-                <p id="modalName" class="text-sm text-gray-500">Apple Inc.</p>
+            <div class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
+                <h3 class="font-black text-xl uppercase mb-4 border-b-2 border-black">X-Market News</h3>
+                <div class="space-y-4">
+                    <div class="news-item">
+                        <div class="text-[10px] font-black bg-blue-400 inline-block px-1 mb-1 border border-black">BULLISH</div>
+                        <p class="text-sm font-bold">SpaceX Mars mission funding causes aerospace stocks to surge 12%.</p>
+                    </div>
+                    <div class="news-item">
+                        <div class="text-[10px] font-black bg-red-400 inline-block px-1 mb-1 border border-black">BEARISH</div>
+                        <p class="text-sm font-bold">Fed signals "Higher for longer" interest rates; Tech braces for volatility.</p>
+                    </div>
+                    <div class="news-item">
+                        <div class="text-[10px] font-black bg-yellow-400 inline-block px-1 mb-1 border border-black">WHALE WATCH</div>
+                        <p class="text-sm font-bold">Mystery trader buys $2B worth of out-of-the-money calls on AI startups.</p>
+                    </div>
+                </div>
             </div>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
+        </aside>
+    </main>
 
-        <div class="flex items-baseline gap-2 mb-6">
-            <span class="text-4xl font-normal text-gray-900">$<span id="modalPrice">150.00</span></span>
-            <span id="modalChange" class="pill-up text-sm font-medium">+1.24%</span>
-        </div>
+    <script>
+        const initialBalance = 100000;
+        let cash = initialBalance;
+        let inventory = {};
+        let leverage = 1;
 
-        <div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-100">
-            <div class="flex justify-between text-sm mb-2">
-                <span class="text-gray-500">Buying Power</span>
-                <span class="font-medium" id="modalBuyingPower">$100,000</span>
-            </div>
-            <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Shares Owned</span>
-                <span class="font-medium" id="modalShares">0</span>
-            </div>
-        </div>
+        // Ticker List
+        const tickers = "AAPL,MSFT,GOOGL,AMZN,NVDA,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,PLTR,SBUX,BA,NFLX,QCOM,MDLZ,AMGN,ISRG,TJX,GILD,NOW,VRTX,LMT,SYK,BLK,ELV,ADI,REGN,T,ETN,PGR,BSX,MMC,CB,PANW,MU,SCHW,ZTS,LRCX,PLD,FI,CI,WM,ITW".split(',');
+        for(let i=tickers.length; i<500; i++) tickers.push(`CORP${i}`);
 
-        <div class="flex gap-3">
-            <button onclick="executeTrade('BUY')" class="flex-1 btn-google py-3 text-lg">Buy</button>
-            <button onclick="executeTrade('SELL')" class="flex-1 btn-outline py-3 text-lg">Sell</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // --- Data Setup ---
-    // Full 500 Ticker List (Simulated)
-    const tickers = "AAPL,MSFT,GOOGL,AMZN,NVDA,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,PLTR,SBUX,BA,NFLX,QCOM,MDLZ,AMGN,ISRG,TJX,GILD,NOW,VRTX,LMT,SYK,BLK,ELV,ADI,REGN,T,ETN,PGR,BSX,MMC,CB,PANW,MU,SCHW,ZTS,LRCX,BSX,PLD,FI,CI,GILD,BDX,C,WM,ITW".split(',');
-    
-    // Fill remaining spots to reach 500 for the search demo
-    for(let i=tickers.length; i<500; i++) tickers.push(`TICK${i}`);
-
-    let stocks = [];
-    let cash = 100000;
-    let portfolio = {};
-    let leverage = 1;
-    let selectedStock = null;
-
-    // Initialize Market
-    function initMarket() {
-        stocks = tickers.map(symbol => ({
-            symbol: symbol,
-            name: getName(symbol),
-            price: Math.floor(Math.random() * 800) + 20,
-            change: (Math.random() * 10) - 4
+        // Generate dynamic stock objects
+        const items = tickers.map(symbol => ({
+            name: symbol,
+            price: Math.floor(Math.random() * 500) + 10,
+            emoji: symbol === 'TSLA' ? "⚡" : (symbol === 'AAPL' ? "🍎" : (symbol === 'NVDA' ? "🤖" : "📈"))
         }));
-        renderGrid();
-        updateUI();
-    }
 
-    function getName(symbol) {
-        if(symbol === 'AAPL') return 'Apple Inc.';
-        if(symbol === 'MSFT') return 'Microsoft Corp';
-        if(symbol === 'GOOGL') return 'Alphabet Inc.';
-        if(symbol === 'TSLA') return 'Tesla Inc.';
-        if(symbol.startsWith('TICK')) return 'Generic Corp';
-        return symbol + ' Corp';
-    }
-
-    // --- Rendering ---
-    function renderGrid() {
-        const query = document.getElementById('search').value.toUpperCase();
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
-
-        // Logic: If search is empty, show top 50. If search has text, search all 500.
-        let displayList = [];
-        if(!query) {
-            displayList = stocks.slice(0, 50);
-        } else {
-            displayList = stocks.filter(s => s.symbol.includes(query) || s.name.toUpperCase().includes(query)).slice(0, 50);
+        function formatMoney(num) {
+            return "$" + num.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
         }
 
-        displayList.forEach(stock => {
-            const isPos = stock.change >= 0;
-            const card = document.createElement('div');
-            card.className = 'g-card p-4 cursor-pointer flex flex-col justify-between h-32';
-            card.onclick = () => openModal(stock);
-            
-            card.innerHTML = `
-                <div class="flex justify-between items-start">
-                    <div>
-                        <div class="font-bold text-gray-800">${stock.symbol}</div>
-                        <div class="text-xs text-gray-500 truncate w-24">${stock.name}</div>
-                    </div>
-                    <div class="change-pill ${isPos ? 'pill-up' : 'pill-down'}">
-                        ${isPos ? '+' : ''}${stock.change.toFixed(2)}%
-                    </div>
-                </div>
-                <div>
-                    <div class="text-2xl font-normal text-gray-900">$${stock.price.toFixed(2)}</div>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
+        function setLeverage(val) {
+            leverage = val;
+            document.getElementById('levLabel').innerText = val;
+            // UI Toggle
+            [1, 2, 5].forEach(v => {
+                const btn = document.getElementById('lev' + v);
+                btn.className = "px-4 py-1 font-black " + (v === val ? "bg-black text-white" : "");
+            });
+            updateUI();
+        }
 
-    // --- Trading Logic ---
-    function setLeverage(mult) {
-        leverage = mult;
-        document.querySelectorAll('.lev-btn').forEach(b => {
-            b.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
-            b.classList.add('text-gray-500');
-        });
-        const btn = document.getElementById('lev' + mult);
-        btn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
-        btn.classList.remove('text-gray-500');
-        updateUI();
-    }
+        function triggerCrash() {
+            items.forEach(i => i.price = Math.floor(i.price * 0.8));
+            updateUI();
+            alert("⚠️ MARKET MELTDOWN! All stocks dropped 20%.");
+        }
 
-    function openModal(stock) {
-        selectedStock = stock;
-        const modal = document.getElementById('tradeModal');
-        modal.classList.remove('hidden');
-        
-        document.getElementById('modalSymbol').innerText = stock.symbol;
-        document.getElementById('modalName').innerText = stock.name;
-        document.getElementById('modalPrice').innerText = stock.price.toFixed(2);
-        
-        const changeEl = document.getElementById('modalChange');
-        changeEl.innerText = (stock.change >= 0 ? '+' : '') + stock.change.toFixed(2) + '%';
-        changeEl.className = 'change-pill ' + (stock.change >= 0 ? 'pill-up' : 'pill-down');
-        
-        document.getElementById('modalShares').innerText = portfolio[stock.symbol] || 0;
-        document.getElementById('modalBuyingPower').innerText = "$" + (cash * leverage).toLocaleString();
-    }
-
-    function closeModal() {
-        document.getElementById('tradeModal').classList.add('hidden');
-        selectedStock = null;
-    }
-
-    function executeTrade(type) {
-        if(!selectedStock) return;
-        
-        // Simple Buy/Sell 1 Share Logic for smoother UX
-        const price = selectedStock.price;
-        const currentQty = portfolio[selectedStock.symbol] || 0;
-
-        if (type === 'BUY') {
+        function buy(idx) {
+            const item = items[idx];
             const buyingPower = cash * leverage;
-            if (buyingPower >= price) {
-                cash -= price;
-                portfolio[selectedStock.symbol] = currentQty + 1;
-            } else {
-                alert("Insufficient Buying Power!");
-            }
-        } else if (type === 'SELL') {
-            if (currentQty > 0) {
-                cash += price;
-                portfolio[selectedStock.symbol] = currentQty - 1;
-                if (portfolio[selectedStock.symbol] === 0) delete portfolio[selectedStock.symbol];
-            } else {
-                alert("No shares to sell!");
+            if (buyingPower >= item.price) {
+                cash -= item.price;
+                inventory[item.name] = (inventory[item.name] || 0) + 1;
+                updateUI();
             }
         }
-        
-        openModal(selectedStock); // Refresh modal data
-        updateUI();
-    }
 
-    function triggerCrash() {
-        stocks.forEach(s => {
-            s.price = s.price * 0.8; // Drop 20%
-            s.change = s.change - 20; // Update change percent visually
-        });
-        renderGrid();
-        updateUI();
-        if(selectedStock) openModal(selectedStock); // Update modal if open
-        alert("MARKET CRASH INITIATED: All assets down 20%");
-    }
+        function sell(idx) {
+            const item = items[idx];
+            if (inventory[item.name] > 0) {
+                cash += item.price;
+                inventory[item.name]--;
+                updateUI();
+            }
+        }
 
-    function updateUI() {
-        // buying power logic
-        document.getElementById('buyingPower').innerText = (cash * leverage).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
-        
-        // Portfolio Calculation
-        const list = document.getElementById('portfolioList');
-        list.innerHTML = '';
-        let portfolioValue = 0;
-        
-        Object.keys(portfolio).forEach(symbol => {
-            const qty = portfolio[symbol];
-            const stock = stocks.find(s => s.symbol === symbol);
-            if(stock) {
-                const val = qty * stock.price;
-                portfolioValue += val;
-                
-                // Add list item
-                const div = document.createElement('div');
-                div.className = "py-3 flex justify-between items-center";
-                div.innerHTML = `
-                    <div>
-                        <div class="font-medium text-gray-800">${symbol}</div>
-                        <div class="text-xs text-gray-500">${qty} shares</div>
+        function renderItems() {
+            const query = document.getElementById('search').value.toUpperCase();
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+
+            const filtered = query 
+                ? items.filter(i => i.name.includes(query)) 
+                : items.slice(0, 50);
+
+            filtered.forEach((item) => {
+                const globalIdx = items.findIndex(i => i.name === item.name);
+                const count = inventory[item.name] || 0;
+                const card = document.createElement('div');
+                card.className = "item-card p-6 flex flex-col items-center text-center";
+                card.innerHTML = `
+                    <div class="text-4xl mb-4">${item.emoji}</div>
+                    <div class="text-xl font-black uppercase mb-1 truncate w-full">${item.name}</div>
+                    <div class="text-green-600 font-black text-2xl mb-4">${formatMoney(item.price)}</div>
+                    <div class="space-y-2 w-full">
+                        <button onclick="buy(${globalIdx})" class="neubrutal bg-green-400 text-black w-full py-2 font-black uppercase text-xs">Execute Buy</button>
+                        <button onclick="sell(${globalIdx})" class="neubrutal bg-red-400 text-black w-full py-2 font-black uppercase text-xs ${count === 0 ? 'opacity-20 pointer-events-none' : ''}">Liquidate</button>
                     </div>
-                    <div class="text-right">
-                        <div class="font-medium">$${val.toLocaleString()}</div>
-                        <div class="text-xs ${stock.change >= 0 ? 'text-[#137333]' : 'text-[#c5221f]'}">
-                            ${stock.change.toFixed(2)}%
-                        </div>
-                    </div>
+                    <div class="mt-3 font-black text-xs uppercase opacity-50">Holding: ${count}</div>
                 `;
-                div.onclick = () => openModal(stock);
-                div.style.cursor = 'pointer';
-                list.appendChild(div);
-            }
-        });
-
-        if (Object.keys(portfolio).length === 0) {
-            list.innerHTML = '<div class="text-sm text-gray-500 py-4 text-center italic">Your portfolio is empty.</div>';
+                grid.appendChild(card);
+            });
         }
 
-        const totalEquity = cash + portfolioValue; // Simplified net worth (cash + assets)
-        document.getElementById('netWorth').innerText = totalEquity.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        
-        const pl = totalEquity - 100000;
-        const plEl = document.getElementById('plDisplay');
-        plEl.innerText = (pl >= 0 ? '+' : '') + "$" + pl.toLocaleString() + " (" + ((pl/100000)*100).toFixed(2) + "%)";
-        plEl.className = "text-sm font-medium mt-1 " + (pl >= 0 ? "text-[#137333]" : "text-[#c5221f]");
-    }
+        function updateUI() {
+            document.getElementById('money').innerText = formatMoney(cash * leverage);
+            const list = document.getElementById('receipt-list');
+            list.innerHTML = '';
+            let portValue = 0;
 
-    // Start
-    initMarket();
+            for (const [name, count] of Object.entries(inventory)) {
+                if (count > 0) {
+                    const price = items.find(i => i.name === name).price;
+                    portValue += (price * count);
+                    list.innerHTML += `
+                        <div class="flex justify-between items-end gap-4">
+                            <span class="flex-1 border-b-2 border-dotted border-black pb-1">${name} x${count}</span>
+                            <span class="text-green-600">$${(price*count).toLocaleString()}</span>
+                        </div>`;
+                }
+            }
+            const netWorth = cash + portValue;
+            if (portValue === 0) list.innerHTML = `<p class="text-center opacity-30 italic">No positions held.</p>`;
+            document.getElementById('receipt-total').innerText = "NET WORTH: " + formatMoney(netWorth);
+            renderItems();
+        }
 
-</script>
+        updateUI();
+    </script>
 </body>
 </html>
         </template>
