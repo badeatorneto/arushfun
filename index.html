@@ -172,12 +172,12 @@
         <a href="https://www.snapchat.com/add/guywholikesfifa" target="_blank" rel="noopener">
             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/snapchat.svg" width="40" height="40" alt="Snapchat" class="transition-transform hover:scale-110">
         </a>
-        <a href="mailto:arush2011jain@gmail.com">
+        <a href="/cdn-cgi/l/email-protection#adccdfd8dec59f9d9c9cc7ccc4c3edcac0ccc4c183cec2c0">
             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gmail.svg" width="40" height="40" alt="Email" class="transition-transform hover:scale-110">
         </a>
     </div>
 </div>
-        </body>
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
         </html>
     </template>
 
@@ -2559,6 +2559,61 @@
 </head>
 <body class="overflow-x-hidden">
 
+<!-- ═══ LOGIN / REGISTER OVERLAY ═══ -->
+<div id="authOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-2 mb-3">
+                <span class="text-2xl font-medium text-gray-500">Google</span>
+                <span class="text-2xl font-medium text-gray-700">Finance</span>
+            </div>
+            <h2 id="authTitle" class="text-3xl font-bold text-gray-900">Sign in</h2>
+            <p id="authSubtitle" class="text-gray-500 mt-1">to your trading account</p>
+        </div>
+        <div id="authError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4"></div>
+        <div id="registerNameGroup" class="hidden mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Display Name</label>
+            <input id="authName" type="text" placeholder="e.g. TradingWolf99" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <input id="authUser" type="text" placeholder="username" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input id="authPass" type="password" placeholder="••••••••" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <button id="authSubmitBtn" onclick="handleAuthSubmit()" class="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold py-3 rounded-lg transition text-sm">Sign In</button>
+        <p class="text-center text-sm text-gray-500 mt-4">
+            <span id="authToggleText">Don't have an account?</span>
+            <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-[#1a73e8] font-semibold ml-1 hover:underline">Create account</button>
+        </p>
+    </div>
+</div>
+
+<!-- ═══ LEADERBOARD OVERLAY ═══ -->
+<div id="leaderboardOverlay" class="fixed inset-0 z-[9998] hidden" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);" onclick="closeLeaderboard()">
+    <div onclick="event.stopPropagation()" class="absolute right-0 top-0 h-full w-full max-w-xl bg-white shadow-2xl overflow-y-auto flex flex-col">
+        <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
+            <div>
+                <h2 class="text-xl font-bold text-gray-900">🏆 Global Leaderboard</h2>
+                <p class="text-xs text-gray-500 mt-0.5">All registered traders ranked</p>
+            </div>
+            <button onclick="closeLeaderboard()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+        </div>
+        <!-- Sort tabs -->
+        <div class="flex border-b border-gray-100 px-6 pt-4 gap-2 pb-0">
+            <button onclick="setLeaderSort('total')" id="sort-total" class="lbsort-btn text-xs font-bold px-3 py-2 rounded-t border-b-2 border-[#1a73e8] text-[#1a73e8] bg-blue-50">💰 Total Value</button>
+            <button onclick="setLeaderSort('profit')" id="sort-profit" class="lbsort-btn text-xs font-bold px-3 py-2 rounded-t border-b-2 border-transparent text-gray-500 hover:text-gray-700">📈 Profit</button>
+            <button onclick="setLeaderSort('stocks')" id="sort-stocks" class="lbsort-btn text-xs font-bold px-3 py-2 rounded-t border-b-2 border-transparent text-gray-500 hover:text-gray-700">📦 Most Shares</button>
+        </div>
+        <div id="leaderboardList" class="flex-1 px-6 py-4">
+            <div class="text-center text-gray-400 py-12">Loading...</div>
+        </div>
+        <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 text-xs text-gray-400 text-center">Updates every time a trade is made</div>
+    </div>
+</div>
+
 <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
     <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between gap-8">
         
@@ -2575,15 +2630,24 @@
         </div>
 
         <div class="flex items-center gap-6">
+            <button onclick="openLeaderboard()" class="flex items-center gap-2 bg-yellow-50 hover:bg-yellow-100 border border-yellow-300 text-yellow-800 px-3 py-2 rounded-lg text-sm font-bold transition">
+                🏆 Leaderboard
+            </button>
             <div class="flex flex-col items-end">
                 <div class="text-xs text-gray-500 uppercase font-bold tracking-wider">Buying Power</div>
                 <div class="text-lg font-google text-[#1a73e8]">$<span id="buyingPower">100,000</span></div>
             </div>
-            
             <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
                 <button onclick="setLeverage(1)" class="lev-btn px-3 py-1 rounded text-sm font-bold bg-white shadow-sm text-gray-800" id="lev1">1x</button>
                 <button onclick="setLeverage(2)" class="lev-btn px-3 py-1 rounded text-sm font-bold text-gray-500 hover:text-gray-800" id="lev2">2x</button>
                 <button onclick="setLeverage(5)" class="lev-btn px-3 py-1 rounded text-sm font-bold text-gray-500 hover:text-gray-800" id="lev5">5x</button>
+            </div>
+            <div class="flex items-center gap-2 border-l pl-4 border-gray-200">
+                <div class="w-8 h-8 rounded-full bg-[#1a73e8] flex items-center justify-center text-white text-sm font-bold" id="userAvatar">?</div>
+                <div class="hidden md:block">
+                    <div class="text-sm font-semibold text-gray-800" id="userDisplayName">—</div>
+                    <button onclick="logOut()" class="text-xs text-gray-400 hover:text-red-500 transition">Sign out</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2673,37 +2737,69 @@
     </aside>
 </main>
 
-<div id="tradeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all scale-100">
-        <div class="flex justify-between items-start mb-6">
-            <div>
-                <h2 id="modalSymbol" class="text-2xl font-normal text-gray-900">AAPL</h2>
-                <p id="modalName" class="text-sm text-gray-500">Apple Inc.</p>
+<div id="stockDetailPage" class="fixed inset-0 bg-[#1c1c1e] hidden z-50 overflow-y-auto">
+    <div class="bg-[#1c1c1e] border-b border-gray-700 px-6 py-4 flex items-center gap-4 sticky top-0 z-10">
+        <button onclick="closeStockDetail()" class="text-gray-400 hover:text-white flex items-center gap-2 text-sm font-medium transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Market
+        </button>
+        <span class="text-gray-600">|</span>
+        <span id="detailHeaderSymbol" class="text-white font-medium"></span>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 py-8">
+        <div class="mb-6">
+            <div class="text-gray-400 text-sm mb-1" id="detailName"></div>
+            <div class="flex items-baseline gap-3 mb-2 flex-wrap">
+                <span id="detailPrice" class="text-white font-light" style="font-size:3.5rem;line-height:1;"></span>
+                <span class="text-gray-400 text-xl">USD</span>
+                <button class="ml-auto flex items-center gap-2 border border-gray-500 text-gray-300 hover:border-gray-200 px-4 py-1.5 rounded-full text-sm font-medium">+ Follow</button>
             </div>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-
-        <div class="flex items-baseline gap-2 mb-6">
-            <span class="text-4xl font-normal text-gray-900">$<span id="modalPrice">150.00</span></span>
-            <span id="modalChange" class="pill-up text-sm font-medium">+1.24%</span>
-        </div>
-
-        <div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-100">
-            <div class="flex justify-between text-sm mb-2">
-                <span class="text-gray-500">Buying Power</span>
-                <span class="font-medium" id="modalBuyingPower">$100,000</span>
+            <div class="flex items-center gap-2 mb-1">
+                <span id="detailChangeAmt" class="text-xl font-medium"></span>
+                <span id="detailChangePct" class="text-xl font-medium"></span>
+                <span id="detailArrow" class="text-xl"></span>
+                <span class="text-gray-400 text-sm">today</span>
             </div>
-            <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Shares Owned</span>
-                <span class="font-medium" id="modalShares">0</span>
+            <div class="text-gray-500 text-xs">Closed: Feb 17, 4:05 am GMT-5</div>
+            <div id="detailPremarket" class="text-[#8ab4f8] text-sm mt-1"></div>
+        </div>
+        <div class="flex border-b border-gray-700 mb-0">
+            <button onclick="setChartPeriod('1D',this)" class="ctab active-tab text-sm font-medium px-4 py-3 border-b-2 border-[#8ab4f8] text-[#8ab4f8]">1D</button>
+            <button onclick="setChartPeriod('5D',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">5D</button>
+            <button onclick="setChartPeriod('1M',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">1M</button>
+            <button onclick="setChartPeriod('6M',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">6M</button>
+            <button onclick="setChartPeriod('YTD',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">YTD</button>
+            <button onclick="setChartPeriod('1Y',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">1Y</button>
+            <button onclick="setChartPeriod('5Y',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">5Y</button>
+            <button onclick="setChartPeriod('Max',this)" class="ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200">Max</button>
+        </div>
+        <div class="relative bg-[#1c1c1e] mb-6" style="height:280px;">
+            <canvas id="stockChart"></canvas>
+            <div class="absolute right-2 top-4 text-xs text-gray-400 text-right leading-tight">
+                <div>Previous</div><div>close</div><div id="prevCloseVal" class="text-gray-300 font-medium"></div>
             </div>
         </div>
-
-        <div class="flex gap-3">
-            <button onclick="executeTrade('BUY')" class="flex-1 btn-google py-3 text-lg">Buy</button>
-            <button onclick="executeTrade('SELL')" class="flex-1 btn-outline py-3 text-lg">Sell</button>
+        <div class="grid grid-cols-3 border-t border-gray-700 text-sm mb-8">
+            <div class="py-4 pr-4"><div class="text-gray-400 mb-1">Open</div><div class="text-white font-medium" id="sOpen">—</div></div>
+            <div class="py-4 px-4"><div class="text-gray-400 mb-1">Mkt cap</div><div class="text-white font-medium" id="sMktCap">—</div></div>
+            <div class="py-4 pl-4"><div class="text-gray-400 mb-1">Dividend</div><div class="text-white font-medium" id="sDividend">—</div></div>
+            <div class="border-t border-gray-700 py-4 pr-4"><div class="text-gray-400 mb-1">High</div><div class="text-white font-medium" id="sHigh">—</div></div>
+            <div class="border-t border-gray-700 py-4 px-4"><div class="text-gray-400 mb-1">P/E ratio</div><div class="text-white font-medium" id="sPE">—</div></div>
+            <div class="border-t border-gray-700 py-4 pl-4"><div class="text-gray-400 mb-1">Qtrly Div Amt</div><div class="text-white font-medium" id="sDivAmt">—</div></div>
+            <div class="border-t border-gray-700 py-4 pr-4"><div class="text-gray-400 mb-1">Low</div><div class="text-white font-medium" id="sLow">—</div></div>
+            <div class="border-t border-gray-700 py-4 px-4"><div class="text-gray-400 mb-1">52-wk high</div><div class="text-white font-medium" id="s52H">—</div></div>
+            <div class="border-t border-gray-700 py-4 pl-4"><div class="text-gray-400 mb-1">52-wk low</div><div class="text-white font-medium" id="s52L">—</div></div>
+        </div>
+        <div class="bg-[#2c2c2e] rounded-2xl p-6 border border-gray-700">
+            <h3 class="text-white text-lg font-medium mb-4">Trade <span id="tradeSymLabel" class="text-gray-400"></span></h3>
+            <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+                <div class="bg-[#1c1c1e] rounded-xl p-4"><div class="text-gray-400 mb-1">Buying Power</div><div class="text-white font-semibold text-lg" id="dBuyPow">$100,000</div></div>
+                <div class="bg-[#1c1c1e] rounded-xl p-4"><div class="text-gray-400 mb-1">Shares Owned</div><div class="text-white font-semibold text-lg" id="dShares">0</div></div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="execDetailTrade('BUY')" class="flex-1 bg-[#34c759] hover:bg-[#2db34e] text-white font-semibold py-3 rounded-xl text-base transition">Buy 1 Share</button>
+                <button onclick="execDetailTrade('SELL')" class="flex-1 bg-[#ff453a] hover:bg-[#e03d33] text-white font-semibold py-3 rounded-xl text-base transition">Sell 1 Share</button>
+            </div>
         </div>
     </div>
 </div>
@@ -2711,10 +2807,120 @@
 <script>
     // --- Data Setup ---
     // Full 500 Ticker List (Simulated)
-    const tickers = "AAPL,MSFT,GOOGL,AMZN,NVDA,META,BRK.B,TSLA,UNH,LLY,JPM,V,JNJ,AVGO,XOM,MA,PG,ORCL,HD,CVX,COST,ABBV,MRK,ADBE,CRM,KO,PEP,ACN,BAC,TMO,WMT,MCD,LIN,CSCO,ABT,PFE,DHR,INTC,DIS,AMD,VZ,CMCSA,CAT,TXN,NEE,NKE,WFC,PM,MS,RTX,HON,AMAT,LOW,UNP,AXP,IBM,GS,SPGI,INTU,COP,DE,PLTR,SBUX,BA,NFLX,QCOM,MDLZ,AMGN,ISRG,TJX,GILD,NOW,VRTX,LMT,SYK,BLK,ELV,ADI,REGN,T,ETN,PGR,BSX,MMC,CB,PANW,MU,SCHW,ZTS,LRCX,BSX,PLD,FI,CI,GILD,BDX,C,WM,ITW".split(',');
-    
-    // Fill remaining spots to reach 500 for the search demo
-    for(let i=tickers.length; i<500; i++) tickers.push(`TICK${i}`);
+    // Real stock data as of Feb 17, 2026
+    // ── Real prices as of Feb 17 2026 (Robinhood / Google Finance) ──
+    const realStockData = {
+        'AAPL':  { name: 'Apple Inc.',               price: 254.86,  change: -2.27,  pe: 32.36,  mktCap: '3.76T', div: '0.41%', divAmt: '0.26', wkHigh: 288.62,  wkLow: 169.21 },
+        'MSFT':  { name: 'Microsoft Corp.',           price: 400.00,  change: -0.29,  pe: 25.11,  mktCap: '2.98T', div: '0.84%', divAmt: '0.91', wkHigh: 555.45,  wkLow: 344.79 },
+        'NVDA':  { name: 'NVIDIA Corp.',              price: 181.51,  change: -2.22,  pe: 49.60,  mktCap: '4.42T', div: '0.04%', divAmt: '0.01', wkHigh: 212.19,  wkLow: 86.62  },
+        'GOOGL': { name: 'Alphabet Inc. Class A',     price: 305.72,  change: -1.06,  pe: 22.45,  mktCap: '3.69T', div: '0.00%', divAmt: '0.00', wkHigh: 349.00,  wkLow: 140.53 },
+        'AMZN':  { name: 'Amazon.com Inc.',           price: 198.95,  change: -0.42,  pe: 41.50,  mktCap: '2.12T', div: '0.00%', divAmt: '0.00', wkHigh: 258.60,  wkLow: 161.38 },
+        'META':  { name: 'Meta Platforms Inc.',       price: 638.64,  change: -1.55,  pe: 29.80,  mktCap: '1.61T', div: '0.00%', divAmt: '0.00', wkHigh: 796.25,  wkLow: 479.80 },
+        'TSLA':  { name: 'Tesla Inc.',                price: 417.44,  change: -0.09,  pe: 388.17, mktCap: '1.57T', div: '0.00%', divAmt: '0.00', wkHigh: 498.83,  wkLow: 214.25 },
+        'BRK.B': { name: 'Berkshire Hathaway B',      price: 488.15,  change: 0.42,   pe: 22.10,  mktCap: '1.07T', div: '0.00%', divAmt: '0.00', wkHigh: 497.20,  wkLow: 370.55 },
+        'JPM':   { name: 'JPMorgan Chase & Co.',      price: 302.68,  change: 0.54,   pe: 14.20,  mktCap: '851B',  div: '2.38%', divAmt: '1.40', wkHigh: 337.25,  wkLow: 202.16 },
+        'AVGO':  { name: 'Broadcom Inc.',             price: 324.96,  change: -1.82,  pe: 68.24,  mktCap: '1.54T', div: '1.24%', divAmt: '0.65', wkHigh: 414.61,  wkLow: 138.10 },
+        'XOM':   { name: 'Exxon Mobil Corp.',         price: 148.70,  change: -1.90,  pe: 14.50,  mktCap: '632B',  div: '3.40%', divAmt: '0.99', wkHigh: 156.93,  wkLow: 97.80  },
+        'WMT':   { name: 'Walmart Inc.',              price: 134.05,  change: 0.60,   pe: 38.90,  mktCap: '1.08T', div: '0.88%', divAmt: '0.24', wkHigh: 134.65,  wkLow: 79.81  },
+        'COST':  { name: 'Costco Wholesale Corp.',    price: 1016.20, change: 1.40,   pe: 54.80,  mktCap: '441B',  div: '0.55%', divAmt: '1.16', wkHigh: 1077.49, wkLow: 844.06 },
+        'V':     { name: 'Visa Inc.',                 price: 314.17,  change: -3.14,  pe: 29.76,  mktCap: '598B',  div: '0.91%', divAmt: '0.59', wkHigh: 375.51,  wkLow: 299.00 },
+        'MA':    { name: 'Mastercard Inc.',           price: 571.44,  change: -0.18,  pe: 38.50,  mktCap: '527B',  div: '0.59%', divAmt: '0.76', wkHigh: 581.30,  wkLow: 440.34 },
+        'LLY':   { name: 'Eli Lilly and Co.',         price: 858.60,  change: -1.20,  pe: 62.30,  mktCap: '817B',  div: '0.67%', divAmt: '1.50', wkHigh: 972.53,  wkLow: 704.17 },
+        'UNH':   { name: 'UnitedHealth Group Inc.',   price: 538.22,  change: -0.44,  pe: 19.80,  mktCap: '496B',  div: '1.57%', divAmt: '2.21', wkHigh: 629.73,  wkLow: 462.86 },
+        'PG':    { name: 'Procter & Gamble Co.',      price: 165.45,  change: 0.33,   pe: 25.70,  mktCap: '388B',  div: '2.43%', divAmt: '1.06', wkHigh: 177.98,  wkLow: 151.42 },
+        'HD':    { name: 'Home Depot Inc.',           price: 396.56,  change: -0.55,  pe: 26.40,  mktCap: '393B',  div: '2.40%', divAmt: '2.25', wkHigh: 439.37,  wkLow: 316.90 },
+        'JNJ':   { name: 'Johnson & Johnson',         price: 158.32,  change: 0.18,   pe: 22.50,  mktCap: '384B',  div: '3.07%', divAmt: '1.24', wkHigh: 168.93,  wkLow: 140.67 },
+        'ORCL':  { name: 'Oracle Corp.',              price: 157.20,  change: -1.80,  pe: 29.40,  mktCap: '435B',  div: '1.02%', divAmt: '0.40', wkHigh: 345.72,  wkLow: 118.86 },
+        'MRK':   { name: 'Merck & Co. Inc.',          price: 89.44,   change: -0.65,  pe: 12.10,  mktCap: '225B',  div: '3.71%', divAmt: '0.81', wkHigh: 134.63,  wkLow: 84.46  },
+        'ABT':   { name: 'Abbott Laboratories',       price: 129.83,  change: 0.22,   pe: 23.10,  mktCap: '226B',  div: '1.87%', divAmt: '0.59', wkHigh: 136.15,  wkLow: 97.11  },
+        'ABBV':  { name: 'AbbVie Inc.',               price: 196.24,  change: 0.41,   pe: 55.20,  mktCap: '345B',  div: '3.16%', divAmt: '1.64', wkHigh: 214.82,  wkLow: 147.35 },
+        'CVX':   { name: 'Chevron Corp.',             price: 161.88,  change: -0.72,  pe: 14.90,  mktCap: '302B',  div: '4.25%', divAmt: '1.71', wkHigh: 171.69,  wkLow: 135.37 },
+        'NFLX':  { name: 'Netflix Inc.',              price: 76.97,   change: 1.33,   pe: 50.40,  mktCap: '33B',   div: '0.00%', divAmt: '0.00', wkHigh: 134.12,  wkLow: 75.23  },
+        'AMD':   { name: 'Advanced Micro Devices',    price: 206.82,  change: -0.69,  pe: 94.20,  mktCap: '334B',  div: '0.00%', divAmt: '0.00', wkHigh: 267.08,  wkLow: 76.48  },
+        'ADBE':  { name: 'Adobe Inc.',                price: 263.93,  change: -0.50,  pe: 23.40,  mktCap: '114B',  div: '0.00%', divAmt: '0.00', wkHigh: 464.99,  wkLow: 251.10 },
+        'CRM':   { name: 'Salesforce Inc.',           price: 188.40,  change: -0.50,  pe: 30.10,  mktCap: '181B',  div: '0.00%', divAmt: '0.00', wkHigh: 329.74,  wkLow: 180.24 },
+        'INTC':  { name: 'Intel Corp.',               price: 46.62,   change: 0.65,   pe: 0,      mktCap: '199B',  div: '0.86%', divAmt: '0.13', wkHigh: 54.60,   wkLow: 17.67  },
+        'CSCO':  { name: 'Cisco Systems Inc.',        price: 62.47,   change: 0.28,   pe: 17.20,  mktCap: '251B',  div: '2.91%', divAmt: '0.41', wkHigh: 64.72,   wkLow: 44.51  },
+        'PFE':   { name: 'Pfizer Inc.',               price: 26.18,   change: -0.38,  pe: 9.60,   mktCap: '148B',  div: '6.57%', divAmt: '0.43', wkHigh: 32.44,   wkLow: 22.91  },
+        'TMO':   { name: 'Thermo Fisher Scientific',  price: 547.12,  change: -0.90,  pe: 25.70,  mktCap: '213B',  div: '0.29%', divAmt: '0.39', wkHigh: 621.65,  wkLow: 478.35 },
+        'DIS':   { name: 'Walt Disney Co.',           price: 111.60,  change: 1.10,   pe: 38.40,  mktCap: '202B',  div: '0.86%', divAmt: '0.50', wkHigh: 123.74,  wkLow: 83.91  },
+        'KO':    { name: 'Coca-Cola Co.',             price: 71.08,   change: 0.52,   pe: 25.10,  mktCap: '306B',  div: '2.89%', divAmt: '0.51', wkHigh: 73.53,   wkLow: 56.57  },
+        'PEP':   { name: 'PepsiCo Inc.',              price: 150.47,  change: -0.18,  pe: 21.40,  mktCap: '207B',  div: '3.65%', divAmt: '1.42', wkHigh: 183.41,  wkLow: 142.76 },
+        'BAC':   { name: 'Bank of America Corp.',     price: 46.72,   change: 0.85,   pe: 14.10,  mktCap: '358B',  div: '2.49%', divAmt: '0.26', wkHigh: 48.08,   wkLow: 32.36  },
+        'WFC':   { name: 'Wells Fargo & Co.',         price: 76.34,   change: 0.92,   pe: 13.20,  mktCap: '256B',  div: '2.36%', divAmt: '0.40', wkHigh: 81.49,   wkLow: 49.60  },
+        'GS':    { name: 'Goldman Sachs Group',       price: 904.50,  change: 1.50,   pe: 17.64,  mktCap: '271B',  div: '1.50%', divAmt: '3.50', wkHigh: 984.70,  wkLow: 439.38 },
+        'MS':    { name: 'Morgan Stanley',            price: 130.47,  change: 0.60,   pe: 20.80,  mktCap: '214B',  div: '3.07%', divAmt: '0.925',wkHigh: 137.00,  wkLow: 90.98  },
+        'IBM':   { name: 'IBM Corp.',                 price: 266.41,  change: 0.45,   pe: 38.10,  mktCap: '238B',  div: '2.40%', divAmt: '1.67', wkHigh: 270.22,  wkLow: 161.71 },
+        'QCOM':  { name: 'Qualcomm Inc.',             price: 162.40,  change: -1.30,  pe: 14.30,  mktCap: '172B',  div: '2.11%', divAmt: '0.89', wkHigh: 230.63,  wkLow: 143.27 },
+        'TXN':   { name: 'Texas Instruments Inc.',    price: 179.55,  change: -0.70,  pe: 28.40,  mktCap: '162B',  div: '2.95%', divAmt: '1.36', wkHigh: 220.39,  wkLow: 152.64 },
+        'AMGN':  { name: 'Amgen Inc.',                price: 262.10,  change: 0.30,   pe: 17.80,  mktCap: '140B',  div: '3.51%', divAmt: '2.38', wkHigh: 329.65,  wkLow: 236.87 },
+        'HON':   { name: 'Honeywell Intl. Inc.',      price: 219.66,  change: -0.42,  pe: 22.50,  mktCap: '137B',  div: '2.19%', divAmt: '1.13', wkHigh: 235.36,  wkLow: 185.33 },
+        'NKE':   { name: 'Nike Inc.',                 price: 74.29,   change: -0.68,  pe: 22.10,  mktCap: '111B',  div: '2.15%', divAmt: '0.40', wkHigh: 97.67,   wkLow: 70.41  },
+        'CAT':   { name: 'Caterpillar Inc.',          price: 386.30,  change: 0.55,   pe: 19.30,  mktCap: '186B',  div: '1.58%', divAmt: '1.41', wkHigh: 418.49,  wkLow: 302.40 },
+        'MCD':   { name: "McDonald's Corp.",          price: 301.67,  change: 0.33,   pe: 24.50,  mktCap: '217B',  div: '2.49%', divAmt: '1.77', wkHigh: 317.90,  wkLow: 243.97 },
+        'SBUX':  { name: 'Starbucks Corp.',           price: 101.29,  change: 1.50,   pe: 32.60,  mktCap: '113B',  div: '2.95%', divAmt: '0.61', wkHigh: 115.07,  wkLow: 72.91  },
+        'BA':    { name: 'Boeing Co.',                price: 183.24,  change: -1.80,  pe: 0,      mktCap: '139B',  div: '0.00%', divAmt: '0.00', wkHigh: 211.03,  wkLow: 136.32 },
+        'PLTR':  { name: 'Palantir Technologies',     price: 131.72,  change: -5.20,  pe: 208.59, mktCap: '313B',  div: '0.00%', divAmt: '0.00', wkHigh: 207.52,  wkLow: 66.12  },
+        'PANW':  { name: 'Palo Alto Networks',        price: 192.48,  change: 0.70,   pe: 52.40,  mktCap: '120B',  div: '0.00%', divAmt: '0.00', wkHigh: 210.20,  wkLow: 152.29 },
+        'NOW':   { name: 'ServiceNow Inc.',           price: 1024.35, change: -2.40,  pe: 121.30, mktCap: '207B',  div: '0.00%', divAmt: '0.00', wkHigh: 1198.09, wkLow: 738.00 },
+        'ISRG':  { name: 'Intuitive Surgical Inc.',   price: 579.88,  change: -1.10,  pe: 84.60,  mktCap: '205B',  div: '0.00%', divAmt: '0.00', wkHigh: 599.09,  wkLow: 363.75 },
+        'AXP':   { name: 'American Express Co.',      price: 301.44,  change: 0.40,   pe: 21.50,  mktCap: '208B',  div: '1.01%', divAmt: '0.82', wkHigh: 325.87,  wkLow: 213.08 },
+        'SPGI':  { name: 'S&P Global Inc.',           price: 497.32,  change: 0.22,   pe: 34.20,  mktCap: '157B',  div: '0.81%', divAmt: '0.94', wkHigh: 574.18,  wkLow: 421.72 },
+        'BLK':   { name: 'BlackRock Inc.',            price: 1068.00, change: 0.55,   pe: 24.60,  mktCap: '158B',  div: '2.17%', divAmt: '5.21', wkHigh: 1088.11, wkLow: 755.12 },
+        'RTX':   { name: 'RTX Corp.',                 price: 130.80,  change: 0.33,   pe: 37.50,  mktCap: '175B',  div: '2.04%', divAmt: '0.63', wkHigh: 138.52,  wkLow: 100.18 },
+        'LMT':   { name: 'Lockheed Martin Corp.',     price: 487.26,  change: 0.48,   pe: 17.80,  mktCap: '119B',  div: '2.94%', divAmt: '3.30', wkHigh: 606.99,  wkLow: 414.10 },
+        'VZ':    { name: 'Verizon Communications',    price: 40.23,   change: -0.25,  pe: 9.40,   mktCap: '169B',  div: '6.56%', divAmt: '0.67', wkHigh: 44.73,   wkLow: 38.16  },
+        'T':     { name: 'AT&T Inc.',                 price: 26.94,   change: 0.15,   pe: 11.80,  mktCap: '193B',  div: '4.82%', divAmt: '0.28', wkHigh: 27.91,   wkLow: 16.11  },
+        'NEE':   { name: 'NextEra Energy Inc.',       price: 73.14,   change: 0.55,   pe: 22.30,  mktCap: '149B',  div: '2.87%', divAmt: '0.54', wkHigh: 84.40,   wkLow: 57.88  },
+        'DHR':   { name: 'Danaher Corp.',             price: 225.60,  change: -0.82,  pe: 36.40,  mktCap: '163B',  div: '0.49%', divAmt: '0.27', wkHigh: 265.57,  wkLow: 209.72 },
+        'UNP':   { name: 'Union Pacific Corp.',       price: 251.90,  change: 0.18,   pe: 21.60,  mktCap: '151B',  div: '2.30%', divAmt: '1.34', wkHigh: 269.80,  wkLow: 214.37 },
+        'PM':    { name: 'Philip Morris Intl.',       price: 135.88,  change: 0.62,   pe: 22.10,  mktCap: '212B',  div: '3.72%', divAmt: '1.35', wkHigh: 137.60,  wkLow: 91.20  },
+        'COP':   { name: 'ConocoPhillips',            price: 107.18,  change: -0.55,  pe: 12.40,  mktCap: '138B',  div: '2.41%', divAmt: '0.78', wkHigh: 134.80,  wkLow: 95.61  },
+        'MU':    { name: 'Micron Technology Inc.',    price: 94.76,   change: -2.30,  pe: 17.20,  mktCap: '105B',  div: '0.42%', divAmt: '0.115',wkHigh: 163.94,  wkLow: 78.20  },
+        'AMAT':  { name: 'Applied Materials Inc.',    price: 171.22,  change: -2.80,  pe: 22.60,  mktCap: '142B',  div: '0.93%', divAmt: '0.40', wkHigh: 261.93,  wkLow: 148.10 },
+        'LRCX':  { name: 'Lam Research Corp.',        price: 720.45,  change: -3.10,  pe: 22.80,  mktCap: '94B',   div: '1.09%', divAmt: '2.30', wkHigh: 1134.34, wkLow: 648.82 },
+        'ADI':   { name: 'Analog Devices Inc.',       price: 209.80,  change: -1.55,  pe: 36.40,  mktCap: '109B',  div: '1.62%', divAmt: '0.92', wkHigh: 246.59,  wkLow: 186.76 },
+        'INTU':  { name: 'Intuit Inc.',               price: 571.30,  change: -1.80,  pe: 47.20,  mktCap: '160B',  div: '0.70%', divAmt: '1.04', wkHigh: 721.98,  wkLow: 522.91 },
+        'SCHW':  { name: 'Charles Schwab Corp.',      price: 80.94,   change: 0.75,   pe: 28.10,  mktCap: '148B',  div: '1.34%', divAmt: '0.25', wkHigh: 85.74,   wkLow: 56.38  },
+        'GILD':  { name: 'Gilead Sciences Inc.',      price: 90.72,   change: 0.35,   pe: 16.40,  mktCap: '113B',  div: '3.17%', divAmt: '0.79', wkHigh: 101.75,  wkLow: 68.70  },
+        'REGN':  { name: 'Regeneron Pharmaceuticals', price: 626.82,  change: -0.82,  pe: 21.40,  mktCap: '66B',   div: '0.00%', divAmt: '0.00', wkHigh: 1191.00, wkLow: 578.41 },
+        'VRTX':  { name: 'Vertex Pharmaceuticals',    price: 498.22,  change: 0.55,   pe: 32.80,  mktCap: '128B',  div: '0.00%', divAmt: '0.00', wkHigh: 535.24,  wkLow: 364.29 },
+        'DE':    { name: 'Deere & Co.',               price: 476.20,  change: -0.45,  pe: 19.50,  mktCap: '129B',  div: '1.47%', divAmt: '1.75', wkHigh: 496.73,  wkLow: 339.40 },
+        'ACN':   { name: 'Accenture Plc.',            price: 338.70,  change: -0.55,  pe: 27.30,  mktCap: '212B',  div: '1.77%', divAmt: '1.48', wkHigh: 383.18,  wkLow: 288.16 },
+        'WM':    { name: 'Waste Management Inc.',     price: 217.40,  change: 0.28,   pe: 31.20,  mktCap: '88B',   div: '1.48%', divAmt: '0.75', wkHigh: 222.05,  wkLow: 182.72 },
+        'ITW':   { name: 'Illinois Tool Works',       price: 258.35,  change: -0.35,  pe: 24.80,  mktCap: '79B',   div: '2.49%', divAmt: '1.40', wkHigh: 271.04,  wkLow: 220.29 },
+        'ETN':   { name: 'Eaton Corp. Plc.',          price: 347.80,  change: 0.42,   pe: 31.60,  mktCap: '138B',  div: '0.90%', divAmt: '0.86', wkHigh: 401.83,  wkLow: 240.79 },
+        'LOW':   { name: "Lowe's Companies Inc.",     price: 265.12,  change: 0.33,   pe: 23.40,  mktCap: '152B',  div: '1.80%', divAmt: '1.15', wkHigh: 289.10,  wkLow: 210.99 },
+        'SYK':   { name: 'Stryker Corp.',             price: 390.55,  change: 0.45,   pe: 33.50,  mktCap: '147B',  div: '0.90%', divAmt: '0.86', wkHigh: 421.33,  wkLow: 302.09 },
+        'BDX':   { name: 'Becton Dickinson & Co.',    price: 223.80,  change: -0.30,  pe: 16.80,  mktCap: '64B',   div: '1.75%', divAmt: '0.95', wkHigh: 250.68,  wkLow: 211.50 },
+        'MDT':   { name: 'Medtronic Plc.',            price: 87.44,   change: 0.25,   pe: 18.20,  mktCap: '116B',  div: '3.40%', divAmt: '0.70', wkHigh: 92.51,   wkLow: 71.93  },
+        'C':     { name: 'Citigroup Inc.',            price: 84.32,   change: 0.92,   pe: 11.80,  mktCap: '161B',  div: '2.85%', divAmt: '0.56', wkHigh: 87.10,   wkLow: 54.80  },
+        'MMC':   { name: 'Marsh & McLennan Cos.',     price: 221.60,  change: 0.18,   pe: 28.40,  mktCap: '108B',  div: '1.44%', divAmt: '0.815',wkHigh: 232.25,  wkLow: 185.56 },
+        'CB':    { name: 'Chubb Ltd.',                price: 271.50,  change: 0.33,   pe: 13.80,  mktCap: '109B',  div: '1.35%', divAmt: '0.91', wkHigh: 300.12,  wkLow: 225.36 },
+        'PLD':   { name: 'Prologis Inc.',             price: 106.78,  change: -0.45,  pe: 35.60,  mktCap: '97B',   div: '3.36%', divAmt: '0.96', wkHigh: 136.80,  wkLow: 96.68  },
+        'CI':    { name: 'Cigna Group',               price: 298.45,  change: -0.38,  pe: 14.60,  mktCap: '71B',   div: '1.78%', divAmt: '1.40', wkHigh: 361.78,  wkLow: 268.60 },
+        'ELV':   { name: 'Elevance Health Inc.',      price: 442.20,  change: -0.55,  pe: 14.20,  mktCap: '109B',  div: '1.44%', divAmt: '1.63', wkHigh: 581.35,  wkLow: 374.50 },
+        'ZTS':   { name: 'Zoetis Inc.',               price: 155.60,  change: -0.72,  pe: 28.80,  mktCap: '71B',   div: '1.10%', divAmt: '0.432',wkHigh: 192.50,  wkLow: 146.43 },
+        'BSX':   { name: 'Boston Scientific Corp.',   price: 102.84,  change: 0.32,   pe: 62.30,  mktCap: '147B',  div: '0.00%', divAmt: '0.00', wkHigh: 106.08,  wkLow: 66.22  },
+        'FI':    { name: 'Fiserv Inc.',               price: 224.72,  change: 0.40,   pe: 24.50,  mktCap: '137B',  div: '0.00%', divAmt: '0.00', wkHigh: 249.80,  wkLow: 167.36 },
+        'LIN':   { name: 'Linde Plc.',                price: 455.30,  change: 0.18,   pe: 30.20,  mktCap: '210B',  div: '1.26%', divAmt: '1.39', wkHigh: 494.99,  wkLow: 396.79 },
+        'CMCSA': { name: 'Comcast Corp.',             price: 33.18,   change: -0.30,  pe: 9.20,   mktCap: '127B',  div: '3.31%', divAmt: '0.31', wkHigh: 41.26,   wkLow: 32.24  },
+        'IBM':   { name: 'IBM Corp.',                 price: 266.41,  change: 0.45,   pe: 38.10,  mktCap: '238B',  div: '2.40%', divAmt: '1.67', wkHigh: 270.22,  wkLow: 161.71 },
+        'TJX':   { name: 'TJX Companies Inc.',        price: 127.30,  change: 0.55,   pe: 30.40,  mktCap: '152B',  div: '1.23%', divAmt: '0.3625',wkHigh: 132.73, wkLow: 97.62  },
+        'PGR':   { name: 'Progressive Corp.',         price: 262.40,  change: 0.42,   pe: 18.20,  mktCap: '153B',  div: '0.00%', divAmt: '0.00', wkHigh: 277.91,  wkLow: 175.50 },
+        'MDLZ':  { name: 'Mondelez Intl. Inc.',       price: 61.34,   change: -0.18,  pe: 21.60,  mktCap: '80B',   div: '2.87%', divAmt: '0.435',wkHigh: 75.28,   wkLow: 58.54  },
+        'ADP':   { name: 'ADP Inc.',                  price: 298.80,  change: 0.35,   pe: 29.30,  mktCap: '121B',  div: '2.07%', divAmt: '1.40', wkHigh: 318.53,  wkLow: 232.95 },
+    };
+
+    const tickers = Object.keys(realStockData);
+    // Fill remaining spots to ~200 with realistic sector peers
+    const extraTickers = ['PYPL','SQ','UBER','LYFT','SNAP','PINS','TWTR','RBLX','COIN','HOOD','DKNG','PENN','MGM','CZR','WYNN','LVS','NCLH','CCL','RCL','DAL','UAL','AAL','LUV','JBLU','ALK','F','GM','RIVN','LCID','NIO','LI','XPEV','BIDU','JD','PDD','BABA','TCOM','NTES','BILI','IQ','TME','FUTU','TIGR','ZM','DOCU','WORK','BOX','DBX','ESTC','MDB','DDOG','NET','FSLY','CRWD','S','OKTA','MIME','PING','SAIL','SAIL','ATEN','ALTR','CALD','FROG','SUMO','NLOK','VNET','CLDR','SPLK','ONEM','HIMS','TDOC','AMWL','ACCD','PHR','GDRX','CLOV','OSGN','SMAR','APPN','MNDY','TTWO','EA','ATVI','ZNGA','SCPL','MZOR','OMCL','NUAN','HLTH','AMPH','CHNG'];
+    extraTickers.forEach(t => {
+        if (!realStockData[t]) {
+            realStockData[t] = { name: t + ' Corp.', price: +(50 + Math.random()*300).toFixed(2), change: +((Math.random()*6)-2.5).toFixed(2), pe: +(10+Math.random()*50).toFixed(1), mktCap: (Math.random()*200+10).toFixed(0)+'B', div: '0.00%', divAmt:'0.00', wkHigh: 0, wkLow: 0 };
+            tickers.push(t);
+        }
+    });
 
     let stocks = [];
     let cash = 100000;
@@ -2724,23 +2930,26 @@
 
     // Initialize Market
     function initMarket() {
-        stocks = tickers.map(symbol => ({
-            symbol: symbol,
-            name: getName(symbol),
-            price: Math.floor(Math.random() * 800) + 20,
-            change: (Math.random() * 10) - 4
-        }));
+        stocks = tickers.map(symbol => {
+            const d = realStockData[symbol];
+            // For extra tickers with 0 wkHigh/Low, generate them
+            const wkHigh = d.wkHigh || +(d.price * (1.2 + Math.random()*0.3)).toFixed(2);
+            const wkLow  = d.wkLow  || +(d.price * (0.65 + Math.random()*0.2)).toFixed(2);
+            return {
+                symbol,
+                name: d.name,
+                price: d.price,
+                change: d.change,
+                pe: d.pe,
+                mktCap: d.mktCap,
+                div: d.div,
+                divAmt: d.divAmt,
+                wkHigh,
+                wkLow
+            };
+        });
         renderGrid();
         updateUI();
-    }
-
-    function getName(symbol) {
-        if(symbol === 'AAPL') return 'Apple Inc.';
-        if(symbol === 'MSFT') return 'Microsoft Corp';
-        if(symbol === 'GOOGL') return 'Alphabet Inc.';
-        if(symbol === 'TSLA') return 'Tesla Inc.';
-        if(symbol.startsWith('TICK')) return 'Generic Corp';
-        return symbol + ' Corp';
     }
 
     // --- Rendering ---
@@ -2794,65 +3003,140 @@
         updateUI();
     }
 
-    function openModal(stock) {
-        selectedStock = stock;
-        const modal = document.getElementById('tradeModal');
-        modal.classList.remove('hidden');
-        
-        document.getElementById('modalSymbol').innerText = stock.symbol;
-        document.getElementById('modalName').innerText = stock.name;
-        document.getElementById('modalPrice').innerText = stock.price.toFixed(2);
-        
-        const changeEl = document.getElementById('modalChange');
-        changeEl.innerText = (stock.change >= 0 ? '+' : '') + stock.change.toFixed(2) + '%';
-        changeEl.className = 'change-pill ' + (stock.change >= 0 ? 'pill-up' : 'pill-down');
-        
-        document.getElementById('modalShares').innerText = portfolio[stock.symbol] || 0;
-        document.getElementById('modalBuyingPower').innerText = "$" + (cash * leverage).toLocaleString();
+    let sChart = null;
+    let detailStock = null;
+
+    function openModal(stock) { openStockDetail(stock); }
+
+    function openStockDetail(stock) {
+        detailStock = stock;
+        document.getElementById('stockDetailPage').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        const isPos = stock.change >= 0;
+        const changeAmt = (stock.price * Math.abs(stock.change) / 100);
+        const color = isPos ? '#81c995' : '#f28b82';
+        document.getElementById('detailHeaderSymbol').innerText = stock.symbol;
+        document.getElementById('detailName').innerText = stock.name;
+        document.getElementById('detailPrice').innerText = stock.price.toFixed(2);
+        document.getElementById('detailChangeAmt').style.color = color;
+        document.getElementById('detailChangeAmt').innerText = (isPos?'+':'-') + changeAmt.toFixed(2);
+        document.getElementById('detailChangePct').style.color = color;
+        document.getElementById('detailChangePct').innerText = '(' + Math.abs(stock.change).toFixed(2) + '%)';
+        document.getElementById('detailArrow').style.color = color;
+        document.getElementById('detailArrow').innerText = isPos ? '↑' : '↓';
+        document.getElementById('detailPremarket').innerText = 'Pre-market ' + (stock.price*0.997).toFixed(2) + ' -' + (stock.price*0.003).toFixed(2) + ' (0.35%)';
+        document.getElementById('prevCloseVal').innerText = (stock.price - changeAmt*(isPos?1:-1)).toFixed(2);
+        document.getElementById('sOpen').innerText = '$' + (stock.price * (1 + (Math.random()*0.005 - 0.002))).toFixed(2);
+        document.getElementById('sHigh').innerText = '$' + (stock.price * 1.008).toFixed(2);
+        document.getElementById('sLow').innerText = '$' + (stock.price * 0.992).toFixed(2);
+        document.getElementById('sMktCap').innerText = stock.mktCap || '—';
+        document.getElementById('sPE').innerText = stock.pe > 0 ? stock.pe.toFixed(2) : 'N/A';
+        document.getElementById('s52H').innerText = '$' + (stock.wkHigh || (stock.price * 1.3)).toFixed(2);
+        document.getElementById('s52L').innerText = '$' + (stock.wkLow || (stock.price * 0.7)).toFixed(2);
+        document.getElementById('sDividend').innerText = stock.div || '0.00%';
+        document.getElementById('sDivAmt').innerText = stock.divAmt > 0 ? '$' + stock.divAmt : '—';
+        document.getElementById('tradeSymLabel').innerText = stock.symbol;
+        document.getElementById('dBuyPow').innerText = '$' + (cash*leverage).toLocaleString(undefined,{maximumFractionDigits:0});
+        document.getElementById('dShares').innerText = portfolio[stock.symbol] || 0;
+        document.querySelectorAll('.ctab').forEach(b => { b.className = 'ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200'; });
+        document.querySelector('.ctab').className = 'ctab text-sm font-medium px-4 py-3 border-b-2 border-[#8ab4f8] text-[#8ab4f8]';
+        drawChart(stock, '1D');
     }
 
-    function closeModal() {
-        document.getElementById('tradeModal').classList.add('hidden');
-        selectedStock = null;
+    function closeStockDetail() {
+        document.getElementById('stockDetailPage').classList.add('hidden');
+        document.body.style.overflow = '';
+        detailStock = null;
+        if (sChart) { sChart.destroy(); sChart = null; }
     }
 
-    function executeTrade(type) {
-        if(!selectedStock) return;
-        
-        // Simple Buy/Sell 1 Share Logic for smoother UX
-        const price = selectedStock.price;
-        const currentQty = portfolio[selectedStock.symbol] || 0;
+    function closeModal() { closeStockDetail(); }
 
-        if (type === 'BUY') {
-            const buyingPower = cash * leverage;
-            if (buyingPower >= price) {
-                cash -= price;
-                portfolio[selectedStock.symbol] = currentQty + 1;
-            } else {
-                alert("Insufficient Buying Power!");
-            }
-        } else if (type === 'SELL') {
-            if (currentQty > 0) {
-                cash += price;
-                portfolio[selectedStock.symbol] = currentQty - 1;
-                if (portfolio[selectedStock.symbol] === 0) delete portfolio[selectedStock.symbol];
-            } else {
-                alert("No shares to sell!");
-            }
+    function setChartPeriod(period, btn) {
+        document.querySelectorAll('.ctab').forEach(b => { b.className = 'ctab text-sm font-medium px-4 py-3 border-b-2 border-transparent text-gray-400 hover:text-gray-200'; });
+        btn.className = 'ctab text-sm font-medium px-4 py-3 border-b-2 border-[#8ab4f8] text-[#8ab4f8]';
+        if (detailStock) drawChart(detailStock, period);
+    }
+
+    function drawChart(stock, period) {
+        if (sChart) { sChart.destroy(); sChart = null; }
+        const canvas = document.getElementById('stockChart');
+        const ctx = canvas.getContext('2d');
+        const isNeg = stock.change < 0;
+        const lineColor = isNeg ? '#f28b82' : '#81c995';
+        let numPts, vol, trend;
+        switch(period) {
+            case '1D': numPts=78; vol=0.004; trend=isNeg?-0.0008:0.0002; break;
+            case '5D': numPts=60; vol=0.007; trend=isNeg?-0.001:0.0005; break;
+            case '1M': numPts=30; vol=0.015; trend=isNeg?-0.003:0.004; break;
+            case '6M': numPts=26; vol=0.03; trend=isNeg?-0.005:0.008; break;
+            case 'YTD': numPts=24; vol=0.025; trend=isNeg?-0.004:0.007; break;
+            case '1Y': numPts=52; vol=0.04; trend=isNeg?-0.003:0.006; break;
+            case '5Y': numPts=60; vol=0.06; trend=0.008; break;
+            default: numPts=120; vol=0.07; trend=0.01; break;
         }
-        
-        openModal(selectedStock); // Refresh modal data
-        updateUI();
+        let p = stock.price, pts = [p];
+        for (let i=1; i<numPts; i++) { p = p/(1+trend+(Math.random()-0.5)*vol*2); pts.push(p); }
+        pts.reverse();
+        const closeIdx = period==='1D' ? Math.floor(numPts*0.62) : -1;
+        const mainPts = closeIdx>0 ? pts.slice(0,closeIdx) : pts;
+        const afterPts = closeIdx>0 ? pts.slice(closeIdx-1) : [];
+        const allP = pts;
+        const minY = Math.min(...allP)*0.999, maxY = Math.max(...allP)*1.001;
+        const grad = ctx.createLinearGradient(0,0,0,280);
+        grad.addColorStop(0, isNeg?'rgba(242,139,130,0.25)':'rgba(129,201,149,0.25)');
+        grad.addColorStop(1,'rgba(0,0,0,0)');
+        const labels = pts.map((_,i) => {
+            if (period!=='1D') return '';
+            const mins = 9*60+30+Math.floor((i/numPts)*(8*60));
+            const h=Math.floor(mins/60), m=mins%60, ampm=h>=12?'pm':'am', h12=h>12?h-12:h;
+            return m===0?`${h12}:00 ${ampm}`:'';
+        });
+        sChart = new Chart(canvas, {
+            type:'line',
+            data:{
+                labels,
+                datasets:[
+                    {data:mainPts,borderColor:lineColor,borderWidth:2,fill:closeIdx<0,backgroundColor:grad,tension:0.3,pointRadius:0,pointHoverRadius:4},
+                    ...(afterPts.length>0?[{data:[...Array(mainPts.length-1).fill(null),...afterPts],borderColor:'#9aa0a6',borderWidth:2,fill:false,tension:0.3,pointRadius:0,pointHoverRadius:3}]:[])
+                ]
+            },
+            options:{
+                responsive:true,maintainAspectRatio:false,animation:{duration:400},
+                interaction:{mode:'index',intersect:false},
+                plugins:{legend:{display:false},tooltip:{backgroundColor:'#3c3c3e',titleColor:'#ebebf5',bodyColor:'#ebebf5',borderColor:'#636366',borderWidth:1,callbacks:{label:c=>'$'+c.parsed.y.toFixed(2)}}},
+                scales:{
+                    x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0a6',maxTicksLimit:6,font:{size:11}},border:{display:false}},
+                    y:{min:minY,max:maxY,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0a6',font:{size:11},callback:v=>v.toFixed(0)},border:{display:false}}
+                }
+            }
+        });
     }
+
+    function execDetailTrade(type) {
+        if (!detailStock) return;
+        const sym = detailStock.symbol, price = detailStock.price, qty = portfolio[sym]||0;
+        if (type==='BUY') {
+            if (cash*leverage >= price) { cash -= price; portfolio[sym] = qty+1; }
+            else { alert('Insufficient Buying Power!'); return; }
+        } else {
+            if (qty>0) { cash += price; portfolio[sym]=qty-1; if(!portfolio[sym]) delete portfolio[sym]; }
+            else { alert('No shares to sell!'); return; }
+        }
+        document.getElementById('dBuyPow').innerText = '$'+(cash*leverage).toLocaleString(undefined,{maximumFractionDigits:0});
+        document.getElementById('dShares').innerText = portfolio[sym]||0;
+        updateUI();
+        saveUserData();
+    }
+
+    function executeTrade(type) { execDetailTrade(type); }
 
     function triggerCrash() {
-        stocks.forEach(s => {
-            s.price = s.price * 0.8; // Drop 20%
-            s.change = s.change - 20; // Update change percent visually
-        });
+        stocks.forEach(s => { s.price = s.price * 0.8; s.change = s.change - 20; });
         renderGrid();
         updateUI();
-        if(selectedStock) openModal(selectedStock); // Update modal if open
+        saveUserData();
+        if(detailStock) { const u=stocks.find(s=>s.symbol===detailStock.symbol); if(u) openStockDetail(u); }
         alert("MARKET CRASH INITIATED: All assets down 20%");
     }
 
@@ -2887,7 +3171,7 @@
                         </div>
                     </div>
                 `;
-                div.onclick = () => openModal(stock);
+                div.onclick = () => openStockDetail(stock);
                 div.style.cursor = 'pointer';
                 list.appendChild(div);
             }
@@ -2906,7 +3190,194 @@
         plEl.className = "text-sm font-medium mt-1 " + (pl >= 0 ? "text-[#137333]" : "text-[#c5221f]");
     }
 
-    // Start
+    // ═══════════════════════════════════════════
+    //  AUTH + PERSISTENT STORAGE SYSTEM
+    // ═══════════════════════════════════════════
+    let currentUser = null;  // { username, displayName }
+    let authMode = 'login';  // 'login' | 'register'
+
+    function toggleAuthMode() {
+        authMode = authMode === 'login' ? 'register' : 'login';
+        const isReg = authMode === 'register';
+        document.getElementById('authTitle').innerText = isReg ? 'Create account' : 'Sign in';
+        document.getElementById('authSubtitle').innerText = isReg ? 'Start with $100,000 USD' : 'to your trading account';
+        document.getElementById('authSubmitBtn').innerText = isReg ? 'Create Account' : 'Sign In';
+        document.getElementById('authToggleText').innerText = isReg ? 'Already have an account?' : "Don't have an account?";
+        document.getElementById('authToggleBtn').innerText = isReg ? 'Sign in' : 'Create account';
+        document.getElementById('registerNameGroup').classList.toggle('hidden', !isReg);
+        document.getElementById('authError').classList.add('hidden');
+    }
+
+    function showAuthError(msg) {
+        const el = document.getElementById('authError');
+        el.innerText = msg;
+        el.classList.remove('hidden');
+    }
+
+    async function handleAuthSubmit() {
+        const username = document.getElementById('authUser').value.trim().toLowerCase();
+        const password = document.getElementById('authPass').value;
+        const displayName = document.getElementById('authName').value.trim();
+        if (!username || !password) return showAuthError('Please fill in all fields.');
+
+        try {
+            if (authMode === 'register') {
+                if (!displayName) return showAuthError('Please enter a display name.');
+                if (username.length < 3) return showAuthError('Username must be at least 3 characters.');
+                if (password.length < 4) return showAuthError('Password must be at least 4 characters.');
+                // Check if username taken
+                let existing = null;
+                try { existing = await window.storage.get('user:' + username, true); } catch(e) {}
+                if (existing) return showAuthError('Username already taken. Try another.');
+                // Create account with $100k
+                const userData = { username, displayName, passwordHash: simpleHash(password), cash: 100000, portfolio: {}, joinedAt: Date.now(), totalTrades: 0 };
+                await window.storage.set('user:' + username, JSON.stringify(userData), true);
+                await loginAs(userData);
+            } else {
+                let stored = null;
+                try { stored = await window.storage.get('user:' + username, true); } catch(e) {}
+                if (!stored) return showAuthError('Account not found. Please register.');
+                const userData = JSON.parse(stored.value);
+                if (userData.passwordHash !== simpleHash(password)) return showAuthError('Incorrect password.');
+                await loginAs(userData);
+            }
+        } catch(e) {
+            showAuthError('Storage error: ' + e.message);
+        }
+    }
+
+    async function loginAs(userData) {
+        currentUser = userData;
+        cash = userData.cash;
+        portfolio = userData.portfolio || {};
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('userAvatar').innerText = userData.displayName[0].toUpperCase();
+        document.getElementById('userDisplayName').innerText = userData.displayName;
+        initMarket();
+    }
+
+    function logOut() {
+        if (!confirm('Sign out? Your progress is saved.')) return;
+        currentUser = null;
+        cash = 100000;
+        portfolio = {};
+        document.getElementById('authOverlay').style.display = 'flex';
+        document.getElementById('authUser').value = '';
+        document.getElementById('authPass').value = '';
+        document.getElementById('authName').value = '';
+        document.getElementById('authError').classList.add('hidden');
+        authMode = 'login';
+        document.getElementById('authTitle').innerText = 'Sign in';
+        document.getElementById('authSubtitle').innerText = 'to your trading account';
+        document.getElementById('authSubmitBtn').innerText = 'Sign In';
+        document.getElementById('authToggleText').innerText = "Don't have an account?";
+        document.getElementById('authToggleBtn').innerText = 'Create account';
+        document.getElementById('registerNameGroup').classList.add('hidden');
+    }
+
+    function simpleHash(str) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; }
+        return h.toString(36);
+    }
+
+    async function saveUserData() {
+        if (!currentUser) return;
+        const portfolioValue = Object.keys(portfolio).reduce((sum, sym) => {
+            const s = stocks.find(x => x.symbol === sym);
+            return sum + (s ? s.price * portfolio[sym] : 0);
+        }, 0);
+        const totalShares = Object.values(portfolio).reduce((a, b) => a + b, 0);
+        currentUser.cash = cash;
+        currentUser.portfolio = portfolio;
+        currentUser.totalValue = cash + portfolioValue;
+        currentUser.profit = (cash + portfolioValue) - 100000;
+        currentUser.totalShares = totalShares;
+        currentUser.totalTrades = (currentUser.totalTrades || 0) + 1;
+        currentUser.lastActive = Date.now();
+        await window.storage.set('user:' + currentUser.username, JSON.stringify(currentUser), true);
+    }
+
+    // ═══════════════════════════════════════════
+    //  LEADERBOARD
+    // ═══════════════════════════════════════════
+    let leaderSort = 'total';
+
+    function openLeaderboard() {
+        document.getElementById('leaderboardOverlay').classList.remove('hidden');
+        loadLeaderboard();
+    }
+
+    function closeLeaderboard() {
+        document.getElementById('leaderboardOverlay').classList.add('hidden');
+    }
+
+    function setLeaderSort(type) {
+        leaderSort = type;
+        document.querySelectorAll('.lbsort-btn').forEach(b => {
+            b.className = 'lbsort-btn text-xs font-bold px-3 py-2 rounded-t border-b-2 border-transparent text-gray-500 hover:text-gray-700';
+        });
+        document.getElementById('sort-' + type).className = 'lbsort-btn text-xs font-bold px-3 py-2 rounded-t border-b-2 border-[#1a73e8] text-[#1a73e8] bg-blue-50';
+        loadLeaderboard();
+    }
+
+    async function loadLeaderboard() {
+        const list = document.getElementById('leaderboardList');
+        list.innerHTML = '<div class="text-center text-gray-400 py-8">Loading traders...</div>';
+        try {
+            const keys = await window.storage.list('user:', true);
+            if (!keys || !keys.keys || keys.keys.length === 0) {
+                list.innerHTML = '<div class="text-center text-gray-400 py-8">No traders yet. Be the first!</div>';
+                return;
+            }
+            const users = [];
+            for (const key of keys.keys) {
+                try {
+                    const r = await window.storage.get(key, true);
+                    if (r) {
+                        const u = JSON.parse(r.value);
+                        if (u.displayName) users.push(u);
+                    }
+                } catch(e) {}
+            }
+            // Sort
+            if (leaderSort === 'total') users.sort((a, b) => (b.totalValue || 100000) - (a.totalValue || 100000));
+            else if (leaderSort === 'profit') users.sort((a, b) => (b.profit || 0) - (a.profit || 0));
+            else if (leaderSort === 'stocks') users.sort((a, b) => (b.totalShares || 0) - (a.totalShares || 0));
+
+            const medals = ['🥇','🥈','🥉'];
+            const isMe = u => currentUser && u.username === currentUser.username;
+
+            list.innerHTML = users.map((u, i) => {
+                const totalVal = u.totalValue || 100000;
+                const profit = u.profit || 0;
+                const shares = u.totalShares || 0;
+                const profitColor = profit >= 0 ? 'text-green-600' : 'text-red-500';
+                const profitSign = profit >= 0 ? '+' : '';
+                const highlight = isMe(u) ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50 border border-gray-100';
+                return `
+                <div class="rounded-xl px-4 py-3 mb-3 ${highlight} flex items-center gap-3">
+                    <div class="text-2xl w-8 text-center">${medals[i] || '#' + (i+1)}</div>
+                    <div class="w-10 h-10 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        ${u.displayName[0].toUpperCase()}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-gray-900 truncate">${u.displayName} ${isMe(u) ? '<span class="text-xs text-blue-500 font-normal">(you)</span>' : ''}</div>
+                        <div class="text-xs text-gray-400">@${u.username}</div>
+                    </div>
+                    <div class="text-right flex-shrink-0">
+                        <div class="font-bold text-gray-800 text-sm">$${totalVal.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+                        <div class="text-xs ${profitColor}">${profitSign}$${Math.abs(profit).toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+                        <div class="text-xs text-gray-400">${shares} shares</div>
+                    </div>
+                </div>`;
+            }).join('') || '<div class="text-center text-gray-400 py-8">No traders yet.</div>';
+        } catch(e) {
+            list.innerHTML = '<div class="text-center text-red-400 py-8">Error loading: ' + e.message + '</div>';
+        }
+    }
+
+    // Show auth on load
     initMarket();
 
 </script>
@@ -5230,8 +5701,7 @@ function showQuizScore() {
     const pct = Math.round((quizState.score / quizQuestions.length) * 100);
     let message = '';
     if (pct >= 80) message = 'Excellent! You have strong password security knowledge.';
-    else if (pct >= 60) message = 'Good job! Review the topics you missed to improve.';
-    else message = 'Keep learning! Check our FAQ and About pages for more information.';
+    else if (pction.';
 
     container.innerHTML =
         '<div class="quiz-score">' +
