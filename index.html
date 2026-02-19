@@ -3459,7 +3459,7 @@ updateUI();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Finance Clone | Market Simulator</title>
+    <title>Stock Market Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -3516,8 +3516,8 @@ updateUI();
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <div class="text-center mb-8">
             <div class="inline-flex items-center gap-2 mb-3">
-                <span class="text-2xl font-medium text-gray-500">Google</span>
-                <span class="text-2xl font-medium text-gray-700">Finance</span>
+                <span class="text-2xl font-medium text-gray-500">S&P</span>
+                <span class="text-2xl font-medium text-gray-700">500</span>
             </div>
             <h2 id="authTitle" class="text-3xl font-bold text-gray-900">Sign in</h2>
             <p id="authSubtitle" class="text-gray-500 mt-1">to your trading account</p>
@@ -3609,7 +3609,12 @@ updateUI();
         </div>
     </div>
 </header>
+</header>
 
+<!-- News banner (added for volatility headlines) -->
+<div id="newsBanner" class="fixed top-16 left-0 right-0 z-40 hidden px-6 py-3 text-center font-medium text-white shadow-lg transition-all duration-400">
+    <span id="newsHeadline"></span>
+</div>
 <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
     
     <div class="lg:col-span-3">
@@ -3618,13 +3623,6 @@ updateUI();
                 <div class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Market Trends</div>
                 <h2 class="text-2xl font-normal text-gray-800">Most active</h2>
             </div>
-            <div class="flex gap-2">
-                 <button onclick="triggerCrash()" class="bg-red-50 text-red-700 border border-red-200 px-4 py-2 rounded-md text-sm font-bold hover:bg-red-100 transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
-                    Trigger Market Crash (-20%)
-                </button>
-            </div>
-        </div>
 
         <div id="grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
             </div>
@@ -3898,6 +3896,70 @@ updateUI();
         'MDLZ':  { name: 'Mondelez Intl. Inc.',       price: 61.34,   change: -0.18,  pe: 21.60,  mktCap: '80B',   div: '2.87%', divAmt: '0.435',wkHigh: 75.28,   wkLow: 58.54  },
         'ADP':   { name: 'ADP Inc.',                  price: 298.80,  change: 0.35,   pe: 29.30,  mktCap: '121B',  div: '2.07%', divAmt: '1.40', wkHigh: 318.53,  wkLow: 232.95 },
     };
+
+    // ────────────────────────────────────────────────
+//   NEWS-DRIVEN VOLATILITY ENGINE (added 2026)
+// ────────────────────────────────────────────────
+
+const newsHeadlines = [
+    { text: "FED RAISES RATES 50 bps – growth stocks under pressure", sector: "Technology", impact: -9 },
+    { text: "TECH MEGACAP RALLY: AI spending beats expectations", sector: "Technology", impact: +13 },
+    { text: "OIL SURGES 8% after OPEC+ cuts production", sector: "Energy", impact: +11 },
+    { text: "FDA grants full approval to breakthrough cancer therapy", sector: "Healthcare", impact: +16 },
+    { text: "Consumer confidence hits 2-year high", sector: "Consumer", impact: +8 },
+    { text: "Semiconductor shortage worsens – supply chain warning", sector: "Technology", impact: -10 },
+    { text: "Crypto rebounds sharply after regulatory clarity", sector: "Financials", impact: +14 },
+    { text: "Major bank reports stronger-than-expected Q4 earnings", sector: "Financials", impact: +7 },
+    { text: "Global chip export restrictions tightened", sector: "Technology", impact: -12 },
+    { text: "Renewable energy subsidies expanded in new bill", sector: "Energy", impact: +10 },
+    { text: "Inflation cools more than expected", sector: "Consumer", impact: +6 },
+    { text: "Big Tech faces new antitrust scrutiny in EU", sector: "Technology", impact: -8 }
+];
+
+let newsTimer = null;
+
+function showNewsEvent() {
+    const event = newsHeadlines[Math.floor(Math.random() * newsHeadlines.length)];
+    
+    const banner = document.getElementById('newsBanner');
+    const headlineEl = document.getElementById('newsHeadline');
+    
+    headlineEl.textContent = event.text;
+    banner.style.background = event.impact >= 0 ? '#065f46' : '#991b1b';
+    banner.classList.remove('hidden');
+    
+    // Apply sector-wide movement
+    stocks.forEach(stock => {
+        if (stock.sector === event.sector) {
+            // 70–130% of base impact + individual noise
+            const move = event.impact * (0.7 + Math.random() * 0.6);
+            stock.price = Math.max(0.5, stock.price * (1 + move / 100));
+            stock.change = Number((move + (Math.random() - 0.5) * 4).toFixed(2));
+        }
+    });
+
+    // Hide banner after 5.5 seconds
+    setTimeout(() => {
+        banner.classList.add('hidden');
+    }, 5500);
+
+    // Refresh UI
+    renderGrid();
+    if (detailStock) {
+        const updated = stocks.find(s => s.symbol === detailStock.symbol);
+        if (updated) openStockDetail(updated);
+    }
+    updateUI();
+}
+
+function startNewsEngine() {
+    if (newsTimer) clearInterval(newsTimer);
+    // First event after 8–15 seconds, then every 24–36 seconds
+    const firstDelay = 8000 + Math.random() * 7000;
+    setTimeout(showNewsEvent, firstDelay);
+    
+    newsTimer = setInterval(showNewsEvent, 24000 + Math.random() * 12000);
+}
 
     const tickers = Object.keys(realStockData);
     // Fill remaining spots to ~200 with realistic sector peers
