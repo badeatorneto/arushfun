@@ -1972,435 +1972,436 @@ nextQ();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Hero</title>
+    <title>Clicker Hero | Ascension Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; }
-        .neubrutal { border: 3px solid #000; box-shadow: 4px 4px 0px #000; transition: all 0.1s; }
-        .neubrutal:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px #000; }
-        .money-gradient { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-        .item-card { border: 3px solid #000; background: #fff; transition: transform 0.2s; }
-        .item-card:hover { transform: rotate(-1deg); }
-        .sticky-header { position: sticky; top: 0; z-index: 100; border-bottom: 4px solid #000; background: #fff; }
-        .receipt-container { background: repeating-linear-gradient(#fff, #fff 30px, #f9f9f9 30px, #f9f9f9 31px); }
+        body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background-color: #ffffff; 
+    color: #111827; 
+    overflow-x: hidden; 
+}
+        .neubrutal { border: 3px solid rgba(139,92,246,0.7); box-shadow: 4px 4px 0px rgba(139,92,246,0.5); transition: all 0.1s; }
+        .card { background: #ffffff; border: 2px solid #e5e7eb; border-radius: 12px; }
         .click-button {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 6px solid #000;
-            box-shadow: 8px 8px 0px #000;
-            transition: all 0.1s;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            width: 180px; height: 180px; border-radius: 50%;
+            border: 6px solid #7c3aed; box-shadow: 0 0 30px rgba(139,92,246,0.6), 8px 8px 0px #4c1d95;
+            transition: transform 0.08s, box-shadow 0.08s;
+            background: radial-gradient(circle at 35% 35%, #a78bfa, #6d28d9, #4c1d95);
+            cursor: pointer; position: relative; overflow: hidden;
         }
-        .click-button:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px #000;
-        }
+        .click-button:active { transform: scale(0.93); box-shadow: 0 0 10px rgba(139,92,246,0.3); }
+        .click-button.clickanim { animation: clickPop 0.12s ease-out; }
+        @keyframes clickPop { 0%{transform:scale(1);} 50%{transform:scale(1.12);} 100%{transform:scale(1);} }
         .float-number {
-            position: fixed;
-            font-weight: 900;
-            font-size: 2rem;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            z-index: 1000;
+            position: fixed; font-weight: 900; font-size: 1.5rem;
+            pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 1000;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
         }
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-100px); }
-        }
-        .pulse-animation {
-            animation: pulseGlow 0.3s;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+        @keyframes floatUp { 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-120px) scale(0.5);} }
+        .particle { position:fixed; pointer-events:none; border-radius:50%; animation: particleFly 1.2s ease-out forwards; z-index:999; }
+        @keyframes particleFly { 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-150px) scale(0); } }
+       .upgrade-card { background:#ffffff; border:2px solid #e5e7eb; border-radius:10px; transition:border-color 0.2s; }
+        .upgrade-card:hover { border-color:#7c3aed; }
+        .upgrade-card.owned { border-color:#22c55e; }
+        .upgrade-card.disabled { opacity:0.4; }
+        .prestige-btn { background:linear-gradient(135deg,#f59e0b,#dc2626); border:3px solid #fff; }
+        .prestige-btn:hover { transform:scale(1.05); }
+        .skill-btn { border:2px solid #d1d5db; background:#ffffff; color:#111827; }
+        .skill-btn.active { background:#4c1d95; color:#fff; border-color:#7c3aed; }
+        .skill-btn:hover:not(.active) { background:#f3f4f6; }
+        .relic-badge { background:#1a0a2e; border:2px solid #f59e0b; border-radius:8px; padding:6px 12px; font-size:12px; font-weight:800; color:#fde68a; }
+        .progress-bar { height:8px; border-radius:4px; background:#2d2d4a; overflow:hidden; }
+        .progress-fill { height:100%; border-radius:4px; background:linear-gradient(to right,#6d28d9,#a78bfa); transition:width 0.3s; }
+        ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-thumb{background:#4c1d95;}
+        .tab-btn { padding:8px 16px; font-weight:800; font-size:13px; border-radius:8px; cursor:pointer; }
+        .tab-btn.active { background:#4c1d95; color:#fff; }
+        .tab-btn:not(.active) { color:#6b7280; }
     </style>
 </head>
 <body class="pb-20">
 
-    <header class="bg-white pt-12 pb-8 border-b-4 border-black text-center px-4">
-        <div class="max-w-4xl mx-auto">
-            <div class="inline-block p-2 bg-purple-500 border-4 border-black mb-4 rotate-2">
-                <span class="font-black text-xl uppercase tracking-tighter text-white">💰 IDLE CLICKER EDITION 💰</span>
-            </div>
-            <h1 class="text-6xl font-black uppercase tracking-tighter mb-4">Clicker Hero</h1>
-            <p class="text-xl font-bold opacity-70">Click to earn money. Buy auto-clickers to get rich while you sleep.<br><strong>Can you become a trillionaire?</strong></p>
+<header class="bg-white pt-6 pb-4 border-b-2 border-gray-200 text-center px-4 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex flex-wrap gap-4 items-center justify-between">
+        <div class="text-left">
+            <h1 class="text-3xl font-black text-purple-400 uppercase tracking-tight">⚡ Clicker Hero</h1>
+            <div class="text-xs text-gray-500 font-bold">Ascension Edition</div>
         </div>
-    </header>
-
-    <div class="sticky-header money-gradient p-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <div id="money" class="text-4xl md:text-6xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] tracking-tighter">$0</div>
-                    <div class="text-sm font-bold text-white mt-1">Per Second: $<span id="perSecond">0</span></div>
-                </div>
-                <div class="text-right">
-                    <div class="bg-black text-white px-3 py-1 font-bold rounded mb-2">Total Clicks: <span id="totalClicks">0</span></div>
-                    <div class="bg-white text-black px-3 py-1 font-bold rounded">Level <span id="level">1</span></div>
-                </div>
+        <div class="flex gap-6 items-center">
+            <div class="text-center">
+                <div class="text-2xl font-black text-yellow-400" id="goldDisplay">0 G</div>
+                <div class="text-xs text-gray-500">Gold</div>
             </div>
-            <div class="h-3 bg-black rounded-full overflow-hidden border-2 border-white">
-                <div id="levelProgress" class="h-full bg-yellow-400 transition-all duration-300" style="width: 0%"></div>
+            <div class="text-center">
+                <div class="text-lg font-black text-purple-300" id="dpsDisplay">0/s</div>
+                <div class="text-xs text-gray-500">DPS</div>
+            </div>
+            <div class="text-center">
+                <div class="text-lg font-black text-yellow-500" id="relicDisplay">0 ✨</div>
+                <div class="text-xs text-gray-500">Relics</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Click Zone -->
+    <div class="lg:col-span-1 flex flex-col items-center gap-4">
+        <!-- Skill Tree Tabs -->
+        <div class="card p-3 w-full">
+            <div class="text-xs text-gray-500 font-black uppercase mb-2">Skill Path</div>
+            <div class="flex gap-2">
+                <button class="skill-btn active" id="pathActive" onclick="setPath('active')">⚔️ Active</button>
+                <button class="skill-btn" id="pathIdle" onclick="setPath('idle')">🏰 Idle Empire</button>
+            </div>
+            <div class="mt-2 text-xs text-gray-400" id="pathDesc">+50% click power. Bigger manual hits.</div>
+        </div>
+
+        <!-- Big Button -->
+        <div class="relative flex flex-col items-center">
+            <button class="click-button" id="clickBtn" onclick="doClick(event)">
+                <span class="text-4xl">💰</span>
+            </button>
+            <div class="mt-3 text-center">
+                <div class="text-sm text-purple-300 font-black" id="clickPower">+1 per click</div>
+                <div class="text-xs text-gray-500 mt-1">Click to earn gold</div>
+            </div>
+        </div>
+
+        <!-- Prestige -->
+        <div class="card p-4 w-full text-center">
+            <div class="text-xs text-gray-500 font-black uppercase mb-1">Prestige Milestone</div>
+            <div class="progress-bar mb-2">
+                <div class="progress-fill" id="prestigeBar" style="width:0%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mb-3" id="prestigeStatus">Reach 1M gold to Ascend</div>
+            <button class="prestige-btn text-white font-black uppercase px-6 py-2 rounded-lg text-sm disabled:opacity-40" id="prestigeBtn" onclick="doPrestige()" disabled>
+                🌌 Reset Universe (+Relic)
+            </button>
+            <div class="mt-2 text-xs text-yellow-400 font-bold" id="relicBonus">Current relic bonus: +0%</div>
+        </div>
+
+        <!-- Relic Badges -->
+        <div class="w-full">
+            <div class="text-xs text-gray-500 font-black uppercase mb-2">Relics Earned</div>
+            <div id="relicBadges" class="flex flex-wrap gap-2">
+                <div class="text-xs text-gray-600 italic">Ascend to earn relics...</div>
             </div>
         </div>
     </div>
 
-    <!-- CLICK BUTTON SECTION -->
-    <section class="max-w-4xl mx-auto p-6 text-center">
-        <div class="neubrutal bg-white p-8 mb-8">
-            <h2 class="text-3xl font-black uppercase mb-6">Click to Earn Money!</h2>
-            <button id="clickButton" class="click-button mx-auto flex items-center justify-center" onclick="earnMoney()">
-                <span class="text-6xl font-black text-black">$<span id="clickValue">1</span></span>
-            </button>
-            <p class="mt-6 text-sm font-bold text-gray-600">Click the button to earn $<span id="clickValueText">1</span> per click</p>
-        </div>
-    </section>
-
-    <main class="max-w-7xl mx-auto p-6">
-        <!-- AUTO-CLICKERS GRID -->
-        <h2 class="text-3xl font-black uppercase mb-6">Buy Auto-Clickers</h2>
-        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+    <!-- Upgrades -->
+    <div class="lg:col-span-2">
+        <div class="flex gap-2 mb-4">
+            <button class="tab-btn active" onclick="showTab('auto',this)">🤖 Auto-Clickers</button>
+            <button class="tab-btn" onclick="showTab('upgrades',this)">⬆️ Upgrades</button>
+            <button class="tab-btn" onclick="showTab('skills',this)">🌳 Skill Tree</button>
         </div>
 
-        <!-- GOLDEN UPGRADES -->
-        <h2 class="text-3xl font-black uppercase mb-6 mt-12">⭐ Golden Upgrades</h2>
-        <div id="upgradesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Auto-Clickers Tab -->
+        <div id="tab-auto" class="space-y-3">
+            <!-- populated by JS -->
         </div>
-    </main>
 
-    <!-- STATS SECTION -->
-    <section class="max-w-2xl mx-auto px-6 mt-12">
-        <div class="receipt-container border-4 border-black p-8 shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-            <h2 class="text-4xl font-black uppercase text-center mb-8 border-b-4 border-black pb-4">Your Empire</h2>
-            <div id="stats-list" class="space-y-4 mb-8 font-bold text-lg">
-                <div class="flex justify-between border-b-2 border-dotted border-black pb-2">
-                    <span>Total Money Earned</span>
-                    <span class="text-green-600">$<span id="totalEarned">0</span></span>
-                </div>
-                <div class="flex justify-between border-b-2 border-dotted border-black pb-2">
-                    <span>Total Clicks</span>
-                    <span class="text-blue-600"><span id="statsClicks">0</span></span>
-                </div>
-                <div class="flex justify-between border-b-2 border-dotted border-black pb-2">
-                    <span>Auto-Clickers Owned</span>
-                    <span class="text-purple-600"><span id="totalBuildings">0</span></span>
-                </div>
-                <div class="flex justify-between">
-                    <span>Income Per Second</span>
-                    <span class="text-yellow-600">$<span id="statsPerSecond">0</span>/s</span>
-                </div>
+        <!-- Upgrades Tab -->
+        <div id="tab-upgrades" class="space-y-3 hidden">
+            <!-- populated by JS -->
+        </div>
+
+        <!-- Skill Tree Tab -->
+        <div id="tab-skills" class="hidden space-y-3">
+            <div class="card p-4">
+                <h3 class="font-black text-purple-400 uppercase mb-3">⚔️ Active Clicking Path</h3>
+                <div id="activeSkills" class="grid grid-cols-2 gap-3"></div>
             </div>
-            <button onclick="resetGame()" class="w-full bg-red-600 text-white font-black py-3 rounded-lg text-sm uppercase neubrutal">Reset Game</button>
+            <div class="card p-4">
+                <h3 class="font-black text-indigo-400 uppercase mb-3">🏰 Idle Empire Path</h3>
+                <div id="idleSkills" class="grid grid-cols-2 gap-3"></div>
+            </div>
         </div>
-    </section>
+    </div>
+</main>
 
-    <script>
-        let gameState = {
-            money: 0,
-            totalEarned: 0,
-            clicks: 0,
-            clickPower: 1,
-            perSecond: 0,
-            level: 1,
-            levelProgress: 0,
-            buildings: {},
-            upgrades: {}
-        };
+<script>
+let gold = 0, totalEarned = 0, relics = 0, prestigeCount = 0;
+let clickPath = 'active';
+let autoInterval = null;
 
-        const buildings = [
-            { id: 'lemonade', name: "Lemonade Stand", basePrice: 10, baseCps: 0.1, emoji: "🍋", owned: 0 },
-            { id: 'newspaper', name: "Paper Route", basePrice: 100, baseCps: 0.5, emoji: "📰", owned: 0 },
-            { id: 'burger', name: "Burger Joint", basePrice: 500, baseCps: 2, emoji: "🍔", owned: 0 },
-            { id: 'carwash', name: "Car Wash", basePrice: 2000, baseCps: 8, emoji: "🚿", owned: 0 },
-            { id: 'bakery', name: "Bakery", basePrice: 10000, baseCps: 40, emoji: "🥖", owned: 0 },
-            { id: 'cafe', name: "Coffee Shop", basePrice: 50000, baseCps: 200, emoji: "☕", owned: 0 },
-            { id: 'warehouse', name: "Warehouse", basePrice: 250000, baseCps: 1000, emoji: "🏭", owned: 0 },
-            { id: 'bank', name: "Bank", basePrice: 1000000, baseCps: 5000, emoji: "🏦", owned: 0 },
-            { id: 'oilrig', name: "Oil Rig", basePrice: 5000000, baseCps: 25000, emoji: "🛢️", owned: 0 },
-            { id: 'mine', name: "Gold Mine", basePrice: 25000000, baseCps: 125000, emoji: "⛏️", owned: 0 },
-            { id: 'laboratory', name: "Lab", basePrice: 100000000, baseCps: 500000, emoji: "🔬", owned: 0 },
-            { id: 'spaceport', name: "Space Port", basePrice: 500000000, baseCps: 2500000, emoji: "🚀", owned: 0 },
-            { id: 'moonbase', name: "Moon Base", basePrice: 2000000000, baseCps: 10000000, emoji: "🌙", owned: 0 },
-            { id: 'marscolony', name: "Mars Colony", basePrice: 10000000000, baseCps: 50000000, emoji: "🪐", owned: 0 },
-            { id: 'timemachine', name: "Time Machine", basePrice: 50000000000, baseCps: 250000000, emoji: "⏰", owned: 0 },
-            { id: 'portal', name: "Portal", basePrice: 250000000000, baseCps: 1250000000, emoji: "🌀", owned: 0 }
-        ];
+const PRESTIGE_GOAL = 1000000;
 
-        const upgrades = [
-            { id: 'click2x', name: "2x Click Power", price: 100, multiplier: 2, emoji: "👆", purchased: false },
-            { id: 'click5x', name: "5x Click Power", price: 1000, multiplier: 5, emoji: "✌️", purchased: false },
-            { id: 'click10x', name: "10x Click Power", price: 10000, multiplier: 10, emoji: "🖐️", purchased: false },
-            { id: 'auto2x', name: "2x Auto Income", price: 5000, multiplier: 2, emoji: "⚡", purchased: false, type: 'auto' },
-            { id: 'auto5x', name: "5x Auto Income", price: 50000, multiplier: 5, emoji: "⚡⚡", purchased: false, type: 'auto' },
-            { id: 'auto10x', name: "10x Auto Income", price: 500000, multiplier: 10, emoji: "⚡⚡⚡", purchased: false, type: 'auto' },
-            { id: 'golden', name: "Golden Touch", price: 5000000, multiplier: 100, emoji: "👑", purchased: false },
-            { id: 'mega', name: "Mega Multiplier", price: 100000000, multiplier: 1000, emoji: "💎", purchased: false },
-            { id: 'ultra', name: "Ultra Boost", price: 10000000000, multiplier: 10000, emoji: "🔥", purchased: false }
-        ];
+const autoClickers = [
+    { id:'cursor', name:'Magic Cursor', emoji:'🖱️', baseCost:15, baseDps:0.1, count:0, cat:'auto' },
+    { id:'goblin', name:'Gold Goblin', emoji:'👺', baseCost:100, baseDps:0.5, count:0, cat:'auto' },
+    { id:'mine', name:'Gold Mine', emoji:'⛏️', baseCost:500, baseDps:4, count:0, cat:'auto' },
+    { id:'factory', name:'Gold Factory', emoji:'🏭', baseCost:3000, baseDps:25, count:0, cat:'auto' },
+    { id:'bank', name:'Quantum Bank', emoji:'🏦', baseCost:15000, baseDps:100, count:0, cat:'auto' },
+    { id:'dragon', name:'Gold Dragon', emoji:'🐉', baseCost:100000, baseDps:500, count:0, cat:'auto' },
+    { id:'planet', name:'Gold Planet', emoji:'🌍', baseCost:1000000, baseDps:3000, count:0, cat:'auto' },
+];
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const upgrades = [
+    { id:'u1', name:'Better Pickaxes', emoji:'⛏️', cost:200, desc:'+2 click power', bought:false, apply:()=>{ baseClickPower+=2; } },
+    { id:'u2', name:'Lucky Clover', emoji:'🍀', cost:1000, desc:'x2 click power', bought:false, apply:()=>{ baseClickPower*=2; } },
+    { id:'u3', name:'Gold Rush', emoji:'💥', cost:5000, desc:'+10 click power', bought:false, apply:()=>{ baseClickPower+=10; } },
+    { id:'u4', name:'Multiplier Core', emoji:'🔮', cost:25000, desc:'x3 all DPS', bought:false, apply:()=>{ dpsMultiplier*=3; } },
+    { id:'u5', name:'Turbo Clicker', emoji:'⚡', cost:100000, desc:'+50 click power', bought:false, apply:()=>{ baseClickPower+=50; } },
+    { id:'u6', name:'Time Dilation', emoji:'⏱️', cost:500000, desc:'x5 all DPS', bought:false, apply:()=>{ dpsMultiplier*=5; } },
+    { id:'u7', name:'Infinity Engine', emoji:'♾️', cost:5000000, desc:'x10 everything', bought:false, apply:()=>{ baseClickPower*=10; dpsMultiplier*=10; } },
+];
 
-        function playSfx(freq, dur) {
-            try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + dur);
-            } catch(e) {}
-        }
+const activeSkillTree = [
+    { id:'as1', name:'Power Strike', emoji:'💪', cost:500, desc:'+5 click/level', levels:0, maxLevels:5, costPerLevel:500, apply:()=>{ baseClickPower+=5; } },
+    { id:'as2', name:'Critical Hit', emoji:'🎯', cost:2000, desc:'+10% crit chance', levels:0, maxLevels:3, costPerLevel:2000, apply:()=>{ critChance=Math.min(0.5,critChance+0.1); } },
+    { id:'as3', name:'Frenzy Mode', emoji:'🔥', cost:10000, desc:'+2 clicks per tap', levels:0, maxLevels:3, costPerLevel:10000, apply:()=>{ clicksPerClick++; } },
+    { id:'as4', name:'Gold Magnet', emoji:'🧲', cost:50000, desc:'+20% bonus on clicks', levels:0, maxLevels:5, costPerLevel:50000, apply:()=>{ clickBonus+=0.2; } },
+];
 
-        function earnMoney() {
-            gameState.money += gameState.clickPower;
-            gameState.totalEarned += gameState.clickPower;
-            gameState.clicks++;
-            gameState.levelProgress += 1;
+const idleSkillTree = [
+    { id:'is1', name:'Automation', emoji:'🤖', cost:800, desc:'+20% DPS per level', levels:0, maxLevels:5, costPerLevel:800, apply:()=>{ dpsMultiplier*=1.2; } },
+    { id:'is2', name:'Compound Interest', emoji:'📈', cost:3000, desc:'DPS x1.5', levels:0, maxLevels:3, costPerLevel:3000, apply:()=>{ dpsMultiplier*=1.5; } },
+    { id:'is3', name:'AFK Empire', emoji:'🏰', cost:20000, desc:'+5% offline earnings', levels:0, maxLevels:5, costPerLevel:20000, apply:()=>{ offlineBonus+=0.05; } },
+    { id:'is4', name:'Quantum Idle', emoji:'⚛️', cost:200000, desc:'DPS x3', levels:0, maxLevels:3, costPerLevel:200000, apply:()=>{ dpsMultiplier*=3; } },
+];
 
-            playSfx(600, 0.05);
-            
-            // Floating number animation
-            const btn = document.getElementById('clickButton');
-            const rect = btn.getBoundingClientRect();
-            const floatEl = document.createElement('div');
-            floatEl.className = 'float-number';
-            floatEl.innerText = `+$${formatMoney(gameState.clickPower)}`;
-            floatEl.style.left = rect.left + rect.width / 2 + 'px';
-            floatEl.style.top = rect.top + 'px';
-            floatEl.style.color = '#10b981';
-            document.body.appendChild(floatEl);
-            setTimeout(() => floatEl.remove(), 1000);
+let baseClickPower = 1;
+let dpsMultiplier = 1;
+let critChance = 0;
+let clicksPerClick = 1;
+let clickBonus = 0;
+let offlineBonus = 0;
+let relicBonus = 0; // % bonus from relics
 
-            // Button pulse
-            btn.classList.add('pulse-animation');
-            setTimeout(() => btn.classList.remove('pulse-animation'), 300);
+function getClickPower() {
+    let power = baseClickPower * (1 + relicBonus);
+    if (clickPath === 'active') power *= 1.5;
+    return Math.ceil(power);
+}
 
-            checkLevelUp();
-            updateUI();
-        }
+function getTotalDps() {
+    let dps = 0;
+    autoClickers.forEach(a => {
+        dps += a.baseDps * a.count * Math.pow(1.15, a.count * 0.3);
+    });
+    dps *= dpsMultiplier * (1 + relicBonus);
+    if (clickPath === 'idle') dps *= 1.5;
+    return dps;
+}
 
-        function buyBuilding(id) {
-            const building = buildings.find(b => b.id === id);
-            const price = getBuildingPrice(building);
+function getAutoCost(a) {
+    return Math.ceil(a.baseCost * Math.pow(1.15, a.count));
+}
 
-            if (gameState.money >= price) {
-                gameState.money -= price;
-                building.owned++;
-                gameState.buildings[id] = building.owned;
-                calculatePerSecond();
-                playSfx(800, 0.1);
-                updateUI();
-            } else {
-                playSfx(150, 0.2);
-            }
-        }
+function formatGold(n) {
+    if (n >= 1e12) return (n/1e12).toFixed(2) + 'T';
+    if (n >= 1e9) return (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return (n/1e6).toFixed(2) + 'M';
+    if (n >= 1e3) return (n/1e3).toFixed(1) + 'K';
+    return Math.floor(n).toString();
+}
 
-        function buyUpgrade(id) {
-            const upgrade = upgrades.find(u => u.id === id);
+function doClick(e) {
+    const power = getClickPower();
+    const isCrit = Math.random() < critChance;
+    const earned = power * clicksPerClick * (isCrit ? 3 : 1) * (1 + clickBonus);
 
-            if (gameState.money >= upgrade.price && !upgrade.purchased) {
-                gameState.money -= upgrade.price;
-                upgrade.purchased = true;
-                gameState.upgrades[id] = true;
+    gold += earned;
+    totalEarned += earned;
 
-                if (upgrade.type === 'auto') {
-                    calculatePerSecond();
-                } else {
-                    gameState.clickPower *= upgrade.multiplier;
-                }
+    // Float number
+    const fl = document.createElement('div');
+    fl.className = 'float-number';
+    fl.textContent = (isCrit ? '💥 CRIT! +' : '+') + formatGold(earned);
+    fl.style.color = isCrit ? '#f59e0b' : '#a78bfa';
+    fl.style.left = (e.clientX - 30) + 'px';
+    fl.style.top = (e.clientY - 20) + 'px';
+    document.body.appendChild(fl);
+    setTimeout(() => fl.remove(), 1000);
 
-                playSfx(1200, 0.2);
-                updateUI();
-            } else {
-                playSfx(150, 0.2);
-            }
-        }
+    // Particles
+    const colors = ['#7c3aed','#a78bfa','#fbbf24','#6366f1'];
+    for (let i = 0; i < 6; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.width = p.style.height = (4 + Math.random()*6) + 'px';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.left = (e.clientX + (Math.random()-0.5)*60) + 'px';
+        p.style.top = (e.clientY + (Math.random()-0.5)*40) + 'px';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1200);
+    }
 
-        function getBuildingPrice(building) {
-            return Math.floor(building.basePrice * Math.pow(1.15, building.owned));
-        }
+    // Button animation
+    const btn = document.getElementById('clickBtn');
+    btn.classList.add('clickanim');
+    setTimeout(() => btn.classList.remove('clickanim'), 120);
 
-        function calculatePerSecond() {
-            let total = 0;
-            buildings.forEach(building => {
-                total += building.baseCps * building.owned;
-            });
+    updateUI();
+}
 
-            // Apply auto upgrades
-            let autoMultiplier = 1;
-            upgrades.forEach(upgrade => {
-                if (upgrade.purchased && upgrade.type === 'auto') {
-                    autoMultiplier *= upgrade.multiplier;
-                }
-            });
-            if (gameState.upgrades['golden']) autoMultiplier *= 100;
-            if (gameState.upgrades['mega']) autoMultiplier *= 1000;
-            if (gameState.upgrades['ultra']) autoMultiplier *= 10000;
+function buyAuto(id) {
+    const a = autoClickers.find(x => x.id === id);
+    const cost = getAutoCost(a);
+    if (gold < cost) return;
+    gold -= cost;
+    a.count++;
+    updateUI();
+}
 
-            gameState.perSecond = total * autoMultiplier;
-        }
+function buyUpgrade(id) {
+    const u = upgrades.find(x => x.id === id);
+    if (!u || u.bought || gold < u.cost) return;
+    gold -= u.cost;
+    u.bought = true;
+    u.apply();
+    updateUI();
+}
 
-        function checkLevelUp() {
-            const nextLevel = gameState.level * 100;
-            if (gameState.levelProgress >= nextLevel) {
-                gameState.level++;
-                gameState.levelProgress = 0;
-                gameState.clickPower = Math.floor(gameState.clickPower * 1.5);
-                playSfx(1000, 0.3);
-                
-                // Show level up notification
-                const notification = document.createElement('div');
-                notification.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fbbf24; border: 4px solid #000; padding: 30px; font-size: 2rem; font-weight: 900; z-index: 9999; box-shadow: 8px 8px 0px #000;';
-                notification.innerText = `🎉 LEVEL ${gameState.level}! 🎉`;
-                document.body.appendChild(notification);
-                setTimeout(() => notification.remove(), 2000);
-            }
-        }
+function buySkill(id) {
+    const skill = [...activeSkillTree, ...idleSkillTree].find(s => s.id === id);
+    if (!skill || skill.levels >= skill.maxLevels || gold < skill.costPerLevel) return;
+    gold -= skill.costPerLevel;
+    skill.levels++;
+    skill.apply();
+    renderSkills();
+    updateUI();
+}
 
-        function formatMoney(num) {
-            if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
-            if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
-            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
-            return num.toFixed(0);
-        }
+function setPath(path) {
+    clickPath = path;
+    document.getElementById('pathActive').classList.toggle('active', path==='active');
+    document.getElementById('pathIdle').classList.toggle('active', path==='idle');
+    document.getElementById('pathDesc').textContent = path==='active' ? '+50% click power. Bigger manual hits.' : '+50% DPS. Idle earnings boosted.';
+    updateUI();
+}
 
-        function updateUI() {
-            document.getElementById('money').innerText = '$' + formatMoney(gameState.money);
-            document.getElementById('perSecond').innerText = formatMoney(gameState.perSecond);
-            document.getElementById('totalClicks').innerText = gameState.clicks.toLocaleString();
-            document.getElementById('level').innerText = gameState.level;
-            document.getElementById('clickValue').innerText = formatMoney(gameState.clickPower);
-            document.getElementById('clickValueText').innerText = formatMoney(gameState.clickPower);
+function doPrestige() {
+    if (gold < PRESTIGE_GOAL) return;
+    relics++;
+    prestigeCount++;
+    relicBonus += 0.1; // +10% per relic
+    gold = 0; totalEarned = 0;
+    autoClickers.forEach(a => a.count = 0);
+    upgrades.forEach(u => { u.bought = false; });
+    baseClickPower = 1; dpsMultiplier = 1; critChance = 0; clicksPerClick = 1; clickBonus = 0;
 
-            const nextLevel = gameState.level * 100;
-            const progress = (gameState.levelProgress / nextLevel) * 100;
-            document.getElementById('levelProgress').style.width = Math.min(progress, 100) + '%';
+    renderRelics();
+    renderAutos();
+    renderUpgrades();
+    renderSkills();
+    updateUI();
 
-            // Stats
-            document.getElementById('totalEarned').innerText = formatMoney(gameState.totalEarned);
-            document.getElementById('statsClicks').innerText = gameState.clicks.toLocaleString();
-            document.getElementById('totalBuildings').innerText = Object.values(gameState.buildings).reduce((a, b) => a + b, 0);
-            document.getElementById('statsPerSecond').innerText = formatMoney(gameState.perSecond);
+    // Flash effect
+    document.body.style.background = '#e5e7eb';
+setTimeout(() => document.body.style.background = '#ffffff', 500);
 
-            renderBuildings();
-            renderUpgrades();
-        }
+}
 
-        function renderBuildings() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            buildings.forEach(building => {
-                const price = getBuildingPrice(building);
-                const canBuy = gameState.money >= price;
-                const card = document.createElement('div');
-                card.className = "item-card p-6 flex flex-col items-center text-center";
-                card.innerHTML = `
-                    <div class="text-7xl mb-4 select-none">${building.emoji}</div>
-                    <div class="text-lg font-black uppercase mb-1 leading-tight">${building.name}</div>
-                    <div class="text-green-600 font-extrabold text-xl mb-2">$${formatMoney(price)}</div>
-                    <div class="text-xs text-gray-600 mb-4">${formatMoney(building.baseCps)}/sec each</div>
-                    <button onclick="buyBuilding('${building.id}')" class="neubrutal bg-green-500 text-white w-full py-3 font-black uppercase text-xs mb-2 ${!canBuy ? 'opacity-20 grayscale pointer-events-none' : ''}">
-                        BUY
-                    </button>
-                    <div class="text-sm font-bold">Owned: ${building.owned}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+function showTab(tab, btn) {
+    ['auto','upgrades','skills'].forEach(t => {
+        document.getElementById('tab-'+t).classList.toggle('hidden', t!==tab);
+    });
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
 
-        function renderUpgrades() {
-            const grid = document.getElementById('upgradesGrid');
-            grid.innerHTML = '';
-            upgrades.forEach(upgrade => {
-                const canBuy = gameState.money >= upgrade.price && !upgrade.purchased;
-                const card = document.createElement('div');
-                const bgColor = upgrade.purchased ? 'bg-yellow-100' : 'bg-white';
-                card.className = `item-card p-6 flex flex-col items-center text-center ${bgColor}`;
-                card.innerHTML = `
-                    <div class="text-7xl mb-4 select-none">${upgrade.emoji}</div>
-                    <div class="text-lg font-black uppercase mb-1 leading-tight">${upgrade.name}</div>
-                    <div class="text-purple-600 font-extrabold text-xl mb-2">$${formatMoney(upgrade.price)}</div>
-                    <div class="text-xs text-gray-600 mb-4">${upgrade.multiplier}x multiplier</div>
-                    ${upgrade.purchased ? 
-                        '<div class="bg-green-500 text-white w-full py-3 font-black uppercase text-xs">PURCHASED ✓</div>' :
-                        `<button onclick="buyUpgrade('${upgrade.id}')" class="neubrutal bg-yellow-500 text-black w-full py-3 font-black uppercase text-xs ${!canBuy ? 'opacity-20 grayscale pointer-events-none' : ''}">BUY UPGRADE</button>`
-                    }
-                `;
-                grid.appendChild(card);
-            });
-        }
+function renderAutos() {
+    document.getElementById('tab-auto').innerHTML = autoClickers.map(a => {
+        const cost = getAutoCost(a);
+        const canBuy = gold >= cost;
+        const dps = (a.baseDps * Math.pow(1.15, a.count * 0.3) * dpsMultiplier * (clickPath==='idle'?1.5:1) * (1+relicBonus));
+        return `<div class="upgrade-card p-4 flex items-center gap-3 ${a.count>0?'owned':''}">
+            <div class="text-3xl">${a.emoji}</div>
+            <div class="flex-1">
+                <div class="font-black text-white">${a.name} <span class="text-purple-400">(${a.count})</span></div>
+                <div class="text-xs text-gray-400">${a.baseDps}/s base • Total DPS: ${formatGold(dps * a.count)}/s</div>
+            </div>
+            <div class="text-right">
+                <div class="text-yellow-400 font-black text-sm">${formatGold(cost)} G</div>
+                <button onclick="buyAuto('${a.id}')" class="mt-1 bg-purple-700 text-white text-xs font-black px-4 py-1 rounded hover:bg-purple-600 ${!canBuy?'opacity-40 pointer-events-none':''}">BUY</button>
+            </div>
+        </div>`;
+    }).join('');
+}
 
-        function resetGame() {
-            if (confirm('Are you sure you want to reset your game? All progress will be lost!')) {
-                gameState = {
-                    money: 0,
-                    totalEarned: 0,
-                    clicks: 0,
-                    clickPower: 1,
-                    perSecond: 0,
-                    level: 1,
-                    levelProgress: 0,
-                    buildings: {},
-                    upgrades: {}
-                };
-                buildings.forEach(b => b.owned = 0);
-                upgrades.forEach(u => u.purchased = false);
-                localStorage.removeItem('clickerHeroSave');
-                updateUI();
-            }
-        }
+function renderUpgrades() {
+    document.getElementById('tab-upgrades').innerHTML = upgrades.map(u => {
+        const canBuy = !u.bought && gold >= u.cost;
+        return `<div class="upgrade-card p-4 flex items-center gap-3 ${u.bought?'owned':''}">
+            <div class="text-2xl">${u.emoji}</div>
+            <div class="flex-1">
+                <div class="font-black text-white">${u.name}</div>
+                <div class="text-xs text-gray-400">${u.desc}</div>
+            </div>
+            <div class="text-right">
+                ${u.bought ? '<span class="text-green-400 font-black text-sm">✅ OWNED</span>' :
+                `<div class="text-yellow-400 font-black text-sm">${formatGold(u.cost)} G</div>
+                <button onclick="buyUpgrade('${u.id}')" class="mt-1 bg-purple-700 text-white text-xs font-black px-4 py-1 rounded hover:bg-purple-600 ${!canBuy?'opacity-40 pointer-events-none':''}">BUY</button>`}
+            </div>
+        </div>`;
+    }).join('');
+}
 
-        function saveGame() {
-            localStorage.setItem('clickerHeroSave', JSON.stringify({
-                gameState,
-                buildings: buildings.map(b => ({ id: b.id, owned: b.owned })),
-                upgrades: upgrades.map(u => ({ id: u.id, purchased: u.purchased }))
-            }));
-        }
+function renderSkills() {
+    const renderTree = (skills, containerId) => {
+        document.getElementById(containerId).innerHTML = skills.map(s => {
+            const canBuy = s.levels < s.maxLevels && gold >= s.costPerLevel;
+            return `<div class="upgrade-card p-3 ${s.levels>0?'owned':''}">
+                <div class="flex justify-between items-start mb-1">
+                    <span class="text-lg">${s.emoji}</span>
+                    <span class="text-xs text-purple-300 font-black">${s.levels}/${s.maxLevels}</span>
+                </div>
+                <div class="font-black text-sm text-white">${s.name}</div>
+                <div class="text-xs text-gray-400 mb-2">${s.desc}</div>
+                <button onclick="buySkill('${s.id}')" class="w-full bg-purple-800 text-white text-xs font-black py-1 rounded hover:bg-purple-700 ${!canBuy?'opacity-40 pointer-events-none':''}">${formatGold(s.costPerLevel)} G</button>
+            </div>`;
+        }).join('');
+    };
+    renderTree(activeSkillTree, 'activeSkills');
+    renderTree(idleSkillTree, 'idleSkills');
+}
 
-        function loadGame() {
-            const saved = localStorage.getItem('clickerHeroSave');
-            if (saved) {
-                const data = JSON.parse(saved);
-                gameState = data.gameState;
-                data.buildings.forEach(b => {
-                    const building = buildings.find(bld => bld.id === b.id);
-                    if (building) building.owned = b.owned;
-                });
-                data.upgrades.forEach(u => {
-                    const upgrade = upgrades.find(upg => upg.id === u.id);
-                    if (upgrade) upgrade.purchased = u.purchased;
-                });
-                calculatePerSecond();
-            }
-        }
+function renderRelics() {
+    const names = ['⭐','🌟','💫','✨','🌠','☄️','🌌','🔮','🪄','🌀'];
+    const badges = Array.from({length: relics}, (_, i) => `<div class="relic-badge">${names[i%names.length]} Relic ${i+1}</div>`);
+    document.getElementById('relicBadges').innerHTML = badges.length ? badges.join('') : '<div class="text-xs text-gray-600 italic">Ascend to earn relics...</div>';
+}
 
-        // Auto-save every 10 seconds
-        setInterval(saveGame, 10000);
+function updateUI() {
+    document.getElementById('goldDisplay').textContent = formatGold(gold) + ' G';
+    document.getElementById('dpsDisplay').textContent = formatGold(getTotalDps()) + '/s';
+    document.getElementById('relicDisplay').textContent = relics + ' ✨';
 
-        // Auto-earn from buildings
-        setInterval(() => {
-            if (gameState.perSecond > 0) {
-                gameState.money += gameState.perSecond / 10;
-                gameState.totalEarned += gameState.perSecond / 10;
-                updateUI();
-            }
-        }, 100);
+    const progress = Math.min(100, (gold / PRESTIGE_GOAL) * 100);
+    document.getElementById('prestigeBar').style.width = progress + '%';
+    document.getElementById('prestigeStatus').textContent = gold >= PRESTIGE_GOAL ? 'Ready to Ascend!' : `${formatGold(gold)} / ${formatGold(PRESTIGE_GOAL)} gold`;
+    document.getElementById('prestigeBtn').disabled = gold < PRESTIGE_GOAL;
+    document.getElementById('relicBonus').textContent = `Current relic bonus: +${Math.round(relicBonus*100)}% to all gold`;
+    document.getElementById('clickPower').textContent = `+${formatGold(getClickPower())} per click`;
 
-        // Initialize
-        loadGame();
+    renderAutos();
+    renderUpgrades();
+}
+
+// DPS tick
+setInterval(() => {
+    const dps = getTotalDps();
+    if (dps > 0) {
+        const earned = dps * 0.1; // tick every 100ms
+        gold += earned;
+        totalEarned += earned;
         updateUI();
-    </script>
+    }
+}, 100);
+
+renderAutos();
+renderUpgrades();
+renderSkills();
+updateUI();
+</script>
 </body>
 </html>
+
     </template>
     <template id="code-bucket">
         <!DOCTYPE html>
@@ -8194,3 +8195,4 @@ button{border:2px solid #0f172a;background:#0f172a;color:#fff;font-weight:700;pa
     <!-- Build: 2026-02-18 review-fixes-pass -->
 </body>
 </html>
+
